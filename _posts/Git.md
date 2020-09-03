@@ -87,7 +87,7 @@ tags:
 
 ### 从远程库克隆
 
-* 使用`git clone  git@github.com:<GitHub上的username》/<GitHub上的远程仓库名>.git`可以将远程的仓库克隆到本地（在哪个目录下打开gitbash使用的克隆，最后克隆下来的仓库就在哪个目录）(使用一`git clone`与使用`git pull`以及`git fetch`等一样，当执行命令后叫确认的时候不要直接回车，而应按照它所说的输入yes或者no。
+* 使用`git clone  git@github.com:<GitHub上的username》/<GitHub上的远程仓库名>.git`可以将远程的仓库克隆到本地（在哪个目录下打开gitbash使用的克隆，最后克隆下来的仓库就在哪个目录）(使用一`git clone`与使用`git pull`以及`git fetch`等一样，当执行命令后叫确认的时候不要直接回车，而应按照它所说的输入yes或者no。)
 * 除了使用`git@....`格式的地址外，还可以使用普通的http地址，只是传输速度相对较慢。
 
 ## 分支管理
