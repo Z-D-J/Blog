@@ -85,7 +85,79 @@ for word in words:
 
 ## break和continue语句，以及循环中的else子句
 
+* 在for循环中，else放在break语句之后，在没有执行break时，执行else语句。break的作用仍然与c语言类似，用于跳出最近的for或while循环。示例：
+```python
+>>> for n in range(2, 10):
+...     for x in range(2, n):#第一次循环，range（2,2)是没有值的,解释器不会输出任何内容
+...         if n % x == 0:
+...             print(n, 'equals', x, '*', n//x)
+...             break
+...     else:
+...         # loop fell through without finding a factor
+...         print(n, 'is a prime number')
+...
+2 is a prime number
+3 is a prime number
+4 equals 2 * 2
+5 is a prime number
+6 equals 2 * 3
+7 is a prime number
+8 equals 2 * 4
+9 equals 3 * 3
+```
+*continue语句与c语言中基本一样，它表示跳过continue语句中后面所有的当前循环的语句（到循环尾），从而直接进入下一次迭代。示例：
+```python
+>>> for num in range(2, 10):
+...     if num % 2 == 0:
+...         print("Found an even number", num)
+...         continue
+...     print("Found a number", num)
+Found an even number 2
+Found a number 3
+Found an even number 4
+Found a number 5
+Found an even number 6
+Found a number 7
+Found an even number 8
+Found a number 9
+```
 
+## pass语句
+
+* pass语句就像它的名字一样，读到它时，什么也不做，直接过去就行。
+
+# 函数
+
+## 函数定义
+
+* 使用`def`定义函数，`def`后接函数的名字，以及她的形参列表，最后就像大多数功能语句一样，以`:`开启函数体。
+* 函数体的书写必须必须全部相对定义缩进。示例：
+
+```python
+>>> def fib(n):    # write Fibonacci series up to n
+...     """Print a Fibonacci series up to n."""
+...     a, b = 0, 1
+...     while a < n:
+...         print(a, end=' ')
+...         a, b = b, a+b
+...     print()
+...
+>>> # Now call the function we just defined:
+... fib(2000)
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597
+```
+* 函数体的第一行可以写字符串（用三个双引号包起来），来对该函数做说明，相当于另一种形式的注释。
+
+## 函数调用
+
+* 直接输入函数的名字并给他传递实参即可，例如`fib(10)`,即是对前文函数的调用。
+* 函数名可以直接赋值给其它变量。如
+```python 
+f = fib
+
+f(10)
+```
+与直接`fib(10)`效果一样。
 
 
 
