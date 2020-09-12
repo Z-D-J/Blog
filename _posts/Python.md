@@ -310,7 +310,134 @@ def fib2(n): # return Fibonacci series up to n
 
 ## 包（模块集）
 
-* 
+* 包是模块的上层，调用包中的模块与调用模块中的函数大体是相同的。可以直接`import 包名.模块名.函数名`,也可以用`from 包名 import 模块名/函数、变量名`或者`from 包名.模块名 import 子模块名/函数、变量名`。当然，类似模块的导入，包也同样有`from 包名 import *`的导入方式。
+* 同样的，包内也可以引用其他包。
+* 包文件的创建；包文件中必须包含`_init_.py`文件，这个文件可以让Python把该文件识别为包。它可以为空，也可以包含初始化的一些配置。示例：
+```python
+sound/                          Top-level package
+      __init__.py               Initialize the sound package
+      formats/                  Subpackage for file format conversions
+              __init__.py
+              wavread.py
+              wavwrite.py
+              aiffread.py
+              aiffwrite.py
+              auread.py
+              auwrite.py
+              ...
+      effects/                  Subpackage for sound effects
+              __init__.py
+              echo.py
+              surround.py
+              reverse.py
+              ...
+      filters/                  Subpackage for filters
+              __init__.py
+              equalizer.py
+              vocoder.py
+              karaoke.py
+              ...
+```
+
+# 输入和输出
+
+## 格式化输出
+
+* 使用print（）函数。print()中有类似c语言的用%以及相应参数限制输出格式的方法。
+* 使用标准string模块，对字符串进行格式操作；例如`字符串.format()`方法。
+* 使用Template方法；
+* 使用str（）和repr（）函数。str（）将值转化为适合人阅读的形式，repr将值转化为适合解释器读取的形式。示例：
+```python
+>>> s = 'Hello, world.'
+>>> str(s)
+'Hello, world.'
+>>> repr(s)
+"'Hello, world.'"
+```
+
+## 文件读写
+
+### 写入文件
+
+* 使用函数open（）会返回文件对象。open常用的模式是`open('filename', 'mode')`.第一个参数是一个含有文件名的字符串。第二个参数也是一个字符串，含有描述如何使用该文件的几个字符。mode 为 'r' 时表示只是读取文件；'w' 表示只是写入文件（已经存在的同名文件将被删掉）；'a' 表示打开文件进行追加，写入到文件中的任何数据将自动添加到末尾。 'r+' 表示打开文件进行读取和写入。mode 参数是可选的，默认为 'r'。示例：`f = open('workfile', 'w')`。
+* `文件名.write(字符串)`将字符串写入文件中，并且返回写入的字符串的长度。
+
+### 读取文件内容
+
+* `文件名.read(size)`方法：该方法读取若干数量的数据并以字符串形式返回其内容，size 是可选的数值，指定字符串长度。如果没有指定 size 或者指定为负数，就会读取并返回整个文件。如果到了文件末尾，f.read() 会返回一个空字符串（''）
+* `文件名.readline()`从文件中读取单独一行，字符串结尾会自动加上一个换行符（ \n ）。如果 f.readline() 返回一个空字符串，那就表示到达了文件末尾。
+* 使用for循环遍历文件来读取文件的内容。
+
+# python的错误
+
+## 语法错误（SyntaxError）
+
+* 语法分析器指出错误行，并且在检测到错误的位置前面显示一个小“箭头”。 错误是由箭头 前面 的标记引起的（或者至少是这么检测的）。
+* 错误会输出文件名和行号，所以如果是从脚本输入的你就知道去哪里检查错误了。
+
+## 异常
+
+* 语法正确的情况下发生的错误为异常错误。
+* 错误信息的最后一行指出发生了什么错误。异常也有不同的类型，异常类型做为错误信息的一部分显示出来：示例中的异常分别为 零除错误（ ZeroDivisionError ） ，命名错误（ NameError） 和 类型错误（ TypeError ）。
+
+## 异常的处理
+
+* 使用`try...except`语句来处理异常。（`try...finall`）可以用来定义清理行为。
+
+## 异常的抛出
+
+* 使用`raise`语句可以抛出异常。
+
+## 自定义异常
+
+* 用户可以自定义异常类型来创建自己的异常名。
+
+## 预定义清理行为、
+
+* `with`语句打开文件，使用完毕之后会自动关闭文件。这可以称作一种预定义的清理行为。示例；
+```python
+with open("myfile.txt") as f:
+    for line in f:
+        print(line)
+```
+
+# 类
+
+## 类的定义
+
+* 类与函数一样，在使用前需要先定义。类的定义示例如下：
+```python
+class ClassName:
+    <statement-1>
+    .
+    .
+    .
+    <statement-N>
+```
+* 类定义完成时（正常退出），就创建了一个 类对象。基本上它是对类定义创建的命名空间进行了一个包装。
+
+## 类对象
+
+* 类对象支持两种操作：属性引用和实例化。
+
+### 属性引用
+
+* 类对象的属性即类对象中包含的命名（如变量，函数）.
+* 属性引用 使用和 Python 中所有的属性引用一样的标准语法：obj.name。即`类对象名.属性名`。示例：
+```python 
+class MyClass:
+    """A simple example class"""
+    i = 12345
+    def f(self):
+        return 'hello world'
+```
+*  MyClass.i 和 MyClass.f 是有效的属性引用，分别返回一个整数和一个方法对象。也可以对类属性赋值，你可以通过给 MyClass.i 赋值来修改它。 `__doc__` 也是一个有效的属性，返回类的文档字符串："A simple example class"。
+
+### 类的实例化
+
+* 类的实例化就就是将类对象看做一个函数进行调用。例如：`x = Myclass()`。
+
+
 
 
 
