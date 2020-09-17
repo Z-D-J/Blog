@@ -272,3 +272,102 @@ public static boolean sum(int a, int b)
 ## 函数的本地变量
 
 * 同c语言一样，Java函数内部定义的变量在函数外部是不可见的。函数内部定义的本地变量，只在函数内部有效。
+
+
+# 类与对象
+
+## 类与对象的基本定义
+
+* **类**：定义同一类事物。（类的第一个字母要大写）类定义示例：
+```java
+public class Hero {
+     
+    String name; //姓名
+     
+    float hp; //血量
+     
+    float armor; //护甲
+     
+    int moveSpeed; //移动速度
+}
+```
+* **对象**：类就像是一个模板，根据这个模板可以创建很多同一类的东西，这些根据类创建出来的东西就是对象。对象创建示例:
+```java
+public class Hero {
+     
+    String name; //姓名
+     
+    float hp; //血量
+     
+    float armor; //护甲
+     
+    int moveSpeed; //移动速度
+     
+    public static void main(String[] args) {
+        Hero garen =  new Hero(); //对象的创建类似于数组或者String类型的变量的创建。
+        garen.name = "盖伦";
+        garen.hp = 616.28f;
+        garen.armor = 27.536f;
+        garen.moveSpeed = 350;
+         
+        Hero teemo =  new Hero();
+        teemo.name = "提莫";
+        teemo.hp = 383f;
+        teemo.armor = 14f;
+        teemo.moveSpeed = 330;
+    }  
+     
+} //英雄是一个大类，而具体的每个英雄则是一个对象
+``` 
+* **属性**：类中定义的变量就是类的属性，类中的属性就像一种东西的各种属性。属性可以是基本类型（如int等）也可以是类类型（如String等）.属性名称一般是小写，但是如果由两个及以上单词组成，则从第二个单词开始，首字母大写。
+*  **方法**：类中的东西不仅具有属性，它还会做事情，能做的事情就是类中的方法。（方法的实质是在类中定义的函数）.方法的命名方法与属性一样。示例：
+```java
+public class Hero {
+    String name; //姓名
+      
+    float hp; //血量
+      
+    float armor; //护甲
+      
+    int moveSpeed; //移动速度
+ 
+    //Hero方法:坑队友
+    void keng(){
+        System.out.println("坑队友！");
+    }
+}
+```
+
+## 引用
+
+* 不是基本类型而是类类型的变量，又叫做**引用**。
+* 对象的创建时用`new Hero()`,但是创建的对象需要一个变量来接收才能使用，于是`Hero h = new Hero()`。这个Hero类型的变量h就又叫做引用。（用c语言指针的概念来理解：就是h指向刚创建的Hero对象，但是Java中没有指针这个概念，所以只是一种理解）
+* 根据引用的概念，对象的创建又可以写为：
+```java
+public class Hero {
+      
+    String name; //姓名
+      
+    float hp; //血量
+      
+    float armor; //护甲
+      
+    int moveSpeed; //移动速度
+      
+    public static void main(String[] args) {
+        //创建一个对象,但是没有引用。
+        new Hero();
+         
+        //使用一个引用来指向这个对象
+        Hero h = new Hero();
+         
+    }  
+      
+}
+```
+* （类比c语言的指针），可以有多个引用指向同一个对象，但是一个引用不能同时指向多个对象。
+
+## 继承
+
+
+
