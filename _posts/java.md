@@ -9,12 +9,13 @@ tags:
 * 使用`Scanner in = new Scanner(System.in);`可以定义一个可以接受输入的东西`in`（名字是任取的。）。之后要接受输入时，就使用形如`in.nextline()``in.nextint()`的语句。（其中line与int表示接受的输入的数据类型，line是字符串，int是整型）。
 * 使用` System.out.println();`可以直接输出字符串并且在每一次输出后都换行，还有`System.out.print()`，它与前者的区别是在每一次输出后不换行。
 * `System.out.prinf()`这个输出的用法与c语言中的printf()类似，可以有`System.out.printf("%.2f",i)`这样的类似c语言的格式限制。
-* Java的注释和c语言一样，可以用`//`和`/**/`
+* Java的注释和c语言一样，可以用`//`和`/**/`，还有`/** */`用来为注释javadoc标明。
 # 变量
 
 * 变量的定义：<类型名称> <变量名>;
 * 变量的名字(又叫做标识符）只能由字母，数字和下划线组成，且数字不可以出现在第一个位置上。Java的内置的关键字不可以用作变量名。
 * Java是一种强类型语言，变量在使用前必须声明，且变量具有确定的类型。
+* 所有被声明的变量都是有默认值的。例如：数字类型的默认值为0,引用类型的默认值为null。还有NULL，''等默认值。不过局部变量声明后不会进行默认的初始化。
 
 # 常量
 
@@ -36,9 +37,11 @@ tags:
 ## 四则运算
   
 * 当浮点数和整数放在一起运算时，Java会将整数先转化为浮点数，之后进行浮点数的运算。
-* `+，-，*,/ , %`的运算优先级和惯常的优先级一致。
+* `+，-，*,/ , %`的运算优先级和惯常的优先级一致。特别的，`%`对于小数也可以使用。
 * 赋值号`=`的优先级很低，以保持和正常思维一样的运算顺序。
 * Java中同样有`i++, ++i`这种运算，用法与c语言完全相同。
+
+## 位运算
 
 ## 单目运算符
 
@@ -50,6 +53,7 @@ tags:
 ## 整型
 
 * 整数类型不能表达有小数部分的数。整数与整数的运算结果还是整数。
+* Java中所有的数字都是有符号的，没有无符号类型。
 * `int`型：
 
 ## 浮点型
@@ -59,7 +63,7 @@ tags:
 
 ## 布尔类型
 
-* Java中的布尔类型是用`boolean`定义的，其含义与用法与c语言中的bool类型一致。
+* Java中的布尔类型是用`boolean`定义的，其含义与用法与c语言中的bool类型一致。但是整型与boolean是严格区分的，即将boolean类型变量赋为0或者1是不行的。
 
 ## 字符类型
 
@@ -267,7 +271,7 @@ public static boolean sum(int a, int b)
 * 函数调用格式：`函数名（参数）`,注意，即使函数不需要参数，也需要括号。
 * 函数可能会有返回值，此时需要有对应的变量来接收返回值。void类型的函数是没有返回值的。
 * 传递给函数的参数类型要匹配，如果类型不匹配，则在某些情况下函数会自动转换。（条件是函数需要的类型比实际传进来的参数类型“宽”，如double类型比int类型宽。）。
-* 传递给函数的参数，实际是传的值，即没有传进去变量本身，而只是变量值的一个副本。
+* 传递给函数的参数，实际是传的值，即没有传进去变量本身，而只是变量值的一个副本。在函数内部是无法修改传进来的参数的值的。
 
 ## 函数的本地变量
 
@@ -341,7 +345,7 @@ public class Hero {
 ## 引用
 
 * 不是基本类型而是类类型的变量，又叫做**引用**。
-* 对象的创建时用`new Hero()`,但是创建的对象需要一个变量来接收才能使用，于是`Hero h = new Hero()`。这个Hero类型的变量h就又叫做引用。（用c语言指针的概念来理解：就是h指向刚创建的Hero对象，但是Java中没有指针这个概念，所以只是一种理解）
+* 对象的创建时用`new Hero()`,但是创建的对象需要一个变量来接收才能使用，于是`Hero h = new Hero()`，此时的`=`不再是对于基本类型的赋值的意思，而是**指向**的意思。这个Hero类型的变量h就又叫做引用。（用c语言指针的概念来理解：就是h指向刚创建的Hero对象，但是Java中没有指针这个概念，所以只是一种理解）
 * 根据引用的概念，对象的创建又可以写为：
 ```java
 public class Hero {
@@ -402,5 +406,283 @@ public class Weapon extends Item{ // 通过extends来
 
 ## 方法重载
 
+* 方法重载指的是方法名一样，但是参数不一样。每次调用该名字的方法时，会自动根据对应的参数类型以及数量来调用对应的方法。示例：
+```java
+public class ADHero extends Hero {
+    public void attack() {
+        System.out.println(name + " 进行了一次攻击 ，但是不确定打中谁了");
+    }
+ 
+    public void attack(Hero h1) {
+        System.out.println(name + "对" + h1.name + "进行了一次攻击 ");
+    }
+ 
+    public void attack(Hero h1, Hero h2) {
+        System.out.println(name + "同时对" + h1.name + "和" + h2.name + "进行了攻击 ");
+    }
+ //可以给类似的方法设置同样的名字。
+    public static void main(String[] args) {
+        ADHero bh = new ADHero();
+        bh.name = "赏金猎人";
+ 
+        Hero h1 = new Hero();
+        h1.name = "盖伦";
+        Hero h2 = new Hero();
+        h2.name = "提莫";
+ 
+        bh.attack(h1);
+        bh.attack(h1, h2);
+    }
+ 
+}
+```
+* 方法重载还可以通过设置可变数量的参数来实现。可变数量的参数通过数组来实现。示例：
+```java
+public class ADHero extends Hero {
+ 
+    public void attack() {
+        System.out.println(name + " 进行了一次攻击 ，但是不确定打中谁了");
+    }
+ 
+    // 可变数量的参数
+    public void attack(Hero... heros) { //方法的形参需要设置...<数组名>来表示这个函数是接受可变参数的
+        for (int i = 0; i < heros.length; i++) {
+            System.out.println(name + " 攻击了 " + heros[i].name);//数组设置的参数调用方法与普通数组一样。
+ 
+        }
+    }
+ 
+    public static void main(String[] args) {
+        ADHero bh = new ADHero();
+        bh.name = "赏金猎人";
+ 
+        Hero h1 = new Hero();
+        h1.name = "盖伦";
+        Hero h2 = new Hero();
+        h2.name = "提莫";
+ 
+        bh.attack(h1);
+        bh.attack(h1, h2);
+ 
+    }
+ 
+}
+```
+## 构造方法
 
+* 实例化：通过一个类创建一个对象的过程叫做实例化。
+* **构造方法（构造器）**：实例化是通过调用构造方法来实现的。构造方法同其他方法一样具有一样具有参数和语句体，但是没有返回类型。构造方法不是成员方法，不能用对象来调用它。**构造方法的名字与类的名字一样**，包括大小写也一样。示例：
+```java
+public class Hero {
+ 
+    String name;
+ 
+    float hp;
+ 
+    float armor;
+ 
+    int moveSpeed;
+ 
+    // 方法名和类名一样（包括大小写）
+    // 没有返回类型
+    public Hero() {
+        System.out.println("实例化一个对象的时候，必然调用构造方法");
+    }
+     
+    public static void main(String[] args) {
+        //实例化一个对象的时候，必然调用构造方法
+        Hero h = new Hero();//new 后面跟的是构造方法，只是构造方法的名字与类的名字是相同的。
+    }
+}
+```
+* 如果在定义类中没有对构造方法的定义，则编译器在编译时会自动给类加上一个无参的，语句体为空的构造方法。
+* 构造方法是通过`new`来调用的，如果使用的是没有参数的构造方法，则直接是`new <类名>()`来调用，如果有参数则需加上参数列表`new <类名>(参数列表)`，另外，构造方法与普通方法一样，是可以进行方法重载的。示例：
+```java
+public class Hero {
+       
+    String name; //姓名
+       
+    float hp; //血量
+       
+    float armor; //护甲
+       
+    int moveSpeed; //移动速度
+       
+    //带一个参数的构造方法
+    public Hero(String heroname){ 
+        name = heroname;
+    }
+     
+    //带两个参数的构造方法
+    public Hero(String heroname,float herohp){ 
+        name = heroname;
+        hp = herohp;
+    }
+       
+    public static void main(String[] args) {
+        Hero garen =  new Hero("盖伦"); //调用构造方法创建对象时需要加上参数了。
+        Hero teemo =  new Hero("提莫",383);
+    }
+     
+}
+```
 
+## this
+
+* this可以顾名思义，this这个关键字代表当前对象，就相当于当前对象的名字，实际使用于类定义的内部。示例：
+```java
+public class Hero {
+     
+    String name; //姓名
+     
+    float hp; //血量
+     
+    float armor; //护甲
+     
+    int moveSpeed; //移动速度
+ 
+    //打印内存中的虚拟地址
+    public void showAddressInMemory(){
+        System.out.println("打印this看到的虚拟地址："+this); //this在类内部使用，因为此时类没有名字，如果要用其中的属性很不方便，所以设置this来表示当前：“对象”，相当于类的一个虚拟名字。
+    }
+     
+    public static void main(String[] args) {
+        Hero garen =  new Hero();
+        garen.name = "盖伦";
+        //直接打印对象，会显示该对象在内存中的虚拟地址
+        //格式：Hero@c17164 c17164即虚拟地址，每次执行，得到的地址不一定一样
+ 
+        System.out.println("打印对象看到的虚拟地址："+garen);
+        //调用showAddressInMemory，打印该对象的this，显示相同的虚拟地址->表示this起始和对象名garen指向的是同一个东西
+        garen.showAddressInMemory();
+    }
+}
+```
+* 使用this给对象的属性赋值。示例：
+```java
+public class Hero {
+     
+    String name; //姓名
+     
+    //参数名和属性名一样
+    //在方法体中，只能访问到参数name
+    public void setName1(String name){
+        name = name;
+    }
+     
+    //为了避免setName1中的问题，参数名不得不使用其他变量名
+    public void setName2(String heroName){
+        name = heroName;
+    }
+     
+    //通过this访问属性
+    public void setName3(String name){
+        //name代表的是参数name
+        //this.name代表的是属性name
+        this.name = name;
+    }
+     
+    public static void main(String[] args) {
+        Hero  h =new Hero();
+         
+        h.setName1("teemo");
+        System.out.println(h.name); //结果为null，即参数的值传不到对象里的属性上
+         
+        h.setName2("garen");
+        System.out.println(h.name); //结果为garen，成功，即使用this可以访问到当前对象的属性   
+         
+        h.setName3("死歌");
+        System.out.println(h.name); //结果为死歌，成功，即使用非属性名的形参，还可以将值传给属性。    
+    }
+     
+}
+```
+
+## 参数的传递
+
+* 参数与变量一样，分为基本类型和类类型。基本类型参数与c语言基本一样，而类类型的参数有一点类似c语言中的指针参数。
+* 类类型参数可以修改实际的类类型的变量指向的对象，实际类类型变量是对应对象的引用，是对象的一个地址。示例：
+```java
+public class Hero {
+        
+    String name; //姓名
+        
+    float hp; //血量
+        
+    float armor; //护甲
+        
+    int moveSpeed; //移动速度
+     
+    public Hero(){
+         
+    }
+     
+    public Hero(String name,float hp){
+        this.name = name;
+        this.hp = hp;
+    }
+ 
+    //复活
+    public void revive(Hero h){ //传入的参数是Hero类型的引用
+        h = new Hero("提莫",383);
+    }
+ 
+    public static void main(String[] args) {
+        Hero teemo =  new Hero("提莫",383);
+         
+        //受到400伤害，挂了
+        teemo.hp = teemo.hp - 400;
+         
+        teemo.revive(teemo); // teemo中hp的值变为了383，即通过类类型传递的是可以在函数内部修改的。
+         
+    
+         
+    }
+      
+}
+
+## 包
+
+* 把具有某种关系的类放在一个包里。包必须在类最开始的地方声明。示例：
+```java
+package charactor; //在最开始的地方声明该类所处于的包名
+public class Hero {
+        
+    String name; //姓名
+        
+    float hp; //血量
+        
+    float armor; //护甲
+        
+    int moveSpeed; //移动速度
+     
+}
+```
+* 包与类的关系示例：
+![java](https://gitee.com/zhangjie0524/picgo/raw/master/uPic/java.jpg)
+* 同一个包里的其它类可以直接使用，但是其他包里的类必须使用`import`来导入。示例：
+```java
+package charactor;
+ 
+//Weapon类在其他包里，使用必须进行import
+import property.Weapon;//格式为 import <包名>.<类名>;
+ 
+public class Hero {
+        
+    String name; //姓名
+        
+    float hp; //血量
+        
+    float armor; //护甲
+        
+    int moveSpeed; //移动速度
+     
+    //装备一把武器
+    public void equip(Weapon w){
+         
+    }
+        
+}
+```
+
+## 
