@@ -320,7 +320,7 @@ public class Hero {
 } //英雄是一个大类，而具体的每个英雄则是一个对象
 ``` 
 * **属性**：类中定义的变量就是类的属性，类中的属性就像一种东西的各种属性。属性可以是基本类型（如int等）也可以是类类型（如String等）.属性名称一般是小写，但是如果由两个及以上单词组成，则从第二个单词开始，首字母大写。
-*  **方法**：类中的东西不仅具有属性，它还会做事情，能做的事情就是类中的方法。（方法的实质是在类中定义的函数）.方法的命名方法与属性一样。示例：
+*  **方法**：类中的东西不仅具有属性，它还会做事情，能做的事情就是类中的方法。（方法的实质是在类中定义的函数）.方法的命名方法与属性一样。方法与属性的调用方法都是通过在对象后使用`.`。示例：
 ```java
 public class Hero {
     String name; //姓名
@@ -368,6 +368,39 @@ public class Hero {
 * （类比c语言的指针），可以有多个引用指向同一个对象，但是一个引用不能同时指向多个对象。
 
 ## 继承
+
+* 如果另一类东西有已经定义的某一类东西全部属性，则可以通过继承来避免属性的重复定义。继承是通过关键字`extends`来实现的。示例：
+```java
+public class Item {
+    String name;
+    int price;
+}
+
+// 非继承的写法
+public class Weapon{
+    String name;
+    int price;
+    int damage; //攻击力
+ 
+}
+//继承的写法
+
+public class Weapon extends Item{ // 通过extends来
+    int damage; //攻击力
+     
+    public static void main(String[] args) {
+        Weapon infinityEdge = new Weapon();
+        infinityEdge.damage = 65; //damage属性在类Weapon中新设计的
+         
+        infinityEdge.name = "无尽之刃";//name属性，是从Item中继承来的，就不需要重复设计了
+        infinityEdge.price = 3600;
+         
+    }
+     
+}
+```
+
+## 方法重载
 
 
 
