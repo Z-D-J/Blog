@@ -898,6 +898,43 @@ public class GiantDragon {
 }
 ```
 
+# 接口与继承
 
+## 接口（Interface）
 
+* 接口是纯抽象的类（接口表达的是规范）。接口是抽象的，它的所有成员函数都是抽象函数（语句体都是空的），它的所有成员变量都是`public static final`类型。
+* 接口的创建：
+```java
+package charactor;
+ 
+public interface AD { //接口的创建使用关键字interface。
+        //物理伤害
+    public void physicAttack(); //接口的成员函数都是抽象函数，只有其形，而实际里面什么也没有。
+}
+```
+* 接口的使用：
+```java
+package charactor;
+ 
+public class ADHero extends Hero implements AD{ //ADHero是从Hero继承而来的的子类，并且使用关键字implements加入了AD接口
 
+    @Override
+    public void physicAttack() { //接口在实际使用的时候再定义具体操作的实现。
+        System.out.println("进行物理攻击");
+    }
+ 
+}
+```
+    * 接口使用关键字`implements`来加入，并且可以同时加入多个接口，如`...implements AD,AP`.
+
+## 对象转型
+
+### 引用类型和对象类型
+
+* 在`Hero a = new Hero()`中，a是引用，a的类型即是引用类型（此例中为a前面的Hero类类型），而`new Hero()`创建的就是对象，对象类型就是Hero类类型。
+
+### 子类转父类（向上转型）
+
+* 类型转换发生在引用类型和对象类型不一致的时候。（类似基本类型中`=`两边的类型不一致时。）类型转换不一定会成功。（就像基本类型转换也会有失败的时候，就像int不能转换为double）。子类是可以转换为父类的（就像基本类型中，长的可以转换为短的，如double可以转换为int）。
+
+### 父类转子类
