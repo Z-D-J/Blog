@@ -727,7 +727,7 @@ public class Hero {
            Hero garen =  new Hero();
            garen.name = "盖伦";
             
-           Hero.copyright = "版权由Riot Games公司所有";
+           Hero.copyright = "版权由Riot Games公司所有"; //对类属性的赋值
             
            System.out.println(garen.name);
            System.out.println(garen.copyright);
@@ -740,5 +740,164 @@ public class Hero {
     }
      
 }
-* 对类属性的赋值通过直接使用类名来完成`Hero.copyright = `.但是在实际的使用中（如idea）虽然使用对象名来改变不被
+```
+* 对类属性的赋值通过直接使用类名来完成`Hero.copyright = `.也可以通过实际的对象来调用，不过一般还是使用类来直接调用，这样更符合类对象的概念。
+
+## 类方法（静态方法）
+
+* **类方法**，又叫静态方法。同类对象相似，类方法也是通过在方法名前面加上`static`关键字来实现的。
+* 与类方法相对的是**对象方法**，对象方法又叫实例方法，非静态方法。示例：
+```java
+package charactor;
+ 
+public class Hero {
+    public String name;
+    protected float hp;
+ 
+    //实例方法,对象方法，非静态方法
+    //必须有对象才能够调用
+    public void die(){
+        hp = 0;
+    }
+     
+    //类方法，静态方法
+    //通过类就可以直接调用
+    public static void battleWin(){
+        System.out.println("battle win");
+    }
+     
+    public static void main(String[] args) {
+           Hero garen =  new Hero();
+           garen.name = "盖伦";
+           //必须有一个对象才能调用
+           garen.die();
+            
+           Hero teemo =  new Hero();
+           teemo.name = "提莫";
+            
+           //无需对象，直接通过类调用
+           Hero.battleWin();
+         
+    }
+}
+```
+* **对象方法必须用实际创建的对象才能调用**，而类方法可以使用类来直接调用，也可以使用对象来调用。（同类对象的情况一致）。
+* 当某个方法没有涉及到具体对象的属性时，设计为类方法，而当涉及具体对象的属性时，则一般设计为对象方法。示例：
+```java
+    public String getName(){
+    	return name;
+    }
+
+    public static void printGameDuration(){
+        System.out.println("已经玩了10分50秒");
+    }
+```
+## 属性初始化
+
+* 对象属性初始化。
+  1. 在声明时初始化；
+  2. 在块中初始化；
+  3. 在构造方法中初始化。
+  4. **初始化的顺序**：如果三种初始化方式同时出现，则不管构造方法中初始化的相对位置在哪里，它的初始化都是最后执行的。
+  5. 示例：
+```java
+public class Hero {
+    public String name = "some hero"; //声明该属性的时候初始化
+    protected float hp;
+    float maxHP;
+     
+    {
+        maxHP = 200; //初始化块,单独用花括号给出一个用来初始化属性的块。
+    }  
+     
+    public Hero(){
+        hp = 100; //构造方法中初始化
+         
+    }
+     
+}
+```
+
+* 类属性初始化
+  1. 声明时初始化
+  2. 静态初始化块:在普通花括号形成的块前面加上关键字`static`形成静态初始化块。
+  3. 示例：
+```java
+public class Hero {
+    public String name;
+    protected float hp;
+    float maxHP;
+     
+    //物品栏的容量
+    public static int itemCapacity = 8; //声明的时候 初始化
+     
+    static{
+        itemCapacity = 6;//静态初始化块 初始化
+    }
+     
+    public Hero(){
+         
+    }
+     
+    public static void main(String[] args) {
+        System.out.println(Hero.itemCapacity);
+    }
+     
+}
+```
+
+## 单例模式
+
+* **单例模式**又叫**Singleton**模式，表示的是一个类，在一个JVM（Java虚拟机）中只有一个实例存在。
+
+### 饿汉式单例模式
+
+* 饿汉式单例模式通过使用private使构造方法无法在外部通过new来创建对象，并创建一个新的方法指定在类中定义的对象，每次使用该方法都只能产生一个唯一的对象从而实现单例模式。
+```java
+public class GiantDragon {
+ 
+    //私有化构造方法使得该类无法在外部通过new 进行实例化
+    private GiantDragon(){
+         
+    }
+ 
+    //准备一个类属性，指向一个实例化对象。 因为是类属性，所以只有一个
+ 
+    private static GiantDragon instance = new GiantDragon();
+     
+    //public static 方法，提供给调用者获取前面定义的instance对象
+    public static GiantDragon getInstance(){
+        return instance;
+    }
+     
+}
+```
+### 懒汉式单例模式
+
+* 懒汉式与饿汉式的区别在于懒汉式只有在调用创建对象的方法时才第一次创建对象。
+```java
+public class GiantDragon {
+  
+    //私有化构造方法使得该类无法在外部通过new 进行实例化
+    private GiantDragon(){       
+    }
+  
+    //准备一个类属性，用于指向一个实例化对象，但是暂时指向null
+    private static GiantDragon instance;
+      
+    //public static 方法，返回实例对象
+    public static GiantDragon getInstance(){
+        //第一次访问的时候，发现instance没有指向任何对象，这时实例化一个对象
+        if(null==instance){
+            instance = new GiantDragon();
+        }
+        //返回 instance指向的对象
+        return instance;
+    }
+      
+}
+```
+
+
+
 
