@@ -898,6 +898,9 @@ public class GiantDragon {
 }
 ```
 
+## 枚举类型
+。。。
+
 # 接口与继承
 
 ## 接口（Interface）
@@ -937,4 +940,48 @@ public class ADHero extends Hero implements AD{ //ADHero是从Hero继承而来�
 
 * 类型转换发生在引用类型和对象类型不一致的时候。（类似基本类型中`=`两边的类型不一致时。）类型转换不一定会成功。（就像基本类型转换也会有失败的时候，就像int不能转换为double）。子类是可以转换为父类的（就像基本类型中，长的可以转换为短的，如double可以转换为int）。
 
-### 父类转子类
+### 父类转子类（向下转型）
+
+* 父类转子类需要进行强制类型转换，如`a  = (ADHero)h`.
+
+### 没有继承关系的类
+
+* 没有继承关系的类之间转换一定会失败，即使用强制类型转换也会出现异常报错。
+
+### 实现类转换为接口(向上转型)
+
+### 接口转换为实现类（向下转型）
+
+## instanceof语句
+
+* instanceof语句用来判断一个引用所指向的对象是否是某种类的实例化或者其子类的实例化。使用示例：`h instanceof Hero`判断引用h指向的对象是否是Hero类或者Hero子类的，如果是则结果为true，否则为false。
+
+## 重写
+
+* 子类可以继承父类的对象方法，如果子类对从父类继承过来的对象方法进行了修改（即在子类中对相同名字的对象方法在写一遍，故称为重写），这就叫做方法的重写。示例：
+```java
+package property;
+ 
+//父类
+public class Item {
+    String name;
+    
+    public void effect() {
+        System.out.println("物品使用后，可以有效果");
+    }
+ 
+}
+
+//从Item中继承的子类
+public class LifePotion extends Item{
+     
+     //对Item中的effect方法进行了重写
+    public void effect(){
+        System.out.println("血瓶使用后，可以回血");
+    }
+     
+}
+```
+
+## 多态
+
