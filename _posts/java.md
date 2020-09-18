@@ -985,3 +985,137 @@ public class LifePotion extends Item{
 
 ## 多态
 
+### 操作符的多态
+
+* 操作符的多态是指同一个操作符在不同的情景下的作用不同。如`+`，在算术运算中是加法的作用，而在字符串中是连接字符串的作用。
+
+### 类的多态
+
+* 同一个类的同一个方法，输出不同的结果是类的一种多态现象。示例：
+```java
+package property;
+ 
+public class Item {
+    String name;
+    int price;
+ 
+    public void buy(){
+        System.out.println("购买");
+    }
+    public void effect() {
+        System.out.println("物品使用后，可以有效果 ");
+    }
+     
+    public static void main(String[] args) {
+        Item i1= new LifePotion(); //LifePotion和MagicPotion是类Item的两个子类。而且这两个子类中都有方法的重写。
+        Item i2 = new MagicPotion(); //引用是父类类型的。
+        System.out.print("i1  是Item类型，执行effect打印:"); //由于两个子类的重写方法不同，导致调用同一个方法会有不同的输出
+        i1.effect();
+        System.out.print("i2也是Item类型，执行effect打印:");
+        i2.effect();
+    }
+ 
+}
+```
+
+* 实现类的多态的条件:
+  1. 父类（接口）指向子类的对象；
+  2. 调用的方法被重写。
+
+## 隐藏
+
+* 与重写类似。重写是子类对父类的**对象方法**的覆盖，而隐藏是对父类的**类方法的覆盖**。示例：
+```java
+package charactor;
+  
+public class Hero {
+    public String name;
+    protected float hp;
+  
+    //类方法，静态方法
+    //通过类就可以直接调用
+    public static void battleWin(){
+        System.out.println("hero battle win");
+    }
+      
+}
+
+public class ADHero extends Hero {
+  
+    //隐藏父类的battleWin方法
+    public static void battleWin(){
+        System.out.println("ad hero battle win");
+    }   
+     
+    public static void main(String[] args) {
+        Hero.battleWin(); //输出的是hero battle win
+        ADHero.battleWin(); //输出的是ad hero battle win
+    }
+  
+}
+```
+
+## super关键字
+
+* super是在子类中调用父类中的属性，方法的关键字。
+    1. 显式调用带参的父类构造方法；如`super(参数)`
+    2. 调用父类的属性：如`super.name`
+    3. 调用父类的普通方法:如`super.useItem()`.
+
+## Object类
+
+* Object默认是所有类的父类。
+* Object类中提供的方法所有类都默认含有。
+* Objiect类中有很多方法，如`toString(), finalize(),equals()...`。
+
+## final修饰词
+
+* final在修饰类、方法、基本类型变量、引用是分别有不同的意思。
+
+### final修饰类
+
+* final修饰类时表示该类不能被继承。使用示例：
+```java
+package charactor;
+ 
+public final class Hero extends Object {
+        
+    String name; //姓名
+        
+    float hp; //血量
+        
+}
+```
+
+### final修饰方法
+
+* 如果类中的方法被final修饰，则代表该方法不能在子类中被重写。使用示例：
+```java
+public class Hero {
+        
+    String name; //姓名
+        
+   
+     
+    public final void useItem(){
+        System.out.println("hero use item");
+    }   
+     
+  
+    public static void main(String[] args) {
+        new Hero();
+    }
+      
+}
+```
+
+### final修饰基本类型变量
+
+* final修饰基本类型变量表示该类型只有一次赋值机会（即变量在第一次被手动初始化后便是只读的变量，再不可修改了），如：`final int hp = 2;`
+
+### final修饰引用
+
+* 被final修饰的引用代表该引用只有一次被赋予指向对象的机会（类似基本类型变量只有一次赋值机会）。
+
+
+
