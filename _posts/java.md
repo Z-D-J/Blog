@@ -684,5 +684,61 @@ public class Hero {
         
 }
 ```
+## 成员变量的修饰符
 
-## 
+### 类之间的关系
+
+* 自身：指的是当前类自己。
+* 同包子类：当前类的处于同一包下的子类。
+* 不同包子类：当前类的没有处于同一个包下的子类。
+* 同包类：两个处于一个包下，但是彼此没有继承关系的类。
+* 其他类：没有处于同一个包下，也没有继承关系的两个类。
+
+
+### private
+
+* 使用private修饰的变量，只有只有这种类的对象才可以访问，子类不可以继承，其它的类就更不能访问了。
+
+### 没有修饰符
+
+* 没有修饰符的成员变量，自身的对象可以访问，同包的类可以访问，同包子类可以继承，不同包子类也可以继承，但是不同包的类不可以访问。
+
+### proteced
+
+* 使用protected修饰的成员变量，同包类可以访问和继承，不同包的类不可以访问和继承。
+
+### public
+
+* 任何地方，都可以访问和继承。
+
+## 类属性（static）
+
+* 当类中的属性被static修饰时，这个属性就叫做**类属性**，又叫做**静态属性**。如果某个属性被声明为类属性，那么该类所有的对象都共享这个值。
+* 与类属性相对的（类中没有static修饰的属性）叫做**对象属性**，又叫做**非静态属性**，**实例属性**。示例：
+```java
+package charactor;
+ 
+public class Hero {
+    public String name; //实例属性，对象属性，非静态属性
+    protected float hp;
+    static String copyright;//类属性,静态属性
+     
+    public static void main(String[] args) {
+           Hero garen =  new Hero();
+           garen.name = "盖伦";
+            
+           Hero.copyright = "版权由Riot Games公司所有";
+            
+           System.out.println(garen.name);
+           System.out.println(garen.copyright);
+            
+           Hero teemo =  new Hero();
+           teemo.name = "提莫";
+           System.out.println(teemo.name);    
+           System.out.println(teemo.copyright);
+         
+    }
+     
+}
+* 对类属性的赋值通过直接使用类名来完成`Hero.copyright = `.但是在实际的使用中（如idea）虽然使用对象名来改变不被
+
