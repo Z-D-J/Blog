@@ -1117,5 +1117,186 @@ public class Hero {
 
 * 被final修饰的引用代表该引用只有一次被赋予指向对象的机会（类似基本类型变量只有一次赋值机会）。
 
+## 抽象类
 
+### 抽象方法
 
+* 没有实现体的方法，是抽象方法。抽象方法使用`abstract`关键字标识。示例：`public abstract void attack();`
+
+### 抽象类
+
+* 包含抽象方法的类必须声明为抽象类，使用关键字`abstract`。
+* 没有包含抽象方法的类也可以声明为抽象类。
+* 抽象类不可以被直接实例化。
+* **抽象类与接口区别**：一个子类只可以继承一个抽象类，但是可以实现多个接口。抽象类和接口都是为子类的具体实现提供了一个框架。
+* 抽象类与接口中都可以包含实体的方法，这些实体方法被叫做**默认方法**。
+* 示例：
+```java
+public abstract class Hero { //声明为抽象类
+    String name;
+             
+    public static void main(String[] args) {
+        //虽然没有抽象方法，但是一旦被声明为了抽象类，就不能够直接被实例化
+        Hero h= new Hero();
+    }
+          
+}
+```
+
+## 内部类
+
+* 在一个类内部声明的类就是**内部类**，相应的外面的类为**外部类**
+
+### 非静态内部类
+
+* 直接在类内部定义(类前面没有任何修饰词），只有在外部类存在的时候才有意义。实例化的语法：`new <外部类>().new <内部类>`或者`<外部类引用>.new <内部类>`.示例：
+```java
+package charactor;
+ 
+public class Hero {
+    private String name; // 姓名
+ 
+    // 非静态内部类，只有一个外部类对象存在的时候，才有意义
+    // 战斗成绩只有在一个英雄对象存在的时候才有意义
+    class BattleScore { //直接在内部定义，前面没有修饰词
+        int kill;
+        int die;
+        int assit;
+ 
+        public void legendary() {
+            if (kill >= 8)
+                System.out.println(name + "超神！");
+            else
+                System.out.println(name + "尚未超神！");
+        }
+    }
+ 
+    public static void main(String[] args) {
+        Hero garen = new Hero();
+        garen.name = "盖伦";
+        // 实例化内部类
+        // BattleScore对象只有在一个英雄对象存在的时候才有意义
+        // 所以其实例化必须建立在一个外部类对象的基础之上
+        BattleScore score = garen.new BattleScore();
+        score.kill = 9;
+        score.legendary();
+    }
+ 
+}
+```
+
+### 静态内部类
+
+* 静态内部类在外部类里面定义时加上了`static`修饰，此时的内部类与普通类相比，除了内部类可以访问外部类的私有静态成员外，没有任何区别。
+* 静态内部类不依赖于外部类的对象，所以可以直接实例化。如`h = new Hero.EnemyCrystal()`.
+* 示例：
+```java
+package charactor;
+  
+public class Hero {
+    public String name;
+    protected float hp;
+  
+    private static void battleWin(){
+        System.out.println("battle win");
+    }
+     
+    //敌方的水晶
+    static class EnemyCrystal{
+        int hp=5000;
+         
+        //如果水晶的血量为0，则宣布胜利
+        public void checkIfVictory(){
+            if(hp==0){
+                Hero.battleWin();
+                 
+                //静态内部类不能直接访问外部类的对象属性
+                System.out.println(name + " win this game");
+            }
+        }
+    }
+     
+    public static void main(String[] args) {
+        //实例化静态内部类
+        Hero.EnemyCrystal crystal = new Hero.EnemyCrystal();
+        crystal.checkIfVictory();
+    }
+  
+}
+```
+### 匿名类
+
+* 对于抽象方法，本来应该在子类中对其实现后，再实例化。但是**匿名类**是在实际使用这个抽象方法的时候直接对其现场实现，省去了在子类中实现的步骤，因而没有子类的名字，叫做匿名。但是，实际上系统是自动为这个你未曾创建的子类分配了一个名字。
+* 示例：
+```java
+package charactor;
+   
+public abstract class Hero {
+    String name; //姓名
+             
+    public abstract void attack(); //抽象方法
+      
+    public static void main(String[] args) {
+          
+        ADHero adh=new ADHero();
+        //通过打印adh，可以看到adh这个对象属于ADHero类
+        adh.attack();
+        System.out.println(adh);
+          
+        Hero h = new Hero(){ //对抽象类在实例化时直接实现抽象类，省去了在子类中实现的步骤，从而没有类名，故为匿名类。
+            //当场实现attack方法
+            public void attack() {
+                System.out.println("新的进攻手段");
+            }
+        };
+        h.attack();
+        //通过打印h，可以看到h这个对象属于Hero$1这么一个系统自动分配的类名
+          
+        System.out.println(h);
+    }
+      
+}
+```
+
+### 本地类
+
+* 本地类可以看做有名字的匿名类，都是在实际使用的代码块里对抽象方法进行实现，只是本地类还顺手创建了子类的名字。示例：
+```java
+package charactor;
+   
+public abstract class Hero {
+    String name; //姓名
+      
+    public abstract void attack();
+      
+    public static void main(String[] args) {
+          
+        //与匿名类的区别在于，本地类有了自定义的类名
+        class SomeHero extends Hero{ //s使用时创建了Hero的子类SomeHero
+            public void attack() {
+                System.out.println( name+ " 新的进攻手段");
+            }
+        }
+         
+        SomeHero h  =new SomeHero();
+        h.name ="地卜师";
+        h.attack();
+    }
+      
+}
+```
+
+## 默认方法
+
+* 在接口中除了抽象方法，还可以实现具体的方法，这个实现了的方法就是默认方法。默认方法前使用`default`来修饰。示例：
+```java 
+package charactor;
+ 
+public interface Mortal {
+    public void die(); //抽象方法
+ 
+    default public void revive() { //默认方法
+        System.out.println("本英雄复活了");
+    }
+}
+```
