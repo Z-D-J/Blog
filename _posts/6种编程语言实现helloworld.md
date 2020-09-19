@@ -66,3 +66,29 @@ public class Hello {
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200919112209.jpg)
 （不过y1s1,除了打helloworld，其它程序还是用idea香，Java补全不行是真的难受）
 
+# JavaScript
+
+## 环境
+
+* JS是一门脚本语言，编程是通过js解释器来逐行解释。js解释器在浏览器中就自带有。
+
+## helloworld实现
+
+* 程序源代码：
+```javascript
+<script language = "javascript">
+
+    function sayHello() {
+        document.write("hello world! I'm 2019091615004 张杰");
+    }
+    sayHello();
+</script>
+```
+* 新建一个.html类型的文件（因为JavaScript是嵌入到HTML中使用的），之后将代码写入，最后用浏览器（我用的是edge）打开即可。
+* 实现截图：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200919130507.jpg)
+
+# PHP
+
+# Ruby
+
