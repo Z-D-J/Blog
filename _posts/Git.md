@@ -162,7 +162,7 @@ tags:
 * 使用`git tag`查看所有标签；
 * 使用`git tag <标签名> <commit id>`给具体某个commit打上标签。
 * 使用`git show <标签名>`查看某个标签的具体信息。
-###
+### 远程标签
 
 * 命令`git push origin <tagname>`可以推送一个本地标签。
 * 命令`git push origin --tags`可以推送全部未推送过的本地标签；
