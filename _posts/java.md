@@ -1301,3 +1301,7 @@ public interface Mortal {
     }
 }
 ```
+# Java的API
+---
+实在是太多了，可以在需要时查看API的[官方文档](https://docs.oracle.com/en/java/javase/15/docs/api/index.html)
+
