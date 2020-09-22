@@ -66,7 +66,7 @@ public class Sums {
     }
 }
 ```
-# 拥有糖果最多的孩子
+# 拥有糖果最多的孩子 1431
 
 * 题目：
 ---
@@ -89,6 +89,7 @@ public class Sums {
 
 * java解法
 ---
+* 先找到拥有糖果数量最多的孩子，将加上补充的糖果数后的与这个最大比较
 ```java
 public class Candy {
 
@@ -102,15 +103,48 @@ public class Candy {
         }
 
 
-        for(int i = 0; i < candies.length; i++) {
-            if(candies[i] + extraCandies >= max) {
-                most.add(true);
-            }
-            else {
-                most.add(false);
-            }
-        }
+//     for(int i = 0; i < candies.length; i++) {
+//       if(candies[i] + extraCandies >= max) {
+//         most.add(true);
+//        }
+//            else {
+//              most.add(false);
+//            }
+//        }
+        //用foreach循环代替上面的普通for循环，因为计数变量i除了除了用来指示当前数组变量，没有任何作用。
+        for (int candy : candies) {
+                    if (candy + extraCandies >= max) {
+                        most.add(true);
+                    } else {
+                        most.add(false);
+                    }
+                }
 
         return most;
+    }
+    //测试
+      public static  void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int Maxsize;
+        System.out.println("输入孩子个数：");
+        Maxsize = in.nextInt();
+        int[] candies = new int[Maxsize];
+
+        System.out.println("请输入每个孩子的糖果数量：");
+        for (int i = 0; i < candies.length; i++) {
+            candies[i] = in.nextInt();
+        }
+
+        System.out.println("输入增加的糖果：");
+        int extraCandies = in.nextInt();
+
+        Candy candy = new Candy();
+
+        List<Boolean> most2 = candy.kidsWithCandies(candies, extraCandies);
+
+        for(int i = 0; i < candies.length; i++) {
+            System.out.print(most2.get(i) + " ");
+        }
+
     }
 ```
