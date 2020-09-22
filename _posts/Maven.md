@@ -35,3 +35,53 @@ tags:
 |部署 deploy|	部署	|拷贝最终的工程包到远程仓库中，以共享给其他开发人员和工程|
 
 # Maven构建配置文件
+
+# Maven的仓库
+
+* Maven 仓库能帮助我们管理构件（主要是JAR），它就是放置所有JAR文件（WAR，ZIP，POM等等）的地方。
+* Maven 仓库有三种类型：
+  1. 本地（local）
+  2. 中央（central）
+  3. 远程（remote）
+* 本地仓库：
+    * 运行 Maven 的时候，Maven 所需要的任何构件都是直接从本地仓库获取的。如果本地仓库没有，它会首先尝试从远程仓库下载构件至本地仓库，然后再使用本地仓库的构件。 
+    *Maven 本地仓库默认被创建在 %USER_HOME% 目录下。要修改默认位置，在 %M2_HOME%\conf 目录中的 Maven 的 settings.xml 文件中定义另一个路径。当你运行 Maven 命令，Maven 将下载依赖的文件到你指定的路径中。
+    ```xml
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 
+    http://maven.apache.org/xsd/settings-1.0.0.xsd">
+        <localRepository>C:/MyLocalRepository</localRepository>
+    </settings>
+    ```
+* 中央仓库：
+  * 这个仓库由 Maven 社区管理。
+  * 不需要配置。
+  * 需要通过网络才能访问。
+  * 要浏览中央仓库的内容，maven 社区提供了一个 URL：http://search.maven.org/#browse。使用这个仓库，开发人员可以搜索所有可以获取的代码库。
+* 远程仓库：
+    * 如果 Maven 在中央仓库中也找不到依赖的文件，它会停止构建过程并输出错误信息到控制台。为避免这种情况，Maven 提供了远程仓库的概念，它是开发人员自己定制仓库，包含了所需要的代码库或者其他工程中用到的 jar 文件。
+* 依赖的搜索顺序：
+    1. 步骤 1 － 在本地仓库中搜索，如果找不到，执行步骤 2，如果找到了则执行其他操作。
+    2. 步骤 2 － 在中央仓库中搜索，如果找不到，并且有一个或多个远程仓库已经设置，则执行步骤 4，如果找到了则下载到本地仓库中以备将来引用。
+    3. 步骤 3 － 如果远程仓库没有被设置，Maven 将简单的停滞处理并抛出错误（无法找到依赖的文件）。
+    4. 步骤 4 － 在一个或多个远程仓库中搜索依赖的文件，如果找到则下载到本地仓库以备将来引用，否则 Maven 将停止处理并抛出错误（无法找到依赖的文件）。
+
+# Maven插件
+
+* 每个生命周期中都包含着一系列的阶段(phase)。这些 phase 就相当于 Maven 提供的统一的接口，然后这些 phase 的实现由 Maven 的插件来完成。
+* Maven 生命周期的每一个阶段的具体实现都是由 Maven 插件实现的。Maven 实际上是一个依赖插件执行的框架，每个任务实际上是由插件完成。Maven 插件通常被用来：1.创建 jar 文件 2.创建 war 文件 3.编译代码文件 4.代码单元测试 5.创建工程文档 6.创建工程报告。
+* 插件的执行：`<code>mvn [plugin-name]:[goal-name]</code>`
+* 常用插件：
+
+|插件|描述|
+|-|-|
+|clean|	构建之后清理目标文件。删除目标目录。|
+|compiler	|编译 Java 源文件。|
+|surefile|	运行 JUnit 单元测试。创建测试报告。|
+|jar	|从当前工程中构建 JAR 文件。|
+|war	|从当前工程中构建 WAR 文件。|
+|javadoc	|为工程生成 Javadoc。|
+|antrun	|从构建过程的任意一个阶段中运行一个 ant 任务的集合。|
+
+* 插件是在 pom.xml 中使用 plugins 元素定义的。每个插件可以有多个目标。
