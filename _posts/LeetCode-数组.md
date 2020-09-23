@@ -207,3 +207,114 @@ public class Resort1470 {
 }
 ```
 * 法二：
+
+#  左旋转字符串 剑指offer 58-II
+
+* 题目：
+---
+字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
+
+ 
+
+示例 1：
+
+输入: s = "abcdefg", k = 2
+输出: "cdefgab"
+
+* Java解法：
+---
+* 将该字符串分为两个子串，然后再反向连接起来
+```java
+import java.util.Scanner;
+
+public class ReverseLeftWords {
+
+    public String reverseLeftWords(String s, int n) {
+         String str1 = s.substring(0, n); //读入从0到n（但是不包括下标为n的）
+         String str2 = s.substring(n); //从n开始到最后（包括下标为n的）
+         String  s1 = str2 + str1;//反向连接，达到左旋转的效果
+
+         return s1;
+// return s.substring(n) + s.substring(o, n);
+
+    }
+
+    public static void main(String[] args) {
+        String s = " ";
+        int n;
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("请输入字符：");
+        s = in.nextLine();
+
+        System.out.println("请输入从哪里开始转：");
+        n = in.nextInt();
+
+        var reverse = new ReverseLeftWords();
+        s = reverse.reverseLeftWords(s, n);
+
+        for(int i = 0; i < s.length(); i++) {
+            System.out.print(s.charAt(i) + " ");
+        }
+
+    }
+}
+```
+
+# 好数对的数目 1512
+
+* 题目
+---
+给你一个整数数组 nums 。
+
+如果一组数字 (i,j) 满足 nums[i] == nums[j] 且 i < j ，就可以认为这是一组 好数对 。
+
+返回好数对的数目。
+
+ 
+
+示例 1：
+
+输入：nums = [1,2,3,1,1,3]
+输出：4
+解释：有 4 组好数对，分别是 (0,3), (0,4), (3,4), (2,5) ，下标从 0 开始.
+
+* java解法
+---
+* 法一：双重循环遍历数组，外层为数组这个计数循环，内层取寻找与当前元素相同的元素（但是只找当前位置之后的，避免重复计算）
+```java
+import java.util.Scanner;
+
+public class NumPairs1512 {
+
+    public int numIdenticalPairs(int[] nums) {
+        int ans = 0;
+
+        for(int i = 0; i < nums.length; i++) {
+            for(int j = i + 1; j < nums.length; j++) { //每次统计相同的元素都是从当前位置向后遍历，这样就不会有重复的情况
+                if(nums[i] == nums[j]) {
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        System.out.println("请输入数组长度：");
+        int maxsize = in.nextInt();
+        System.out.println("请输入数字：");
+        int[] nums = new int[maxsize];
+
+        for(int i = 0; i < nums.length; i++) {
+            nums[i] = in.nextInt();
+        }
+
+        var pairs = new NumPairs1512();
+        System.out.println("好数对有" + pairs.numIdenticalPairs(nums) + "对");
+    }
+}
+```
+* 法二：
+
