@@ -21,6 +21,7 @@ tags:
 # 常量
 
 * 类似变量的定义声明，常量只需要在定义时在类型前加上关键词`final`。常量只能在定义时赋值初始化，之后不能再赋值。
+* 可以在类中定义final类型的实例字段。如果在定义时没有给final类型的变量赋值，那么就可以在**构造器**（也只有在构造器中，其他方法不行）中为它赋值
 * **变量的作用域**：总的来说，Java中变量的作用域就是在它被定义的花括号之内。如，在for循环内部定义的就只在该循环内有效，在函数内部定义的就只在函数内部有效。
 
 # 运算
@@ -695,7 +696,9 @@ public class Hero {
 
 ## 包
 
-* 把具有某种关系的类放在一个包里。包必须在类最开始的地方声明。示例：
+* 把具有某种关系的类放在一个包里。包必须在**类最开始的地方声明**。
+* 借助包名可以确保类名的唯一性。包名常使用因特网域名的逆序形式。如域名为`horstman.com`则将包名设为`com.horstman`.包名之后还可以追加一个工程名之后再写上类名。如`com.horstman.corejava.Employee`，这个也被称为该类的**完全限定名**.其中corejava为工程名，Employee为类名。
+* 示例：
 ```java
 package charactor; //在最开始的地方声明该类所处于的包名
 public class Hero {
@@ -712,12 +715,17 @@ public class Hero {
 ```
 * 包与类的关系示例：
 ![java](https://gitee.com/zhangjie0524/picgo/raw/master/uPic/java.jpg)
-* 同一个包里的其它类可以直接使用，但是其他包里的类必须使用`import`来导入。示例：
+
+### 类的导入
+
+* 一个类可以使用所属包中的所有类，以及其他包里的公共类。但是其他包里的公共类必须使用`import`来导入。（也可以在使用其他包里的公共类时使用其完全限定名）
+* 使用`import 包名.*`可以导入一个包里的所有类。（但是只能使用`*`导入一个包，不能导入一个包里嵌套的所有包。
+* 示例：
 ```java
 package charactor;
  
 //Weapon类在其他包里，使用必须进行import
-import property.Weapon;//格式为 import <包名>.<类名>;
+import property.Weapon;//格式为 import 类的完全限定名;
  
 public class Hero {
         
@@ -736,6 +744,17 @@ public class Hero {
         
 }
 ```
+
+### 静态导入
+
+* 在import关键字之后加上static修饰符可以导入某个类中的静态方法和静态字段。如：`import static java.lang.System.*`可以导入System类中的所有静态方法和静态字段。如果这样导入，`System.out.print()`就可以用`out.print()`代替（可以省略类名）。当然，也可以导入特定的方法和字段。如`import static java.lang.System.out`.
+
+### 在包中增加类
+
+* 要将类放入包中需要将包的名字放在该类源文件的开头。如`package com.horstman.corejava`.如果在源文件开头没有防止package语句，则这个类就默认属于**无名包**（没有名字，但是实际存在的的包）。还要注意**类的源文件必须放到与完整包名匹配的目录中**。
+* 编译和运行类必须切换到基目录。
+
+
 ## 成员变量的修饰符
 
 ### 类之间的关系
@@ -748,7 +767,7 @@ public class Hero {
 
 ### private
 
-* 使用private修饰的变量，只有只有这种类的对象才可以访问，子类不可以继承，其它的类就更不能访问了。
+* 使用private修饰的变量，只有这种类的对象才可以访问，子类不可以继承，其它的类就更不能访问了。
 
 ### 没有修饰符
 
