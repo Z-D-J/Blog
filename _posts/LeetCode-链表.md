@@ -75,3 +75,74 @@ public class SinglyLinkedList {
     }
 }
 ```
+
+# 二进制链表转整数 1290
+
+* 题目
+---
+给你一个单链表的引用结点 head。链表中每个结点的值不是 0 就是 1。已知此链表是一个整数数字的二进制表示形式。
+
+请你返回该链表所表示数字的 十进制值 。
+
+ 
+
+示例 1：
+
+
+
+输入：head = [1,0,1]
+输出：5
+解释：二进制数 (101) 转化为十进制数 (5)
+
+* java解法
+---
+
+* 法一：
+```java
+import java.util.Scanner;
+
+public class BtoD  {
+    public int binaryToDecimal(SinglyLinkedList head) {
+        int nums = 0;
+        int result = 0;
+        int temp = 0;
+        int index = 1;
+        SinglyLinkedList node = head;
+        for( nums = 0; node != null; node = node.next, nums++);
+
+        node = head;
+        for(; node != null; ) {
+            temp = nums;
+            for(index = 1; temp - 1 > 0; temp--) {
+                index *= 2;
+            }
+            result += index * node.val;
+            node = node.next;
+            nums--;
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("请输入一串二进制数字，以-1结束：");
+        int temp = in.nextInt();
+        SinglyLinkedList fnode  = new SinglyLinkedList(temp);
+        SinglyLinkedList head = fnode; //保存头结点
+        temp = in.nextInt();
+        while (temp != -1) {
+            SinglyLinkedList lnode = new SinglyLinkedList(temp);
+            fnode.next = lnode;
+            fnode = lnode; //使当前结点始终为链表末尾的结点
+            temp = in.nextInt();
+        }
+
+        BtoD converse = new BtoD();
+        System.out.println("十进制的结果为：" + converse.binaryToDecimal(head));
+    }
+}
+```
+
+* 法二：使用位运算
