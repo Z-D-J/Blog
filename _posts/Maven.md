@@ -8,10 +8,14 @@ tags:
 
 * maven是基于POM（project object model:项目对象模型）的软件项目管理工具。
 * Maven 是一个项目管理工具，可以对 Java 项目进行构建、依赖管理。Maven 也可被用于构建和管理各种项目，例如 C#，Ruby，Scala 和其他语言编写的项目。
+)
+* Maven 可以统一**管理所有的依赖 jar**，甚至是不同的版本。程序员也可以动态地将自己写好的模块打包成 jar 包让它管理。需要的时候，可以直接通过简单的描述文件告诉 Maven，它会自动帮助程序员找出来，集成到项目中。并且它提供了中央仓库，能帮我们自动下载构件。
+* maven可以进行对指定目录下的代码进行单元测试，检测代码质量。
+
 
 # maven的安装
 
-* 参见：[菜鸟教程](https://www.runoob.com/maven/maven-setup.html)
+* 参见：[菜鸟教程](https://www.runoob.com/maven/maven-setup.html
 
 # Maven POM
 
@@ -38,7 +42,7 @@ tags:
 
 # Maven的仓库
 
-* Maven 仓库能帮助我们管理构件（主要是JAR），它就是放置所有JAR文件（WAR，ZIP，POM等等）的地方。
+* Maven 仓库能帮助我们管理构件（主要是JAR），它就是放置所有JAR文件（WAR，ZIP，POM等等）的地方。即jar不是放在项目中，而是放在仓库中，实际使用的时候，maven通过jar包的坐标在**仓库**中定位jar包。
 * Maven 仓库有三种类型：
   1. 本地（local）
   2. 中央（central）
