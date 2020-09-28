@@ -28,15 +28,20 @@ tags:
 * 生命周期概述：
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200922005205.jpg)
 
-|阶段|处理|描述|
-|-|-|-|
-|验证 validate|	验证项目|	验证项目是否正确且所有必须信息是可用的|
-|编译 compile|	执行编译	|源代码编译在此阶段完成|
-|测试 Test|	测试|	使用适当的单元测试框架（例如JUnit）运行测试。|
-|包装 package|	打包	|创建JAR/WAR包如在 pom.xml 中定义提及的包|
-|检查 verify|	检查	|对集成测试的结果进行检查，以保证质量达标|
-|安装 install|	安装|	安装打包的项目到本地仓库，以供其他项目使用|
-|部署 deploy|	部署	|拷贝最终的工程包到远程仓库中，以共享给其他开发人员和工程|
+* 默认生命周期：
+
+
+|阶段|处理|命令｜描述|
+|-|-|-|-|
+|验证 validate|	验证项目||	验证项目是否正确且所有必须信息是可用的|
+|编译 compile|	执行编译	|mvn compile|源代码编译在此阶段完成|
+|测试 Test|	测试|mvn test|	使用适当的单元测试框架（例如JUnit）运行测试。|
+|包装 package|	打包	|mvn package|创建JAR/WAR包如在 pom.xml 中定义提及的包|
+|检查 verify|	检查	||对集成测试的结果进行检查，以保证质量达标|
+|安装 install|	安装|	mvn install|安装打包的项目到本地仓库，以供其他项目使用|
+|部署 deploy|	部署	|mvn deploy|拷贝最终的工程包到远程仓库中，以共享给其他开发人员和工程|
+
+* 清理生命周期；清除项目编译信息：mvn clean
 
 # Maven构建配置文件
 
@@ -90,4 +95,16 @@ tags:
 
 * 插件是在 pom.xml 中使用 plugins 元素定义的。每个插件可以有多个目标。
 
-# 
+# maven的目录结构
+
+* 核心代码部分；
+* 配置文件部分：jar包之外的部分。
+* 测试代码部分；
+* 测试配置文件部分。
+* maven标准目录结构：
+  * src/main/java:核心代码部分
+  * src/main/resources:配置文件部分
+  * src/test/java：测试代码部分
+  * src/test/resources:测试配置文件
+  * src/main/webapp:页面资源，js，css，图片等。
+
