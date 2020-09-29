@@ -108,3 +108,17 @@ tags:
   * src/test/resources:测试配置文件
   * src/main/webapp:页面资源，js，css，图片等。
 
+# pom.xml
+
+* 项目对象模型：
+  * 项目自身信息
+  * 项目运行所依赖的jar包信息
+  * 项目运行环境信息，比如jdk信息。
+* 依赖管理模型：（dependency）
+  * 管理jar包
+* 插件（plugins）
+  * 生命周期的每一个过程都对应底层的一个插件
+
+
+
+
