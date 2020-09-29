@@ -146,3 +146,64 @@ public class BtoD  {
 ```
 
 * 法二：使用位运算
+
+
+# 链表中倒数第k个结点 剑指offer22
+
+* 题目：
+---
+输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。例如，一个链表有6个节点，从头节点开始，它们的值依次是1、2、3、4、5、6。这个链表的倒数第3个节点是值为4的节点。
+
+ 
+
+示例：
+
+给定一个链表: 1->2->3->4->5, 和 k = 2.
+
+返回链表 4->5.
+
+* Java解法
+---
+* 数出链表的总结点个数，然后推出正序的排名。
+```java
+public static int kthtoLast(SinglyLinkedList head, int k) {
+        int nums = 1;
+        SinglyLinkedList node = head;
+        
+        //得出当前链表的总结点个数
+        while (node.next != null) { 
+            node = node.next;
+            nums++;
+        }
+
+        int index = nums - k + 1; //根据逆序排名得出正序排名
+        
+        //找到要求的结点
+        node = head;
+        for (int i = 1; i < index; i++) {
+            node = node.next;
+        }
+
+        return node.val;
+    }
+```
+
+测试代码：
+```java
+public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("请输入一串数字，以-1结束：");
+        SinglyLinkedList head = new SinglyLinkedList();
+        KthtoLast.getIn(head);
+
+        System.out.println("输入要返回倒数第几个数：");
+        int k = in.nextInt();
+
+        KthtoLast reverse = new KthtoLast();
+        System.out.println("结果为: " + reverse.kthtoLast(head, k));
+
+
+    }
+}
+```
