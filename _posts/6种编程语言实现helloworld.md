@@ -3,6 +3,22 @@ title: 6种编程语言实现helloworld
 date: 2020-09-19 10:21:20
 tags:
 ---
+# 总述
+
+## C语言
+
+## Python语言
+
+## Java语言
+
+## JavaScript语言
+
+## PHP语言
+
+* PHP（全称：PHP：Hypertext Preprocessor，即"PHP：超文本预处理器"）是一种通用开源脚本语言。PHP 脚本在服务器上执行
+
+## Ruby语言
+
 
 # c语言
 
@@ -92,8 +108,17 @@ public class Hello {
 
 ## 环境
 
+* 在windows上安装apache服务器：
+    * 去[官网](https://httpd.apache.org/)下载apache的windows版本
+    * 解压到c盘的根目录下（C:\Apache2.4)
+    * 使用管理员权限打开cmd，进入bin目录下，使用命令`httpd.exe -k insatll`将Apache安装成windows服务，之后使用`httpd.exe -k start`启动服务。
+* 在windows上安装PHP：
+    * 去[官网](http://php.net/downloads.php)下载PHP的zip文件；
+    * 
 * 在Windows上安装PHPstorm（使用学生邮箱白嫖）。
 
 
 # Ruby
+
+
 
