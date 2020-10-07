@@ -15,16 +15,18 @@ Markdown具有一系列衍生版本，用于扩展Markdown的功能（如表格�
 
 ## 二、 编辑Markdown的工具
 
-1.vscode  
- Markdown All in One -> 各种优化一股脑装上  
- Markdown Preview GitHub styling -> 使预览格式与GitHub pages中一样  
- Markdown preview ehenced -> 快捷键：英文输入状态下，同时按下ctrl,k 然后同时放开再按v可唤出预览窗口。
- Markdownlint ->  markdown语法检查纠正器
- Markdown PDF -> 将.md文件转换成pdf,jpeg,png,html格式
+1.vscode
+  * 需要安装插件
+    * Markdown All in One -> 各种优化一股脑装上  
+    * Markdown Preview GitHub styling -> 使预览格式与GitHub pages中一样  
+    * Markdown preview ehenced -> 快捷键：英文输入状态下，同时按下ctrl,k 然后同时放开再按v可唤出预览窗口。
+    * Markdownlint ->  markdown语法检查纠正器
+    * Markdown PDF -> 将.md文件转换成pdf,jpeg,png,html格式
 
 2.typora
 
 * 专业Markdown编辑器，可去[官网](https://www.typora.io/)下载。
+* 界面简约美观，专用于写Markdown文件，功能强劲。
 
 ## 三、文本编辑语法  
 
