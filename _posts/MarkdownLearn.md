@@ -13,14 +13,18 @@ banner_img: /img/markdown-syntax-language.png
 >Markdown是一种可以使用普通文本编辑器编写的标记语言，通过简单的标记语法，它可以使普通文本内容具有一定的格式。
 Markdown具有一系列衍生版本，用于扩展Markdown的功能（如表格、脚注、内嵌HTML等等），这些功能原初的Markdown尚不具备，它们能让Markdown转换成更多的格式，例如LaTeX，Docbook。Markdown增强版中比较有名的有Markdown Extra、MultiMarkdown、 Maruku等。这些衍生版本要么基于工具，如Pandoc；要么基于网站，如GitHub和Wikipedia，在语法上基本兼容，但在一些语法和渲染效果上有改动。
 
-## 二、 编辑Markdown的工具（VsCode)
+## 二、 编辑Markdown的工具
 
- 1.安装插件：  
+1.vscode  
  Markdown All in One -> 各种优化一股脑装上  
  Markdown Preview GitHub styling -> 使预览格式与GitHub pages中一样  
  Markdown preview ehenced -> 快捷键：英文输入状态下，同时按下ctrl,k 然后同时放开再按v可唤出预览窗口。
  Markdownlint ->  markdown语法检查纠正器
  Markdown PDF -> 将.md文件转换成pdf,jpeg,png,html格式
+
+2.typora
+
+* 专业Markdown编辑器，可去[官网](https://www.typora.io/)下载。
 
 ## 三、文本编辑语法  
 
@@ -145,10 +149,10 @@ Markdown具有一系列衍生版本，用于扩展Markdown的功能（如表格�
 
 注意：  
 
-* '*','-','+'三种符号任意一个都可创建无序列表
+* `*`,`-`,`+`三种符号任意一个都可创建无序列表
 * 无序列表每一行之后回车会自动新建一个空无序列表行
-* 符号“* ，-, +”与字符之间要有空格
-* 利用tab对'*、+、-'缩进，可以形成层级列表
+* 符号`* ，-, +`与字符之间要有空格
+* 利用tab对`*、+、-`缩进，可以形成层级列表
 
 ### 有序列表
 
