@@ -5,6 +5,12 @@ tags:
 ---
 # 总述
 
+## 解释型语言与编译型语言
+
+* 编译型语言是使用特定的编译器，一次性将程序源代码编译为能被平台硬件所执行的机器码的语言。
+* 解释型语言是使用特定的解释器，在程序被执行时将源码逐行翻译为能被平台机器执行的机器码并立即执行的语言。
+
+
 ## C语言
 
 ## Python语言
@@ -18,6 +24,8 @@ tags:
 * PHP（全称：PHP：Hypertext Preprocessor，即"PHP：超文本预处理器"）是一种通用开源脚本语言。PHP 脚本在服务器上执行
 
 ## Ruby语言
+
+* Ruby 的特性与 Smalltalk、Perl 和 Python 类似。Perl、Python 和 Smalltalk 是脚本语言。Smalltalk 是一个真正的面向对象语言。Ruby，与 Smalltalk 一样，是一个完美的面向对象语言。
 
 
 # c语言
@@ -80,7 +88,7 @@ public class Hello {
 
 * 实现截图：
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200919112209.jpg)
-（不过y1s1,除了打helloworld，其它程序还是用idea香，Java补全不行是真的难受）
+（不过y1s1,除了打helloworld，其它程序还是用IDEA香，Java补全不行是真的难受）
 
 # JavaScript
 
@@ -108,17 +116,40 @@ public class Hello {
 
 ## 环境
 
-* 在windows上安装apache服务器：
-    * 去[官网](https://httpd.apache.org/)下载apache的windows版本
-    * 解压到c盘的根目录下（C:\Apache2.4)
-    * 使用管理员权限打开cmd，进入bin目录下，使用命令`httpd.exe -k insatll`将Apache安装成windows服务，之后使用`httpd.exe -k start`启动服务。
 * 在windows上安装PHP：
     * 去[官网](http://php.net/downloads.php)下载PHP的zip文件；
-    * 
+    * 解压缩到任意路径。
 * 在Windows上安装PHPstorm（使用学生邮箱白嫖）。
+* 在PHPstorm中导入下载的PHP的`php.exe`解释器。
+
+## helloworld实现
+
+* 程序源代码
+```php
+<?php
+    echo "hello world!";
+?>
+```
+* 实现截图：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201001204857.jpg)
 
 
 # Ruby
 
+## 环境
+
+* 去[官网](https://rubyinstaller.org/downloads/)下载Ruby安装器。跟随安装向导即可一步步安好。
+* 安装好后打开cmd，输入`ruby -v`即可查看是否安装好了。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201001210503.jpg)
+
+## helloworld实现
+
+* 程序代码：（在一个名为hello.rb的文件中）
+```ruby
+puts("hello world！I'm 2019091615004 张杰");
+```
+* 实现截图：
+      
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201001211814.jpg)
 
 
