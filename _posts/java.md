@@ -187,7 +187,7 @@ switch (控制表达式) {
 ### while
 
 * 与c语言中的while基本一致。 while是当条件满足时执行循环内的语句。
-* 与c语言一样，Java中也有`do-while`循环，这个循环至少执行一次。
+* 与c语言一样，Java中也有`do-while`循环，这个循环至少执行一次。do-while循环是一直执行直到while语句中的条件**不满足**。
 
 ### for循环
 
