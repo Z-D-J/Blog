@@ -303,3 +303,151 @@ public static void main(String[] args) {
 * 法三：‘’
 
   * 使用栈
+
+# 移除重复结点 面试题02.01 
+
+* 题目
+
+  ---
+  编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+  
+  示例1:
+  
+   输入：[1, 2, 3, 3, 2, 1]
+   输出：[1, 2, 3]
+  
+* Java解法
+
+  ---
+  * 法一：
+  	* 将链表中的元素在逐个遍历时存入一个数组中，在遍历时进行比对，如果出现相同元素值，则跳过该元素
+
+  ```java
+  //删除链表中重复结点的方法
+      public SinglyLinkedList removeDuplicateNodes(SinglyLinkedList head) {
+  
+          SinglyLinkedList node = head;
+          int nums = 0;
+  
+          //计算链表中元素的个数
+          while(node != null) {
+              node = node.next;
+              nums++;
+          }
+          //注意排除链表为一个空链表的情形（即head为一个null）
+          if(nums == 0) {
+              return head;
+          }
+  
+          //用于储存已经读出的元素值的数组
+          int[] temp = new int[nums];
+          int i = 0;
+          int j = 0;
+  
+          //遍历数组并跳过重复结点,将遍历的结果存入数组中
+          node = head;
+          while(node != null) {
+              if(i == 0) {
+                  temp[i] = node.val;
+                  node = node.next;
+                  i++;
+              }
+              else {
+                  for( j = i - 1; j >= 0; j--) {
+                      if(node.val == temp[j]) {
+                          node = node.next;
+                          nums--;
+                          break;
+                      }
+                  }
+                  if(j >= 0) {
+                      continue;
+                  }
+                  else {
+                      temp[i] = node.val;
+                      node = node.next;
+                      i++;
+                  }
+              }
+          }
+  
+          //将数组中的结果重新存入链表中
+          node = head;
+          for(i = 0; i < nums - 1; i++) {
+              node.val = temp[i];
+              node = node.next;
+          }
+          //最后一个结点需要单独赋值，因为需要将它的next设为null
+          node.val = temp[nums - 1];
+          node.next = null;
+  
+          return head;
+      }
+  //测试用例
+  /**
+   *
+   * Method:  removeDuplicateNodes(SinglyLinkedList head)
+   *
+   */
+  @Test
+  public void testRemoveDuplicateNodes() throws Exception {
+      //创建测试链表为｛1，2，3， 3， 2，1｝
+      SinglyLinkedList head = new  SinglyLinkedList();
+      head.val = 1;
+      SinglyLinkedList node1 = new SinglyLinkedList();
+      head.next = node1;
+      node1.val= 2;
+      SinglyLinkedList node2 = new SinglyLinkedList();
+      node2.val = 3;
+      node1.next = node2;
+      SinglyLinkedList node3 = new SinglyLinkedList();
+      node3.val = 3;
+      node2.next = node3;
+      SinglyLinkedList node4 = new SinglyLinkedList();
+      node4.val = 2;
+      node3.next = node4;
+      SinglyLinkedList node5 = new SinglyLinkedList();
+      node5.val = 1;
+      node4.next = node5;
+  
+      head = head.removeDuplicateNodes(head);
+  
+      SinglyLinkedList node = head;
+      int nums = 0;
+  
+      //计算链表中元素的个数
+      while(node != null) {
+          node = node.next;
+          nums++;
+      }
+  
+      //用于储存读出的元素值的数组
+      int[] temp = new int[nums];
+      int i = 0;
+      int j = 0;
+  
+      //遍历数组,将遍历的结果存入数组中
+      node = head;
+      while(node != null) {
+          temp[i] = node.val;
+          node = node.next;
+          i++;
+      }
+  
+      //预期结果
+      int[] exp = {1, 2, 3};
+  
+      Assert.assertArrayEquals(temp, exp);
+  
+  }
+  
+  ```
+
+  * 法二：
+    * set集合去重
+  * 法三：
+    * 哈希表
+  * 法四：
+    * 位运算
+  * 法五：
+    * 双指针
