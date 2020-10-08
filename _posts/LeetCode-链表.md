@@ -10,7 +10,7 @@ tags:
 ---
 实现一种算法，删除单向链表中间的某个节点（即不是第一个或最后一个节点），假定你只能访问该节点。
 
- 
+
 示例：
 
 输入：单向链表a->b->c->d->e->f中的节点c
@@ -207,3 +207,99 @@ public static void main(String[] args) {
     }
 }
 ```
+
+# 从尾到头打印链表 剑指offer 06. 
+
+* 题目：
+
+---
+
+输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。
+
+ 
+
+**示例 1：**
+
+```
+输入：head = [1,3,2]
+输出：[2,3,1]
+```
+
+* Java解法
+
+  ---
+  
+* 法一：
+	* 每次遍历到相对的最后一个结点，通过一个计数变量来判断是否到达了最后一个结点。	
+  ```java
+  public static int[] reversePrint(SinglyLinkedList head) {
+          SinglyLinkedList node = new SinglyLinkedList();
+          int nums = 1;
+          int i = 0;
+          node = head;
+  
+          //计算链表中有多少个元素
+          //注意判断链表为空的情况
+          if(node == null){
+              nums = 0;
+          }
+          else {
+              while (node.next != null) {
+                  node = node.next;
+                  nums++;
+              }
+          }
+  
+          int[] result = new int[nums];
+  
+          node = head;
+  
+          if(nums == 0) {
+              return result;//当链表为空时直接返回一个空数组
+          }
+          else {
+              do {
+                  //每次从第一个结点开始遍历到最后一个结点，将最后一个结点的值存入数组中
+                  //如果有三个数，只需循环两次便可达到最后一个结点
+                  for(int j = 1; j < nums; j++) {
+                      node = node.next;
+                  }
+                  result[i] = node.val;
+                  node = head;
+                  i++;
+                  //将链表的长度减一，表示最后一个结点已经被输出了
+                  nums--;
+              } while(nums != 0);
+  
+              return result;
+          }
+  }
+  //测试代码
+  @Test
+  public void testReversePrint() throws Exception {
+      //设置测试链表为｛1， 3， 2｝
+      SinglyLinkedList head = new  SinglyLinkedList();
+      head.val = 1;
+      SinglyLinkedList node1 = new SinglyLinkedList();
+      head.next = node1;
+      node1.val= 3;
+      SinglyLinkedList node2 = new SinglyLinkedList();
+    node2.val = 2;
+	    node1.next = node2;
+	
+	    int[] result = new int[3];
+	    result = SinglyLinkedList.reversePrint(head);
+	    //预期结果为｛2，3，1｝
+	    int[] exp = {2, 3, 1};
+	    //断言判断结果是否为｛2， 3，1｝
+	    Assert.assertArrayEquals(result, exp);
+	} 
+	```
+	
+* 法二：
+
+  * 使用一个定长的数组，但是对数组的赋值是从逆向开始的。这样避免了对链表的逆转。
+
+* 法三：‘’
+
+  * 使用栈
