@@ -33,5 +33,50 @@ tags:
 	* `tomcat-user.xml`配置用户名密码和相关权限.
 * work文件：
   * work工作目录：该目录用于存放**jsp被访问后生成对应的server文件和.class文件**
-* webapps目录：
+
+
+
+# webapps目录：
+
+* **在webapps中建立了web1目录**，下面放置我们的html文件，jsp文件，图片等等，**则web1就被当做web应用管理起来**。示例：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009103542.jpg)
+
+  ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009103533.jpg)
+
+  * 注意路径是严格大小写的，路径出错是无法显示的。
+
+* web站点的目录规范：
+  ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009104107.png)
+  * 作用：我有多个html文件，想把其中的一个html文件作为我web站点的首页。如果没有WEB-INF目录下的web.xml文件支持，是无法解决我的需求的。这个规范是约定熟成的。
+
+  * web.xml使helloworld2.html做首页示例：
+
+    * 新建一个WEB-INF目录![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009151532.jpg)
+    * 在WEB-INF目录下创建一个web.xml
+    * web.xml我们不可能会写，所以可以**在webapps目录下其他的站点中抄一份过来**【复制ROOT/WEB-INF/web.xml的文件到自己的站点中】
+    * 在web.xml中添加以下代码
+
+    ```xml
+          <welcome-file-list>
+                <welcome-file>helloworld2.html</welcome-file>
+          </welcome-file-list>
+    ```
+
+    * 最终的web.xml如图：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009151441.jpg)
+    * 在浏览器输入`localhost:8080/web1/`得：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009151224.jpg)
+      * 因为已经规定了首页为helloworld2.html所以无需指明具体的html文件。
+
+
+
+# 配置虚拟目录
+
+* 虚拟目录的作用：
+  * 如果把所有web站点的目录都放在webapps下，可能导致**磁盘空间不够用**，也**不利于对web站点目录的管理**【如果存在非常多的web站点目录】
+  * 把**web站点的目录分散到其他磁盘管理就需要配置虚拟目录【默认情况下，只有webapps下的目录才能被Tomcat自动管理成一个web站点】**
+  * 把web应用所在目录交给web服务器管理，这个过程称之为虚拟目录的映射。
+* 虚拟目录的配置方法一：
+  * 在其他地方创建一个web站点目录，并创建WEB-INF目录和一个html文件。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009152314.jpg)
+  * 找到Tomcat目录下/conf/server.xml文件
+  * 在server.xml中的<Host>节点下添加如下代码。**path表示的是访问时输入的web项目名，docBase表示的是站点目录的绝对路径**` <Context path="/web" docBase="C:\03Temporary\web"/>`
+  * 最后访问配置好的站点:`localhost:8080/web/helloworld.html`
+* 虚拟目录的配置方法二：
   * 
