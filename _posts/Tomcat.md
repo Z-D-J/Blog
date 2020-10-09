@@ -123,7 +123,8 @@ tags:
 
 * 打开到C:Windows/System32/drivers/etc下，找到hosts文件，在其中添加`127.0.0.1 localhost`和`127.0.0.1 zhangjie`两行。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009182837.jpg)
 
-* 在浏览器中输入`zhangjie:8080/hello3/helloworld.html`访问失败。
+* 在浏览器中输入`zhangjie:8080/hello3/helloworld.html`访问失败d是因为没有保存修改后的hosts文件，保存后可以正常运行。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010074530.jpg)
 
 # 配置虚拟主机
 
