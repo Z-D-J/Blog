@@ -1,4 +1,5 @@
 ---
+
 title: Tomcat
 date: 2020-10-08 16:42:03
 tags:
@@ -70,13 +71,92 @@ tags:
 # 配置虚拟目录
 
 * 虚拟目录的作用：
+
   * 如果把所有web站点的目录都放在webapps下，可能导致**磁盘空间不够用**，也**不利于对web站点目录的管理**【如果存在非常多的web站点目录】
   * 把**web站点的目录分散到其他磁盘管理就需要配置虚拟目录【默认情况下，只有webapps下的目录才能被Tomcat自动管理成一个web站点】**
   * 把web应用所在目录交给web服务器管理，这个过程称之为虚拟目录的映射。
+
 * 虚拟目录的配置方法一：
+
   * 在其他地方创建一个web站点目录，并创建WEB-INF目录和一个html文件。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009152314.jpg)
   * 找到Tomcat目录下/conf/server.xml文件
   * 在server.xml中的<Host>节点下添加如下代码。**path表示的是访问时输入的web项目名，docBase表示的是站点目录的绝对路径**` <Context path="/web" docBase="C:\03Temporary\web"/>`
-  * 最后访问配置好的站点:`localhost:8080/web/helloworld.html`
+  * 最后访问配置好的站点:`localhost:8080/web/helloworld.html`，不知为啥，不能成功显示。
+
 * 虚拟目录的配置方法二：
-  * 
+
+  * 进入到conf/Catalina/localhost文件下，创建一个xml文件，**该文件的名字就是站点的名字。**（此处名为`hello3.xml`）
+
+  * xml文件中的内容：
+
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?> 
+    <Context 
+        docBase="C:\03Temporary\web1" 
+        reloadable="true"> 
+    </Context> 
+    ```
+    
+  * 输入`localhost:8080/hello3/helloworld.html`来访问页面。结果如图：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009181521.jpg)
+
+
+
+# 配置临时域名
+
+访问Tomcat服务器有好几种方式：
+
+- 使用localhost域名访问【localhost代表本机】
+
+- 使用ip地址127.0.0.1访问【该ip地址也是本机】
+
+- 使用机器名称访问【只限用于本机上或者局域网】
+
+- 使用本机IP地址访问【**在cmd中输入ipconfig可以查询到本机IP地址**】
+
+- 还可以为机器配置临时域名。
+
+- 示例：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009183154.jpg)
+
+  
+
+配置临时域名的步骤：
+
+* 打开到C:Windows/System32/drivers/etc下，找到hosts文件，在其中添加`127.0.0.1 localhost`和`127.0.0.1 zhangjie`两行。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009182837.jpg)
+
+* 在浏览器中输入`zhangjie:8080/hello3/helloworld.html`访问失败。
+
+# 配置虚拟主机
+
+### 什么是虚拟主机？
+
+* **多个不同域名的网站共存于一个Tomcat中**
+
+### 为什么需要用到虚拟主机？
+
+* 例子：我现在开发了4个网站，有4个域名。如果我不配置虚拟主机，一个Tomcat服务器运行一个网站，我就需要4台电脑才能把4个网站运行起来。
+
+配置虚拟主机的步骤：
+
+* 在tomcat的server.xml文件中添加主机名，添加内容如下：
+
+  ```xml
+  </Host>
+  
+        <Host name="zhang" appBase="C:\03Temporary\web1">
+                      <Context path="/web1" docBase="C:\03Temporary\web1"/>
+        </Host>
+  ```
+* 之后在浏览器输入`zhang:8080/hello3/helloworld.html`来访问。结果失败。。。
+
+
+
+# Tomcat的结构体系
+
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009184720.png)
+
+
+
+# 浏览器访问WEB资源的流程图
+
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009184857.png)
+
