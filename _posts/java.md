@@ -1468,3 +1468,30 @@ public interface Mortal {
 * `size()`方法返回数组列表中现在的元素个数。如`length = staff.size()`.
 * 不能使用普通的`[下标]`来访问数组列表中的元素。使用`get()`方法来访问数组列表中第i个元素，如`value = staff.get(i)`。使用`set()`方法来对第i个元素进行赋值。如`staff.set(i, value)`.
 * `remove()`方法删除指定位置的元素，并将之后的所有元素前移，返回所删除的元素。如`staff.remove(i)`.
+
+## java.util.Stack<E>
+
+* 这是java用于实现栈功能的类。
+* 初始化一个空栈：`Stack<Interger> stack1 = new Stack<Interger>();`,因为栈也是使用泛型的，所以初始化的时候需要**指定类型**。
+* 判断栈是否为空:`stack1.empty()`,方法`boolean empty()`
+* 查看栈顶部的元素但不取出：`stack1.peek()`,方法`Object peek()`，Object是指返回值的类型是由初始化的时候指定的，具体为哪种并不确定。
+* 进栈：`stack1.push(Object element);`，方法`Object push(Object element)`
+* 出栈：`stack1.pop();`,方法`Object pop()`.
+* 返回某个值在堆栈中的位置从，位置是从1开始的：方法`int search(Object element)`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
