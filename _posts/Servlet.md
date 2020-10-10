@@ -29,14 +29,14 @@ tags:
 
 ### 请求行
 
-* 请求行：`GET /java.html HTTP/1.1`。请求行中的GET称之为请求方式，请求方式有：POST,GET,HEAD,OPTIONS,DELETE,TRACE,PUT。
+* 请求行：`GET /java.html HTTP/1.1`。请求行中的GET称之为请求方式，之后跟请求的路径，最后是请求协议版本。请求方式有：POST,GET,HEAD,OPTIONS,DELETE,TRACE,PUT。
 * 常用的请求方式有：POST,GET
   * 一般来说，当我们点击超链接，通过地址栏访问都是get请求方式。通过表单提交的数据一般是post方式。
   * 可以简单理解GET方式用来**查询数据**,POST方式用来**提交数据**，get的提交速度比post**快**。
   * GET方式：在URL地址后附带的参数是有限制的，其**数据容量通常不能超过1K**。
   * POST方式：可以在请求的实体内容中向服务器**发送数据，传送的数据量无限制**。
 
-### 消息头
+### 请求头
 
 * Accept: text/html,image/* 【浏览器告诉服务器，它支持的数据类型】
 * Accept-Charset: ISO-8859-1 【浏览器告诉服务器，它支持哪种字符集】
