@@ -101,7 +101,17 @@ tags:
 
 # 实现Servlet接口编写Servlet程序
 
+## IDEA上配置tomcat
+
+* 使用的ide是IDEA，需要先在IDEA上配置Tomcat。(需要IDEA的utilmate版).
+  1. 点击Run---EDit Configurations...
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165243.jpg)
+  2.点击左侧“+”号，找到Tomcat Server---Local。
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165641.jpg)
+  3.找到tomcat存放位置并配置到idea中：
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165926.jpg)
 
 
-
+## 编写servlet程序的步骤
+  
 
