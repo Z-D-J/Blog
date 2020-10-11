@@ -1214,7 +1214,7 @@ public class ADHero extends Hero {
 
 ## Object类
 
-* Object默认是所有类的父类。
+* Object默认是所有类的父类。（全名：java.lang.Object:java.lang这个包是默认导入到每一个类中的）
 * Object类中提供的方法所有类都默认含有。
 * Objiect类中有很多方法，如`toString(), finalize(),equals()...`。
 
@@ -1230,7 +1230,56 @@ obj = int[10]; //ok
 
 ### equals方法
 
-* 
+* Object中equals的实现：
+```java
+    //第一种
+ public boolean equals(Object obj) {
+   return (this == obj);
+   //第二种
+```
+* Objects类中equals的实现：
+```java
+
+   static boolean equals(Object a, Object b) {
+       ...
+   }
+```
+
+* equals方法是用来检测一个对象是否等于另一个对象的(Object中的equals方法适用于两个参数都不为null的情况，Objects类中的equals方法两个参数都为null时返回true，一个为null是返回false，两个都不为null时**返回a.equals(b)的结果**，即进行正常比较。不过object类中直接判断两个对象的引用是否相等来判断对象是否想等的方法有时会不够，所以equals方法经常会在子类中被**重写**。如：
+```java
+public class Employee{
+    ...
+    @override //用@override标记来表明这是对超类方法的覆盖，以避免出现参数类型不一致等情况（会报错）
+    public boolean equals(Object otherObject){//参数类型必须为Object才能覆盖Object类中的equals方法
+        //快速检查对象是否相同
+        if(this==otherObject) return true;
+        
+        //如果EcPLID参数为空，则必须返回false
+        if(otherObject==null) return false;
+        
+        //如果类不匹配，它们就不能相等。
+        if(getClass()!=otherObject.getClass())
+            return false;
+        
+        //现在我们知道另一个对象是非空雇员，将其强制类型转换为对应的类型
+        Employee other =(Employee)otherObject;
+        
+        //测试字段是否具有相同的值
+        return Object.equals(other.name);
+        && salary==other.salary
+        && hireDay.equals(other.hireDay);
+    }
+}
+```
+* equals方法的设计一般要遵循**自反性**，**对称性**，**传递性**，**一致性**，**非空性**。
+
+### hashCode方法
+
+* 散列码是由对象导出的一个整型值。没有规律，两个不同的对象的散列码基本不会相同。Object类的散列码是由对象的存储地址导出的。
+* hashCode方法：`int hashCode()`。返回对象的散列码。
+
+### toString方法
+
 ## final修饰词
 
 * final在修饰类、方法、基本类型变量、引用是分别有不同的意思。
@@ -1512,6 +1561,12 @@ public interface Mortal {
 
 ## java.util.Objects
 
+* 可以看做是Object类针对多个对象进行处理的类似的类。
+* 判断两对象是否相等的方法：`static boolean equals(Object a, Object b)`。
+* 提供散列码的方法（hashcode）:
+  * `static int hash(Object...objects)`，返回一个散列码，由提供的所有对象的散列码组合得到。
+  * `static int hashCOde(Object a)`如果a为null返回0，否则返回a.hashCode()的结果（即Object类中的hashCode方法增加了对null的处理）
+
 ## java.util.List
 
 ## Math
@@ -1542,6 +1597,10 @@ public interface Mortal {
 * 出栈：`stack1.pop();`,方法`Object pop()`.
 * 返回某个值在堆栈中的位置从，位置是从1开始的：方法`int search(Object element)`.
 
+## java.util.Arrays
+
+* 这是一个主要用来对数组进行处理的类。
+* 判断两个数组是否相等的静态方法：`static boolean equals(xxx[] a, xxx[] b)`.如果两个数组长度相同且对应位置的元素相等，则返回true，否则返回false。
 
 
 
