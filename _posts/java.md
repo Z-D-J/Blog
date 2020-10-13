@@ -243,6 +243,7 @@ for(int i = 0; i < numbers.length; i++) {
 ```
 * 数组的直接初始化：形如：`int[] numbers = {1, 2, 3, 4, 5};`
 * 数组变量之间可以做赋值。例如：`int[] numbers = {1, 2, 3, 4, 5}; int[] b = numbers;`.数组变量的实质与c语言类似，是指向实际存储空间的“指针”，但是Java中不使用指针的概念，可以把数组变量看作是实际存储空间的管理者。所以数组变量之间的赋值，其实质是将对实际存储空间的管理权共享了出去，而不是把整个数组复制过去。因此，如果改变了b数组中，某个元素的值，numbers数组中相应的元素也会跟着改变。如`b [2] = 3;`之后会有`numbers[2] == 3`.
+* **拷贝**数组元素到另一个数组中：`var a = new X[list.size]; list.toArray(a)`。将list数组的元素拷贝到a数组中去。（适用于各种类型的数组，包括泛型数组列表）
 * 对数组对象的操作需要使用**Arrays**类中的方法。
 * main函数必须带的参数`String[] args`是main函数接收命令行参数的字符串类型的数组。
 * 数组变量之间的比较，是在比较两个数组变量是否管理同一个数组，而不是比较两个数组是否是每个元素都对应相等。
@@ -459,6 +460,16 @@ public class Weapon extends Item{ // 通过extends来实现继承
 * 在继承层次内才能进行对象引用的强制类型转换。
 * 只能将父类强制类型转换为子类，并且应该使用instanceof检查要转换的两个类型之间是否为父子类关系。
 * 示例：`boss = (Manger) staff[1]`。
+
+### 对象包装器与自动装箱
+
+* 所有的基本类型都有一个与之对应的类。（如：Integer类对应基本类型int）。这些类称为**包装器**。
+* 包装器有：`Integer, Long, Float, Double, Short, Byte, Character, Boolean`。
+* 包装器是**不可变**的类，包装器被构造之后，就不允许更改包装在其中的值。包装器是**final**类型的类，不能派生子类。
+* 包装器的用途：将基本类型如int转换为对象。如：ArrayList<Integer>`。因为尖括号中必须是普通的类，所以不能使用int，此时可以用Integer达到相同的效果。
+* **自动装箱**：在声明为包装器类的地方使用对应的基本类型，会自动将该基本类型的元素转换为对应的包装器类，这种特性叫做自动装箱。如：`list.add(3)`将自动转换成`list.add(Integer.valueOf(3))`。
+* **自动拆箱**：在声明为基本类型的地方使用对应的包装器类，会自动将该包装器类的元素转换为对应的基本类型。
+* 包装器中还有很多基本静态方法。如`int x = Integer.parseInt(s)`可以将s字符串转换为整型数值。 
 
 ## 方法重载
 
@@ -1280,6 +1291,17 @@ public class Employee{
 
 ### toString方法
 
+* toString方法会返回表示对象值的一个字符串：类名[字段值]。
+* Object类中的toString方法会打印对象的类名和散列码。toString 方法经常会在子类中被重写。如：
+```java
+public String toString() {
+    return getClass().getName() + "name=" + name +"salary=" + salary;
+}
+```
+* 使用getClass和getName方法确保子类也可以调用该方法。
+* 只要一个对象与一个字符串通过`+`相连，java编译器就会自动地调用toString方法来或得这个对象的字符串描述并与另一个字符串相连。
+
+
 ## final修饰词
 
 * final在修饰类、方法、基本类型变量、引用是分别有不同的意思。
@@ -1559,6 +1581,17 @@ public interface Mortal {
 ---
 实在是太多了，可以在需要时查看API的[官方文档](https://docs.oracle.com/en/java/javase/15/docs/api/index.html)
 
+## java.lang.Object
+
+* `Class getClass()`:返回包含对象信息的类对象。
+* `boolean equals(Object otherObject)`:比较两个对象是否相等。
+* `String toString()`:返回表示该对象值的字符串。
+
+## java.lang.Class
+
+* `String getName()`:返回这个类的名字；
+* `Class getSuperclass()`:以Class对象的的形式返回这个类的超类。
+
 ## java.util.Objects
 
 * 可以看做是Object类针对多个对象进行处理的类似的类。
@@ -1578,14 +1611,17 @@ public interface Mortal {
 * `Random()`返回一个随机数生成器（对应的类的对象）
 * `int nextInt(int n)`，返回一个0~n-1之间的随机数的方法。
 
-## java.util.ArrayList<E>
+## java.util.ArrayList<E> （泛型数组列表）
 
-* ArrayList类类似于数组，但是它能在添加或者删除元素时，自动调整数组的容量。
-* ArrayList是有**类型参数**的**泛型类**（所以又被称为**泛型数组列表**），泛型类是可以在使用时再具体类型的。使用时为了指明数组保存的 元素的类型，可以使用一对尖括号`<>`来将具体的类名追加到ArrayList后面。如`Array<Employee> staff = new ArrayList<Employee>();`.在这种方式中可以去掉后一个尖括号中的类型`Array<Employee> staff = new ArrayList<Employee>(可以在这里填数组列表的容量);`,这种使用空的尖括号的方式又被称为**菱形语法**。
-* 使用`add()`方法可以将元素加到数组列表中，如`staff.add(i)`.
-* `size()`方法返回数组列表中现在的元素个数。如`length = staff.size()`.
+* ArrayList类类似于数组，但是它能在添加或者删除元素时，**自动调整数组的容量**。
+* ArrayList是有**类型参数**的**泛型类**（所以又被称为**泛型数组列表**），泛型类是可以在使用时再声明具体类型的。使用时为了指明数组保存的元素的类型，可以使用一对尖括号`<>`来将具体的类名追加到ArrayList后面。如`Array<Employee> staff = new ArrayList<Employee>();`.在这种方式中可以去掉后一个尖括号中的类型`Array<Employee> staff = new ArrayList<>(可以在这里填数组列表的容量,也可以不写。即使写了容量，这个容量仍是可以在使用时动态改变的);`,这种使用空的尖括号的方式又被称为**菱形语法**。
+* 使用`boolean add(E obj)`方法可以将元素**加到数组列表**中，如`staff.add(i)`.`void add(int index, E obj)`。可以在数组内部指定位置插入元素，并使后面的元素后移，同时数组长度加一。
+* `int size()`方法返回数组列表中现在的元素个数。如`length = staff.size()`.
 * 不能使用普通的`[下标]`来访问数组列表中的元素。使用`get()`方法来访问数组列表中第i个元素，如`value = staff.get(i)`。使用`set()`方法来对第i个元素进行赋值。如`staff.set(i, value)`.
 * `remove()`方法删除指定位置的元素，并将之后的所有元素前移，返回所删除的元素。如`staff.remove(i)`.
+* `void ensureCapacity(int capacity)`方法可以给数组分配一个有具体数量的数组空间如：`staff.ensure(100)`。与直接在创建数组列表时声明大小的效果一样。
+* 遍历：泛型数组列表同样可以用`for each`循环来遍历每个元素。
+
 
 ## java.util.Stack<E>
 
@@ -1601,7 +1637,18 @@ public interface Mortal {
 
 * 这是一个主要用来对数组进行处理的类。
 * 判断两个数组是否相等的静态方法：`static boolean equals(xxx[] a, xxx[] b)`.如果两个数组长度相同且对应位置的元素相等，则返回true，否则返回false。
+* 打印数组:`Arrays.toString(数组名)`。结果是一个形如"[1, 2, 3, 4]"的字符串。打印多维数组需要调用`Arrays.deepToString(数组名)`。
+* 拷贝数组`数组名1.toArray(数组名2)`。将数组1的数组元素拷贝到数组2中去。
 
+## java.lang.Integer
+
+* `int intValue()`:将该Integer的对象的值作为一个int返回。
+* `static String toString(int i)`:返回一个String对象，表示指定数值的十进制表示。
+* `static String toString(int i, int radix)`：返回数值i基于radix参数指定进制的表示。
+* `static int parseInt(String s)`：将字符串转换为十进制整型返回。
+* `static int pardeInt(String s, int radix)：将字符串转换为radix进制整型返回。
+* `static Integer valueOf(String s)`:返回一个Integer对象，用s表示的十进制整数初始化。
+* `static Integer valueOf(String s, int radix)`：返回一个Integer对象，用s表示的radix进制数初始化。
 
 
 
