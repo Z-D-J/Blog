@@ -6,7 +6,7 @@ tags:
 
 # servlet简介
 
-* Servlet其实就是一个遵循Servlet开发的java类。Servlet是由服务器调用的，运行在服务器端。
+* Servlet其实就是一个遵循Servlet开发的java类。Servlet是由服务器调用的，运行在服务器端。Servlet没有main方法，它的创建、使用、销毁都由Servlet容器进行管理（如Tomcat：提供了Servlet功能的服务器称作Servlet容器）。即虽然没有main方法，但是通过Servlet容器可以自动调用。
 * 我们编写java程序想要在网上实现 聊天、发帖、这样一些的交互功能，普通的java技术是非常难完成的。sun公司就提供了Servlet这种技术供我们使用。
 
 # HTTP协议
@@ -113,5 +113,5 @@ tags:
 
 
 ## 编写servlet程序的步骤
-  
+
 
