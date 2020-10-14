@@ -471,6 +471,14 @@ public class Weapon extends Item{ // 通过extends来实现继承
 * **自动拆箱**：在声明为基本类型的地方使用对应的包装器类，会自动将该包装器类的元素转换为对应的基本类型。
 * 包装器中还有很多基本静态方法。如`int x = Integer.parseInt(s)`可以将s字符串转换为整型数值。 
 
+### 参数数量可变的方法
+
+* 示例：`public PrintStream printf(String fmt, Object...args)`。其中`...`是java代码的一部分。，表明这个方法可以接收任意数量的对象。实际上这个方法接收两个参数，一个是格式字符串fmt，一个是`Object[]`数组。`Object[]`数组中保存着其它所有参数。
+
+### 反射
+
+
+
 ## 方法重载
 
 * 方法重载指的是**方法名一样，但是参数不一样**。每次调用该名字的方法时，会自动根据对应的参数类型以及数量来调用对应的方法。示例：
@@ -1044,7 +1052,14 @@ public class GiantDragon {
 ```
 
 ## 枚举类型
-。。。
+
+* 枚举类型包括有限个命名的值。例如：
+```java
+
+enum Size{SMALL, MEDIUM, LARGE, EXTRA_LARGE};//定义枚举类型Size。
+Size s = Size.MEDIUM;//声明枚举类型的变量s并进行初始化。
+```
+* 枚举类型的变量中只能存储这个类型的声明中给定的**某个枚举值**，或者null（表示这个变量没有设置任何值）。
 
 # 接口与继承
 
@@ -1650,6 +1665,12 @@ public interface Mortal {
 * `static Integer valueOf(String s)`:返回一个Integer对象，用s表示的十进制整数初始化。
 * `static Integer valueOf(String s, int radix)`：返回一个Integer对象，用s表示的radix进制数初始化。
 
+## java.lang.Enum<E>
+
+* `static Enum valueOf(Class enumClass, String name)`：返回给定类中指定名字的枚举常量。
+* `String toString()`:返回枚举常量名。如`Size.SMALL.toString()`返回字符串"SMALL".
+* `int ordinal()`：返回枚举常量在enum中声明的位置，位置从0开始计数。
+* `int compareTO(E other)`:如果枚举常量出现在other之前，返回一个负整数；如果this==other，返回0； 其他情况返回一个正整数。
 
 
 
