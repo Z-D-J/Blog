@@ -1629,6 +1629,83 @@ public interface Mortal {
 * 在方法首部声明该方法可能抛出的**检查型异常**：如： `public FileInputStream(String name) throws FileNotFoundException`。如果会抛出多个异常，可以在首部声明所有的检查型异常类,用逗号分隔，如：`public Image loadImage(String s) throws FileNotFoundException, EoFException`
 
 
+# 并发
+
+## 线程与进程
+
+* 每个进程(processor)都拥有自己的一套变量，而线程(thread)之间共享数据。线程比进程更加的轻量级。
+* 线程是在进程内部同时做的事情。
+* 多线程即在同一时间，可以做多件事情。
+
+## 创建多线程
+
+### 继承线程类创建多线程
+
+* 可以通过继承`Thread`类来实现创建线程，如：
+```java
+public class KillThread extends Thread{ //KillThread是继承自Thread的子类
+     
+    private Hero h1;
+    private Hero h2;
+ 
+    public KillThread(Hero h1, Hero h2){
+        this.h1 = h1;
+        this.h2 = h2;
+    }
+ 
+    public void run(){ //覆盖Thread中的run方法（必须），以实现启动线程后的具体操作。
+        while(!h2.isDead()){
+            h1.attackHero(h2);
+        }
+    }
+}
+```
+* 无论使用什么方法实现线程，线程启动都需要使用Thread类中的**start方法**。线程启动示例：
+```java
+    KillThread killThread1 = new KillThread(gareen,teemo); //新建一个线程
+    killThread1.start(); //启动一个创建的线程
+    KillThread killThread2 = new KillThread(bh,leesin);
+    killThread2.start();
+```
+
+### 实现Runable接口来创建多线程
+
+* Runable接口中有一个run方法，实现这个接口的时候必须实现run方法（run方法中是这个线程需要做的事）。
+* 实现Runable接口示例：
+```java
+
+public class Battle implements Runnable{ //实现Runable接口的类
+     
+    private Hero h1;
+    private Hero h2;
+ 
+    public Battle(Hero h1, Hero h2){
+        this.h1 = h1;
+        this.h2 = h2;
+    }
+ 
+    public void run(){ //实现run方法
+        while(!h2.isDead()){
+            h1.attackHero(h2);
+        }
+    }
+}
+```
+* 线程启动示例：
+```java
+    Battle battle1 = new Battle(gareen,teemo); //启动的时候，首先创建一个Battle对象，然后再根据该battle对象创建一个线程对象，并启动 
+    new Thread(battle1).start(); //把Battle对象作为Thread对象的构造器的参数来新建一个Thread对象，并直接调用start方法启动这个线程。
+ 
+    Battle battle2 = new Battle(bh,leesin);
+    new Thread(battle2).start();
+```
+
+### 使用匿名类创建多线程
+。。。
+
+
+
+
 # Java的API
 ---
 实在是太多了，可以在需要时查看API的[官方文档](https://docs.oracle.com/en/java/javase/15/docs/api/index.html)
