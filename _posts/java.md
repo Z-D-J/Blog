@@ -477,7 +477,7 @@ public class Weapon extends Item{ // 通过extends来实现继承
 
 ### 反射
 
-
+* 暂时略。
 
 ## 方法重载
 
@@ -1065,7 +1065,7 @@ Size s = Size.MEDIUM;//声明枚举类型的变量s并进行初始化。
 
 ## 接口（Interface）
 
-* 接口是纯抽象的类（接口表达的是规范）。接口是抽象的，它的所有成员函数都是抽象函数（语句体都是空的），它的所有成员变量都是`public static final`类型。
+* 接口不是类，而是对希望符合这个接口的类的一组需求（应该做什么）。接口是抽象的，它的所有成员函数都是抽象函数（语句体都是空的），它的所有成员变量都是`public static final`类型（但是在接口中声明的方法都默认是public方法，所以public可以省略）。
 * 接口的创建：
 ```java
 package charactor;
@@ -1075,7 +1075,7 @@ public interface AD { //接口的创建使用关键字interface。
     public void physicAttack(); //接口的成员函数都是抽象函数，只有其形，而实际里面什么也没有。
 }
 ```
-* 接口的使用：
+* 接口的使用：（接口在类中具体实现时的public不能省略）
 ```java
 package charactor;
  
@@ -1090,6 +1090,7 @@ public class ADHero extends Hero implements AD{ //ADHero是从Hero继承而来�
 ```
     * 接口使用关键字`implements`来加入，并且可以同时加入多个接口，如`...implements AD,AP`.
 
+* 
 ## 对象转型
 
 ### 引用类型和对象类型
@@ -1591,6 +1592,42 @@ public interface Mortal {
 
 * 使用[javadoc](https://www.cnblogs.com/fjhh/p/5370642.html).
 
+# 异常、断言和日志
+
+## 异常
+
+### 异常概念
+
+* **异常处理的任务**：将控制权从产生错误的地方转移到能够处理这种情况的错误处理器。
+* **程序中可能会出现的错误**：
+  * 用户输入错误；
+  * 设备错误；
+  * 物理限制（存储空间）；
+  * 代码错误。
+* **异常处理过程**： 如果某个方法不能够正常的完成，可以通过抛出一个封装了错误信息的异常对象来退出方法。需要退出的方法并不返回任何值，而是直接退出，之后异常处理机制开始搜索能够处理这种异常的异常处理器。
+
+### 异常分类
+
+* **异常对象**：是派生于Throwable类的类实例。
+* **异常的层次结构**：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201015184846.jpg)
+    * 所有的异常类都是由Throwable类继承而来。
+    * **Error**类层次结构：描述了java运行时的系统内部错误和资源耗尽错误。
+    * **Exception**类层次结构：是设计程序时主要关注的异常。
+    * **RuntimeException**:由编程错误导致的异常（如果出现RuntimeException异常，一定是程序员的问题）。具体包含：
+      * 错误的强制类型转换；
+      * 数组访问越界；
+      * 访问null指针。
+    * **IOException**:包含除RuntimeException的其他异常，例如：
+      * 试图超越文件末尾继续读取数据；
+      * 试图打开一个不存在的文件；
+      * 试图根据给定的字符串查找并不存在的Class对象。
+* **非检查型异常与检查型异常**：所有派生于Error或者RuntimeException类的异常称为非检查型异常。其余异常为检查型异常。
+
+### 声明检查型异常
+
+* 在方法首部声明该方法可能抛出的**检查型异常**：如： `public FileInputStream(String name) throws FileNotFoundException`。如果会抛出多个异常，可以在首部声明所有的检查型异常类,用逗号分隔，如：`public Image loadImage(String s) throws FileNotFoundException, EoFException`
+
 
 # Java的API
 ---
@@ -1671,6 +1708,12 @@ public interface Mortal {
 * `String toString()`:返回枚举常量名。如`Size.SMALL.toString()`返回字符串"SMALL".
 * `int ordinal()`：返回枚举常量在enum中声明的位置，位置从0开始计数。
 * `int compareTO(E other)`:如果枚举常量出现在other之前，返回一个负整数；如果this==other，返回0； 其他情况返回一个正整数。
+
+## java.lang.Comparable<T>
+
+* 这是一个接口。其中要求了`int comparable(T other)`方法。这个方法要求对象小于other返回一个负整数，相等返回0，大于返回正整数。
+
+
 
 
 
