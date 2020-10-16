@@ -1627,7 +1627,53 @@ public interface Mortal {
 ### 声明检查型异常
 
 * 在方法首部声明该方法可能抛出的**检查型异常**：如： `public FileInputStream(String name) throws FileNotFoundException`。如果会抛出多个异常，可以在首部声明所有的检查型异常类,用逗号分隔，如：`public Image loadImage(String s) throws FileNotFoundException, EoFException`
+* 一个方法必须声明所有可能抛出的检查型异常。而非检查型异常是我们无法控制的（Error），或者是我们应该极力在编程时避免的（RuntimeException）。
+* 子类方法中声明的检查型异常是父类方法中的声明的异常的子集。
 
+### 抛出异常
+
+* 抛出异常的方法：
+  1. 找到一个合适的异常类；
+  2. 创建这个类的对象：如：`var e = new EOFException`
+  3. 将对象抛出：如`throw e`。
+* 2、3步可以合并为一步：`throw new EOFException`
+* 每个异常类都带有一个字符串参数的构造器，可以用来描述异常的具体信息。如：
+```java
+String gripe = "Content-length: " + len +", Recived: " + n;
+throw new EOFException(gripe);
+```
+### 创建异常类
+
+* 如果标准的异常类不能描述清楚你程序的问题，那么就需要创建自己的异常类。
+* 自定义的异常类需要派生于Exception类或者Exception的子类。并且这个类中应该包含两个构造器：一个默认的构造器（无参数），一个包含描述异常信息的字符串参数的构造器。示例：
+```java
+class FileFormatException extends IOException {
+    public FileFormatException() {} //默认的构造器
+    public FileFormatException (String gripe) {
+        super(gripe);//父类构造器中有含这个参数的构造器，直接借用即可
+    }
+}
+```
+
+### 捕获异常
+
+* 抛出异常是将发生的异常交给异常处理器取处理。而与之相对的**捕获异常**就是将异常交给用户指定的异常处理器去处理。
+* 捕获异常需要使用`try/catch`语句块，要捕获异常的方法就不再使用`throws`声明抛出异常。示例：
+```java
+    public void read(String filename) {
+        try {
+            var in = new FileInputStream(filename);
+            int b;
+            while (b = in.read() != -1) {
+                process input
+            }
+        }
+        catch (IOException exception) {
+            exception.printStackTrace(); //调用对应异常的处理器方法
+        }
+    }
+```
+* **捕获多个异常**
 
 # 并发
 
@@ -1790,6 +1836,11 @@ public class Battle implements Runnable{ //实现Runable接口的类
 
 * 这是一个接口。其中要求了`int comparable(T other)`方法。这个方法要求对象小于other返回一个负整数，相等返回0，大于返回正整数。
 
+## java.lang.Throwable(异常)
+
+* `Thorwable()`:构造一个Throwable对象但是没有详细的描述信息
+* `Throwable(String message)`: 构造一个Throwable对象，带有指定的详细描述信息。
+* `String getMessage()`:获得Throwable对象的详细描述信息。
 
 
 
