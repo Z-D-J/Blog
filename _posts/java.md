@@ -1626,7 +1626,7 @@ public interface Mortal {
 
 ### 声明检查型异常
 
-* 在方法首部声明该方法可能抛出的**检查型异常**：如： `public FileInputStream(String name) throws FileNotFoundException`。如果会抛出多个异常，可以在首部声明所有的检查型异常类,用逗号分隔，如：`public Image loadImage(String s) throws FileNotFoundException, EoFException`
+* 在方法首法使用`throws`关键字声明该方法可能抛出的**检查型异常**：如： `public FileInputStream(String name) throws FileNotFoundException`。如果会抛出多个异常，可以在首部声明所有的检查型异常类,用逗号分隔，如：`public Image loadImage(String s) throws FileNotFoundException, EoFException`
 * 一个方法必须声明所有可能抛出的检查型异常。而非检查型异常是我们无法控制的（Error），或者是我们应该极力在编程时避免的（RuntimeException）。
 * 子类方法中声明的检查型异常是父类方法中的声明的异常的子集。
 
@@ -1673,7 +1673,87 @@ class FileFormatException extends IOException {
         }
     }
 ```
-* **捕获多个异常**
+* **捕获多个异常**：在一个try语句块中可以捕获多个异常类型，并对不同的异常类型做出不同的处理。例如：
+    ```java
+    try {
+        //code that might throw exceptions
+    }
+    catch (FileNotFoundException e) {
+        //emergency action for missing files
+    } 
+    catch (IOException e) {
+        //emergency action for all other I/O problems
+    }
+    ```java
+        * 还可以用一个catch语句捕获多个异常类型，前提是这些异常类型彼此之间不存在子类关系。如：
+    ```java
+
+    try {
+        //code that might throw exceptions
+    }
+    catch (FileNotFoundException e | UnknownHostException e) { //同时捕获多个异常
+        //emergency action for missing files or unknown hosts
+    } 
+    catch (IOException e) {
+        //emergency action for I/O problems
+    }
+    ```
+* **再次抛出异常**：可以在catch语句中仅记录一个异常（即*不对该异常对象做修改*），之后再将这个异常重新抛出。此时可以在方法上重新加上`throws`关键字，指明抛出的异常类型。示例：
+```java
+try {
+    //access thr database
+}
+catch (Exception) {
+    logger.log(level, message, e);//仅仅是记录该异常的信息
+    throw e;
+}
+```
+
+### finally子句
+
+* 代码抛出一个异常时，会停止处理这个方法中的剩余的代码，并退出这个方法。但此时可能会有这个方法以及获得的资源没有清理。而finally子句正是用来清理这这些资源的。
+* 如果无论该方法有没有抛出异常，finally子句中的代码都会在前面代码按照普通流程结束后执行（没有异常则顺序执行到finally子句，捕获了异常则再catch中处理了异常再执行finall子句，抛出了异常则抛出异常后执行finally子句），示例：
+```java
+var in = new FileInputStream;
+try {
+    //code
+}
+catch (IOException) {
+    //...
+}
+finally {
+    in.close();
+}
+```
+* 还可以将两个try嵌套，内层try确保关闭资源，外层try语句确保报告错误。示例：
+```java
+InputStream in = ...;
+try {
+    try {
+        //code that might throw exception
+    }
+    finally {
+        in.close();
+    }
+}
+catch (IOException) {
+    //...
+}
+```
+
+### try-with-Resources语句
+
+* try-with-Resources语句是和finally子句实现同样功能的。可以在try后面加上执行完代码后需要关闭的资源，这样构成try-with-Resources语句,无论什么时候退出try语块，都会自动将资源关闭。示例：
+```java
+try (var in = new Scanner(new FileInputStream("/usr/share/dict/words"), StandardCharests.UTF_8)) {
+    while (in.hasNext()) {
+        System.out.println(in.next());
+    }
+}
+```
+* try-with-Resources语句也可以带上catch子句和finally子句。
+
+### 分析堆栈轨迹元素
 
 # 并发
 
