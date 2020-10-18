@@ -1755,6 +1755,29 @@ try (var in = new Scanner(new FileInputStream("/usr/share/dict/words"), Standard
 
 ### 分析堆栈轨迹元素
 
+* 堆栈轨迹（stack trace）是程序执行过程中某个特定点上所有挂起的方法调用的一个列表。
+* 可以通过Throwable类或者StackWalker类来显示堆栈轨迹。
+
+## 断言
+
+* **断言**：断言机制允许在测试代码时插入一些检查。使用关键字`assert`来使用断言。一般格式: 
+  * `assert condition;`:这个语句会计算condition中的条件，如果结果为false，就会抛出一个AssertionError的异常。
+  * `assert condition:expression;`:在前一个语句的基础上增加了expression异常描述消息字符串，这个语句会将这个expression描述传入AssertionError的对象构造器中。
+* 示例：
+```java
+//断言x是一个非负数。
+
+assert x >= 0;
+//或者
+assert x >= 0 : x;
+```
+* 断言的使用场景：
+  * 断言失败应该是失败的、不可恢复的错误；
+  * 断言检查只是用在开发和测试调试阶段，是程序员用来自我检查的工具。
+
+## 日志
+
+
 # 并发
 
 ## 线程与进程
