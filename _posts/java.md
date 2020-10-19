@@ -1066,6 +1066,7 @@ Size s = Size.MEDIUM;//声明枚举类型的变量s并进行初始化。
 ## 接口（Interface）
 
 * 接口不是类，而是对希望符合这个接口的类的一组需求（应该做什么）。接口是抽象的，它的所有成员函数都是抽象函数（语句体都是空的），它的所有成员变量都是`public static final`类型（但是在接口中声明的方法都默认是public方法，所以public可以省略）。
+* 接口不能包含**实例字段**，但可以包含**常量**。
 * 接口的创建：
 ```java
 package charactor;
@@ -1082,15 +1083,24 @@ package charactor;
 public class ADHero extends Hero implements AD{ //ADHero是从Hero继承而来的的子类，并且使用关键字implements加入了AD接口
 
     @Override
-    public void physicAttack() { //接口在实际使用的时候再定义具体操作的实现。
+    public void physicAttack() { //接口在实际使用的时候再定义具体操作的实现。这是方法的重写，需要有Override注解
         System.out.println("进行物理攻击");
     }
  
 }
 ```
-    * 接口使用关键字`implements`来加入，并且可以同时加入多个接口，如`...implements AD,AP`.
+  * 接口使用关键字`implements`来加入，并且可以**同时加入多个接口**，如`...implements AD,AP`.
 
-* 
+### 接口的属性
+
+* 接口**不是类**，不能使用new来实例化一个接口。
+* 可以声明**接口类型的变量**，这个接口类型的变量必须引用实现了这个的类对象。
+* 可以使用`instanceof`来判断一个对象是否实现了某个特定的接口。如：`if(anObject instanceof Comparable) {...}`。
+* 接口与类一样，也可以进行扩展，形成**接口链**，从通用性较高的接口扩展到专用性较高的接口。对接口进行扩展同样使用`extends`关键字，基本扩展规则与类的扩展相似。
+
+### 接口与抽象类
+
+
 ## 对象转型
 
 ### 引用类型和对象类型
@@ -1917,6 +1927,7 @@ public class Battle implements Runnable{ //实现Runable接口的类
 * 判断两个数组是否相等的静态方法：`static boolean equals(xxx[] a, xxx[] b)`.如果两个数组长度相同且对应位置的元素相等，则返回true，否则返回false。
 * 打印数组:`Arrays.toString(数组名)`。结果是一个形如"[1, 2, 3, 4]"的字符串。打印多维数组需要调用`Arrays.deepToString(数组名)`。
 * 拷贝数组`数组名1.toArray(数组名2)`。将数组1的数组元素拷贝到数组2中去。
+* `static void sort(Object[] a)`:对数组a中的元素进行排序，要求数组中的元素必须实现了Comparable接口的类，并且元素之间必须是可以比较的。
 
 ## java.lang.Integer
 
@@ -1927,6 +1938,8 @@ public class Battle implements Runnable{ //实现Runable接口的类
 * `static int pardeInt(String s, int radix)：将字符串转换为radix进制整型返回。
 * `static Integer valueOf(String s)`:返回一个Integer对象，用s表示的十进制整数初始化。
 * `static Integer valueOf(String s, int radix)`：返回一个Integer对象，用s表示的radix进制数初始化。
+* `static int compare(int x, int y)`:对两个整数进行比较，如果x < y,返回负整数，如果x=y返回0， x > y返回一个正整数。
+
 
 ## java.lang.Enum<E>
 
