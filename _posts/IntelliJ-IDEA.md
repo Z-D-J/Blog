@@ -30,3 +30,7 @@ tags:
 * `ctrl + shit + F10`可以运行代码，`ctrl + shift + F9`调试代码。
 * `shift + F6`可以对选中的文件进行重命名。
 * `ctrl + o`添加override的方法。
+
+# idea报错
+
+* 同一个包内的类不能使用：参见[blog](https://www.cnblogs.com/wanghongsen/p/12574807.html)
