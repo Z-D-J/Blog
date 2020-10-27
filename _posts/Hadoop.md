@@ -42,3 +42,28 @@ tags:
 ## Yarn架构概述
 
 ![IMG_2177](https://gitee.com/zhangjie0524/picgo/raw/master/uPic/IMG_2177.JPG)
+* ResourceManger(RM：整个资源管理老大)主要作用：
+  1.  处理客户端请求
+  2.  监控NodeManger
+  3.  启动或监控ApplicationMaster(任务管理)
+  4.  资源的分配与调度。
+* NodeMaster（NM：节点老大）作用：
+  1. 管理单个节点上的资源。
+  2. 处理来自ResourceManger的命令。
+  3. 处理来自ApplicationManager命令。
+* ApplicationManger（AM：任务老大）作用：
+  1. 负责数据的切分。
+  2. 为应用程序申请资源并分配给内部的任务。
+  3. 任务的监控与容错。
+* Container
+  * Container是yarn中的资源抽象，它封装了某个节点上的多个维度资源，如内存，cpu，磁盘，网络等。
+
+## MapReduce架构概述
+
+* MapReduce将计算过程分为两个阶段：Map和Reduce：
+  1. Map阶段并行处理输入数据（将运算任务分给不同的服务器）；
+  2. Reduce阶段对Map的阶段的结果进行汇总。
+
+## 大数据技术生态
+
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201027094308.png)
