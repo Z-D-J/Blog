@@ -44,6 +44,7 @@ tags:
 
 1. 使用
 
+# SQLyog图形化界面
 
 # SQL语句
 
@@ -90,12 +91,20 @@ tags:
 
 
 1. C（creat）:创建；
-   1. 语法:`creat table 表名（列名1， 数据类型1， 列名2 数据类型2， ... 列名n 数据类型n）;`
+   1. 创建语法:`creat table 表名（列名1， 数据类型1， 列名2 数据类型2， ... 列名n 数据类型n）;`
+   2. 复制：`creat table 表名（即将创建） like 表名（被复制的）`
 2. R（Retrieve）：查询；
    1. 查询数据库中所有表的名称：`show tables;`
    2. 查询表结构：`desc 表名;`
 3. U（Update）：修改；
+   1. 修改表名：`alter table 表名 rename to 新表名;`
+   2. 修改表的字符集：`alter table 表名 character set 字符集名称;`
+   3. 添加一列：`alter table 表名 add 列名 数据类型;`
+   4. 修改列名称 类型：`alter table 表名 modify 列名 新数据类型;`（仅修改列的数据类型）或者`alter table 表名 change 列名 新列名 新数据类型;`
+   5. 删除列：`alter table 表名 drop 列名;`
 4. D(Delete):删除；
+   1. 删除数据库中的表;·drop table 表名;`
+   2. 判断表存在后再修改:`drop table if exists 表名;`
 
 ### 数据类型
 
