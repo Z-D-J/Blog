@@ -38,7 +38,7 @@ tags:
 
 1. 搜索服务，点击打开；
 2. 在cmd输入`services.msc`启动；
-3. 在管理员cmd输入`net start <本机mysql的名字>`或者`net stop <本机mysql的名字>`启动或者关闭。如本机的mysql服务名称为mysql57。
+3. 在管理员cmd输入`net start <本机mysql的名字>`或者`net stop <本机mysql的名字>`启动或者关闭。
 
 # MySQL的登录与退出
 
