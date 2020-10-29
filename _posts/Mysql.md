@@ -32,7 +32,6 @@ tags:
   2.  企业版（收费）
   3.  下载地址：https://dev.mysql.com/downloads/installer/
   4.  跟随安装指导进行配置。
-* MySQL的卸载：
 
 # MySQL服务的启动
 
@@ -40,11 +39,27 @@ tags:
 2. 在cmd输入`services.msc`启动；
 3. 在管理员cmd输入`net start <本机mysql的名字>`或者`net stop <本机mysql的名字>`启动或者关闭。
 
-# MySQL的登录与退出
+# MySQL的登录
 
-1. 使用
+* 登录本地用户：`mysql -uroot -proot`，-u后面接的是用户名，-p后面接的是root用户的密码。`mysql -uroot -p`,会在之后输入密码。
+* 登录远程用户：`mysql -h127.0.0.1 -p` -h后面接的是连接目标的ip。
+* 登录：`mysql --host=IP --user=用户名 --passward=连接目标的密码`
+
+# MySQL的目录结构
+
+1.MySQL的安装目录：
+  1.  bin：二进制可执行文件，包括很多命令的执行程序。
+  2.  data：存放mysql的日志文件，数据文件等。
+  3.  include：放置.h头文件；
+  4.  lib：所需的jar包；
+  5.  share：错误信息存放
+2.MySQL的数据目录：（在c盘下的programdata下）
+  1.  数据库及其中的数据；
+  2.  my.ini是MySQL的配置文件。
 
 # SQLyog图形化界面
+
+* 可以使用sql语句控制，也可以直接使用鼠标控制。
 
 # SQL语句
 
@@ -91,7 +106,7 @@ tags:
 
 
 1. C（creat）:创建；
-   1. 创建语法:`creat table 表名（列名1， 数据类型1， 列名2 数据类型2， ... 列名n 数据类型n）;`
+   1. 创建语法:`creat table 表名（列名1， 数据类型1， 列名2 数据类型2， ... 列名n 数据类型n）;`**创建表时，至少有一个列，否则创建会直接失败**
    2. 复制：`creat table 表名（即将创建） like 表名（被复制的）`
 2. R（Retrieve）：查询；
    1. 查询数据库中所有表的名称：`show tables;`
@@ -113,5 +128,11 @@ tags:
 * date:日期，只包含年月日，yyyy-mm-dd;
 * datetime:日期，包含年月日时分秒，yyyy-mm-dd HH:mm:ss;
 * timestamp:时间戳类型，包含年月日时分秒（同datetime），但是如果不给这个字段赋值或者赋值为null，则默认使用当前的系统时间来自动赋值。
-* varchar：字符串类型，varchar（20），表示字符串的最多有20个字符。
-* 
+* varchar：字符串类型，varchar（20），表示字符串的最多有20个字符。**必须在varchar后面接上（数字），否则就是语法错误。**
+
+## DML
+
+1. 添加数据：
+   1. 添加语法：`insert into 表名 （列名1， 列名2，... ，列名n）value（值1，值2，...,值n）;`
+      1. 列名和值要一一对应；
+      2. 如果表名后不给列名，在提供和列数相同个数值的前提下，会默认依次给所有列添加值，否则会报错。
