@@ -1977,6 +1977,9 @@ public class Battle implements Runnable{ //实现Runable接口的类
 * 使用`synchronized`修饰符来为保护资源上锁。但是`synchronzied`只能用来说明**方法**和**代码段**，不能用来说明类和成员变量。被`synchronized`修饰的方法或者代码段同一时刻只能被一个线程执行，其他想用的线程必须等待。
 * `wait()`可使一个线程进入阻塞状态，等待其他线程用`notify`唤醒。`notifyAll()`可以唤醒其它所有线程。二者配合实现同步机制。
 
+# 流
+
+
 # 网络编程
 
 * java具有支持Internet和WWW的完整软件包。java.net包支持Internet。
@@ -2040,7 +2043,26 @@ public class Battle implements Runnable{ //实现Runable接口的类
 * 即Client/Server(客户机/服务器)结构，通过任务合理分配到Client端和Server端，降低了系统通讯开销，可充分利用两端硬件环境优势。
 * C/S的优点是能充分发挥客户端ＰＣ的处理能力，很多工作可以在客户端处理后再提交给服务器。
 
-## Java.net包
+## TCP通信编程
+
+### java.net.Socket类：客户端
+
+* Socket类实现**客户端**的套接字，套接字是两台计算机之间通信的端点。
+  * 客户端和网络端进行交互必须使用Socket中提供的网络流，不能使用自己创建的流对象。
+  * 当我们创建客户端对象Socket的时候，就会去请求服务器，和服务器经过3次握手建立连接通信。
+* 构造方法：`Socket(String host, int port)`,创建一个流套接字并将其连接到指定主机的指定端口号；
+  * String host：服务器的主机地址/服务器的IP地址
+  * int port：服务器的端口号；
+* `OutputStream getOutputStream()`:返回此套接字的输出流
+* `InputStream getInputStream()`:返回此套接字的输入流
+* `void close()`：关闭此套接字；
+
+### java.net.ServerSocket类：服务器端
+
+* ServerSocket类表示服务器端的套接字。
+* 构造方法；`ServerSocket(int port)`:创建指定端口号的ServerSocket对象；
+* `Socket accept()`；侦听并接受请求此ServerSocket对象的Socket对象。
+* `void close()`：关闭此套接字。
 
 ### Internet寻址(InetAddress类和URL类)
 
@@ -2061,6 +2083,7 @@ public class Battle implements Runnable{ //实现Runable接口的类
 * 服务器端与客户端交互模型：
 ![IMG_2180](https://gitee.com/zhangjie0524/picgo/raw/master/uPic/IMG_2180.JPG)
 
+### TCP通信程序实现
 
 
 
