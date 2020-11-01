@@ -1979,6 +1979,50 @@ public class Battle implements Runnable{ //实现Runable接口的类
 
 # 流
 
+## java.io.File类
+
+* File类是文件及文件目录路径名的抽象表示形式。java可以使用File类对文件和目录进行创建，删除，获取，判断，遍历等操作。
+* File类是与系统无关的类，任何操作系统都可以使用这个类中的方法和字段（它会自适应各种操作系统）。
+
+### File类的成员变量
+
+* 成员变量（都为静态）：
+  * `static String pathSeparator;`路径分隔符：Windows中为分号`;`,linux系统为冒号`:`.
+  * `static String separator`:文件名分隔符：Windows中为反斜杠`\`,linux中为正斜杠`/`。
+  * `static char pathSeparetorChar`:内容一样的字符表示形式。
+  * `static char separatorChar`：内容一样的字符表示形式。
+* 路径：
+  * 绝对路径：完整路径，以盘符`C:\\`开始，如`C:\02Permanent\Blog\source\_posts`
+  * 相对路径：相对于当前项目的根目录，可以省略当前项目的根目录。若当前路径`C:\02Permanent\Blog\source\_posts\java.md`,在当前目录下可以简写为`java.md`。
+  * 路径不区分大小写；
+  * Windows的文件名分隔符原本为`\`,但是反斜杠又有转义的作用，所以需要使用两个反斜杠`\\`来表示分隔符。
+
+### File类的构造方法
+
+* 构造方法：
+  * `File(String pathname)`:通过将给定路径名字符串转换为抽象路径名来创建一个File对象。
+    * 参数：路径名称的字符串为构造的参数。
+      * 既可以是文件结尾，也可以是文件名结尾。
+      * 既可以是绝对路径，也可以是相对路径。
+      * 路径可以存在的，也可以是不存在的。
+  * `File(String parent, String child)`:根据parent路径名字符串和child路径名字符串创建一个File对象。
+    * 参数：将路径分为了父路径和子路径两个部分，父路径和子路径都可以单独变化，使用起来很灵活。
+    * 示例：`File f = new File("c:\\", "java.md");`f的结果为`c:\java.md`。
+  * `File(File parent, String chile)`:根据parent**抽象**路径名和child路径名字符串创建一个File对象。
+    * 参数：把路径分为了抽象路径和路径名字符串两部分。可以使用File类的方法对parent路径进行操作，再使用该路径创建File对象。
+    * 示例：
+    ```java
+    File parent = new File("c:\\");
+    File file = new File(parent, "hello.java");
+    ```
+  * `File(URL url)`：暂略
+
+### File类获取功能的方法
+
+
+
+
+
 
 # 网络编程
 
