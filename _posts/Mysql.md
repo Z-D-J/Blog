@@ -162,3 +162,51 @@ tags:
    4.sum：求和；
    5.avg：计算平均值。  
    * 适用于count的特殊方法也会适用于其他函数（除了`*`）
+3.分组查询
+   1. 语法：`group by 分组字段`，可以增加条件：`where 条件 group by 分组字段;`（分组前进行限定，如果不满足条件，则不参与分组。where后不可以跟聚合函数进行判断）或者`group by 分组字段 having 条件
+   2. 示例：`select sex avg(math), count(id) from student group by sex;`,有条件：`select sex from student where math>70 group by sex;`(math>70 才能有被分组的资格)，`select sex feom student group by sex having count(id) > 2;`(id的个数要大于2，才会参与分组)。
+   3. 分组后查询的字段：只能是被查询的字段，或者是聚合函数。
+4.分页查询
+   1. 分页语法：`limit 分页索引，每页显示的条数`（limit是mysql的方言）
+   2. 分页索引的计算：开始的索引 - （当前的页码 -1）* 每页的条数。
+   3. 示例：`select * from stu limit 0,3;`(第一页)， `selct  * from stu limit 3,3;`(第二页)
+
+### DQL查询表中的数据
+
+* 查询所有数据：`select * from 表名`(将表中的所有数据查询出来)
+* 总语法：`select 字段列表 from 表名列表 where 条件列表 group by 分组字段 having 分组之后的条件限定 order by 排序子句 limit 分页限定`
+
+#### 基础数据查询
+
+* 查询指定列：`select 列名1，列名2 from 表名`.示例：
+```sql
+select 
+      name , -- 姓名
+      age，  -- 年龄
+from
+      student; --学生表
+```
+* 去除重复的结果集显示某列的内容:`select distinct 需去重的列名1，需去重的列名2 from 表名`（必须去重的所有的列的数据完全一样才会去掉）
+* 计算列的的结果再显示：`select 列名1， 列名2，列名1 + 列名2 form 表明;`(如果某一列的数据为null，则计算结果都为null)
+  * 一般可以使用四则运算进行运算（只有数值型计算）。
+  * ifnull函数：`ifnull(表达式1，表达式2);`表达式1：需要判断是否为null的字段；表达式2；被查询字段为null后替代的值。
+* 给列起别名：` select 列名1 as 别名1 form 表名`或者省略as`select 列名1 别名1 form 表名`(列名和别名之间用空格)
+
+#### 条件查询
+
+* where子句后跟条件；
+* 运算符：
+  * `>, <, >= , <=, =(没有==，=就是等于) , !=, <>(也是不等号）`
+  * `between...and...(在两者之间，包含边界0`
+  * 逻辑运算符：`and(与&&相同),or(与||相同)，not(与!相同)`
+  * `in(数据1，数据2，数据3，...)`数据等于数据1，或者数据2，或者数据3都可以。
+  * `is null, is not null`null值不能被直接查询，只能使用这两个特殊语句判断。
+  * `like`:模糊查询
+    * 占位符:
+      * `_`：单个任意字符；
+      * `%`:多个任意字符；
+    * 示例：
+      * `select name from stu where name like '马%';`(name中第一个字是马)
+      * `select name from stu where name like '_化_`（name中第二个字是化）
+      * `select naem from stu where name like '%德%'(name中含马)
+      * `select name from stu where name like '___'`(name为三个字)
