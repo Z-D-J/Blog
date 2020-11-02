@@ -210,3 +210,51 @@ from
       * `select name from stu where name like '_化_`（name中第二个字是化）
       * `select naem from stu where name like '%德%'(name中含马)
       * `select name from stu where name like '___'`(name为三个字)
+
+## 约束
+
+### 约束概念
+
+* 约束：对表中的数据进行限定，从而保证数据的正确性，有效性和完整性。
+* 约束的分类：
+  1. 主键约束：primary key
+  2. 非空约束：not null
+  3. 唯一约束：unique
+  4. 外键约束：foreign key
+
+### 非空约束
+
+* 在创建表时添加约束：
+  * 示例：
+  ```sql
+   CREATE TABLE stu1(
+   id INT,
+   NAME VARCHAR(20) NOT NULL -- name必须为非空，才能加入表中
+   );
+   ```
+* 创建表完成后添加或删除约束：
+  * 示例：
+  ```sql
+  ALTER TABLE stu1 MODIFY NAME VARCHAR(20); -- 将原来有约束的name改为没有not null的
+  ALTER TABLE stu1 MODIFY NAME VARCHAR(20) NOT NULL; -- 给name添加not null约束
+  ```
+
+### 唯一约束
+
+* 创建表时添加约束：
+  * 示例：
+  ```sql
+   CREATE TABLE stu1(
+   id INT,
+   NAME VARCHAR(20) UNIQUE -- name必须为是唯一没有重复的，才能加入表中
+   );
+* 创建表完成后添加或者删除约束：
+   * 示例：
+   ```sql
+   ALTER TABLE stu1 DROP INDEX NAME VARCHAR(20); -- 删除创建表时的唯一约束（使用DROP INDEX 而不是MODIFY）
+   ALTER TABLE stu1 MODIFY NAME VARCHAR(20) UNIQUE; -- 添加唯一约束，仍然使用MODIFY
+   ```
+* MySQL中多个null不认为是重复的
+
+### 主键约束
+
