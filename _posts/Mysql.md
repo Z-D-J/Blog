@@ -222,7 +222,7 @@ from
   3. 唯一约束：unique
   4. 外键约束：foreign key
 
-### 非空约束
+### 非空约束 NOT NULL
 
 * 在创建表时添加约束：
   * 示例：
@@ -239,7 +239,7 @@ from
   ALTER TABLE stu1 MODIFY NAME VARCHAR(20) NOT NULL; -- 给name添加not null约束
   ```
 
-### 唯一约束
+### 唯一约束 UNIQUE
 
 * 创建表时添加约束：
   * 示例：
@@ -256,5 +256,77 @@ from
    ```
 * MySQL中多个null不认为是重复的
 
-### 主键约束
+### 主键约束：PRIMARY KEY
 
+* 主键约束：非空且唯一，一张表中只能有一个字段为主键，主键就是表中记录的唯一标识。
+* 创建时添加主键，示例：
+```sql
+create table stu (
+   id int primary key, -- 给id添加主键约束
+   name varchar(20)
+)
+```
+* 删除主键约束，示例：
+```sql
+alter table stu1  drop primary key;
+```
+   * 因为一个表中的主键是唯一的，所以无需指定特定的列。
+* 创建完表之后，添加主键，示例：
+```sql
+alter table stu1 modify id int primary key;
+```
+* **自动增长**：
+  * 如果某一列是数值类型的，使用auto_increment可以完成值的自动增长。一般和主键联合在一起使用。
+  * 创建表时添加主键约束，并且实现主键的自增长，示例：
+  ```sql
+  create table stu1 (
+     id int primary key auto_increment, -- 给id添加主键约束，并自动增长。
+     name varchar(20)
+  );
+  ```
+* 使用自动增长：
+```sql
+insert into stu1 values(null, 'name1'); -- 每次执行此操作，如果不指定id的值，就会自动根据上一行的数据加一来作为本行的id值
+```
+* 删除自动增长：
+```sql
+alter table stu1 modify id int; -- 能够去除自动增长，但是不能这样删除主键
+```
+* 创建完表后添加自动增长：
+```sql
+alter table stu modify id int auto_increment;
+```
+
+### 外键约束：FOREIGN KEY
+
+* 联系两个表某些列，之后关联的两列的删除添加操作都是相互制约的,从而保证数据的正确性。
+* 创建表时添加外键：
+```sql
+create table 表名 (
+   ...
+   外键列(和其它表有关系的列)
+   constanit  外键名称 foreign key (外键列的名称) references 主表名称(主表的列（一般为主键列）名称)
+)
+
+示例：
+
+creat table department (
+   id int primary key,
+   name varchar(20)
+)
+
+create table empolyee (
+   id int primary key,
+   dep_id int -- 外键对应主表的主键（外键列）
+   constraint emp_dept_fk foreign key (dep_id) references department(id)
+)
+```
+* 删除外键：
+```sql
+alter table employee drop foreign key emp_dept_key;
+```
+* 创建表之后添加外键：
+```sql
+alter table employee add constraint emp_dept_fk foreign key (dep_id) references department(id);
+```
+* **级联操作**
