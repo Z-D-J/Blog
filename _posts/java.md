@@ -2019,8 +2019,44 @@ public class Battle implements Runnable{ //实现Runable接口的类
 
 ### File类获取功能的方法
 
+* `public String getAbsolutePath()`：返回此File的**绝对路径**名字符串；（返回构造File时的传入的路径）
+* `public String getPath()`:返回此File的路径名字符串（既可以是绝对路径，也可以是相对）
+* `public String getName()`:返回此File表示的文件或者目录的名称（即构造时传入的路径的结尾部分）
+* `public long lenght()`:返回此File表示的文件的长度；
+  * 长度是以字节为单位计算的；
+  * 目录是没有大小的，只能得到具体文件的长度大小。
 
+### File类判断功能的方法
 
+* `public boolean exists();`:此File对象表示的文件或者目录是否真实存在。如果路径本身就不存在，则直接返回false
+* `public boolean isDirectory();`此File对象表示的是否为目录。如果路径本身就不存在，则直接返回false
+* `public boolean isFile();`此File对象表示的是否为文件。如果路径本身就不存在，则直接返回false
+
+### File类创建和删除功能的方法
+
+* `public boolean createNewFile();`:当且仅当具有该名称的**文件**尚不存在的时候，创建一个新的空文件。
+  * 创建文件的路径和名称在构造方法中给出
+  * 文件不存在，创建文件，返回true
+  * 文件存在，返回false
+  * 如果路径不存在，则会抛出**IOException异常**;所以调用这个方法要么throws异常，要么使用try-catch捕获异常。
+  * 只能创建文件，不能创建文件夹（目录）
+* `public boolean mkdir();`:创建由此File表示的目录（只能创建单级空文件夹）
+  * 创建文件夹的路径和名称在构造方法中给出
+  * 文件夹不存在，创建文件，返回true
+  * 文件夹存在，返回false
+  * 如果路径不存在，则还是返回false
+  * 只能创建文件夹，不能创建文件。
+* `public boolean mkdirs();`:创建由此File表示的目录（能够创建多级文件夹，如`File//111//222//333`）
+  * 创建文件夹的路径和名称在构造方法中给出
+  * 文件夹不存在，创建文件，返回true
+  * 文件夹存在，返回false
+  * 如果路径不存在，则还是返回false
+  * 只能创建文件夹，不能创建文件。
+* `public boolean delete();`删除由此File表示的**文件或目录**
+  * 文件或者目录删除成功，返回true
+  * 文件夹中有内容，不会删除返回false；
+  * 构造方法中的路径不存在返回false；
+  * 该方法直接在硬盘删除文件或者文件夹，不走回收站。
 
 
 
