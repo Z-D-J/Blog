@@ -2070,7 +2070,7 @@ import java.io.File;
 public class Recurison {
 
     public static void main(String[] args) {
-        File file = new File("c://");
+        File file = new File("c://...");
         getAllFile(file);
     }
 
@@ -2088,6 +2088,110 @@ public class Recurison {
     }
 }
 ```
+* 示例：遍历目录，只需以.java结尾的文件
+```java
+import java.io.File;
+
+public class Recurison {
+
+    public static void main(String[] args) {
+        getAllFile(file);
+    }
+
+    public  static void getAllFile(File dir) {
+        File[] files = dir.listFiles();
+        System.out.println(dir);
+
+        for(File f : files) {
+            if(f.isDirectory()) {
+                getAllFile(f);
+            } else {
+                /*
+                * 三选一
+                */
+                //String name = f.getName();
+                //String path = f.getPath();
+                String s = f.toString();
+                
+                //把字符串转换为小写
+                s = s.tolowerCase();
+
+
+                boolean b = s.endWith(".java");
+                if(b) {
+                    System.out.println(f);
+                }
+            }
+        }
+    }
+}
+```
+### FileFilter和FilenameFilter过滤器
+
+* FileFilter是一个接口，用于抽象路径名（File对象）的过滤；
+* FileFilter内有过滤文件的抽象方法：
+```java
+boolean accept (File pathname) //测试指定抽象路径名是否应该包含在某个路径名列表中
+```
+    * File pathname:使用ListFiles方法遍历目录，得到的每一个文件对象；
+* FilenameFilter也是一个接口，用于过滤文件名称。
+* FileFilter内过滤的抽象方法：
+```java
+boolean accept (File dir, String name) 
+```
+    * File dir:构造方法中传递的被遍历的目录；
+    * String name：使用ListFiles方法遍历目录，获取的每一个文件/目录的名称
+* 两个过滤器接口是没有实现类的，需要我们自己写实现类，重写过滤器的方法accept，在方法找那个自己定义过滤的规则
+* 示例：
+```java
+import java.io.File;
+
+public class Recurison {
+
+    public static void main(String[] args) {
+        getAllFile(file);
+    }
+
+    public  static void getAllFile(File dir) {
+        File[] files = dir.listFiles(new FileFilterimpl());//传递过滤器对象
+        System.out.println(dir);
+
+        for(File f : files) {
+            if(f.isDirectory()) {
+                getAllFile(f);
+            } else {
+                /*
+                * 三选一
+                */
+                //String name = f.getName();
+                //String path = f.getPath();
+                String s = f.toString();
+                
+                //把字符串转换为小写
+                s = s.tolowerCase();
+
+
+                boolean b = s.endWith(".java");
+                if(b) {
+                    System.out.println(f);
+                }
+            }
+        }
+    }
+}
+```
+```java
+
+public class FileFiterImpl implements FileFilter {
+    @overide
+    public boolean accept (File pathname) {
+        return false;
+    }
+}
+```
+
+
+
 
 # 网络编程
 
