@@ -2058,7 +2058,36 @@ public class Battle implements Runnable{ //实现Runable接口的类
   * 构造方法中的路径不存在返回false；
   * 该方法直接在硬盘删除文件或者文件夹，不走回收站。
 
+### File的目录遍历功能
 
+* `public String[] list();`:返回一个String数组，表示该File目录中所有的子文件或目录。遍历构造方法中给出的目录，会获取目录中**所有文件/文件夹的名称**，把获取到的多个名称存储到一个String类型的数组。（打印出来就是文件或者文件夹名）
+* `public File[] listFiles();`:返回一个File数组，表示该File目录中所有的子文件或目录。遍历构造方法中的目录，或获取目录中所有的文件或文件夹，把文件或者文件夹封装为File对象，多个File对象，存储到File数组中。（打印出来的是文件名和它的完整存储路径）
+* 这两种方法遍历的是构造方法中给出的目录，如果给出的目录路径不存在，会抛出空指针异常，如果给出的路径不是一个目录，也会抛出一个空指针异常。
+* 示例：递归打印多级目录
+```java
+import java.io.File;
+
+public class Recurison {
+
+    public static void main(String[] args) {
+        File file = new File("c://");
+        getAllFile(file);
+    }
+
+    public  static void getAllFile(File dir) {
+        File[] files = dir.listFiles();
+        System.out.println(dir);
+
+        for(File f : files) {
+            if(f.isDirectory()) {
+                getAllFile(f);
+            } else {
+                System.out.println(f);
+            }
+        }
+    }
+}
+```
 
 # 网络编程
 
