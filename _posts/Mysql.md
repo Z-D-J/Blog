@@ -329,4 +329,29 @@ alter table employee drop foreign key emp_dept_key;
 ```sql
 alter table employee add constraint emp_dept_fk foreign key (dep_id) references department(id);
 ```
-* **级联操作**
+* **级联操作**:修改有外键连接的两个表的列中的数据，操作会自动同步给关联的另一个列。
+  * 添加级联操作语法：
+  ```sql
+  ALTER TABLE 表名 ADD CONSTRAINT 外键名称 
+         FOREIGN KEY (外键字段名称) REFERENCES 主表名称(主表列名称) ON UPDATE CASCADE ON DELTE CASCADE;
+   ```
+   * 级联更新：ON UPDATE CASADE;
+   * 级联删除：ON DELTE CASCADE;
+
+# 数据库的设计
+
+## 多表关系
+
+1. 一对一关系（使用较少）
+   1. 如：人与身份证
+   2. 实现：一对一关系实现，可以在任意一方添加**唯一外键**指向另一方的主键。可以直接合成一张表。
+2. 一对多关系
+   1. 如：部门和员工
+   2. 实现：在“多”的一方建立外键，指向“一”的一方的主键。
+3. 多对多关系：
+   1. 如：课程与学生
+   2. 实现：多对多关系需要借助**中间表**，中间表至少包含两个字段，这两个字段（这两个字段是**联合**的）作为第三张表的外键，分别指向两张表的主键。
+
+
+
+
