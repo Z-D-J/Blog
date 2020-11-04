@@ -2261,6 +2261,54 @@ public class Recurison {
 
 ## IO流概述
 
+* I(Input)O(Output),流：数据（字符，字节）1个字符 = 2个字节，1个字节 = 8个二进制位。
+* I输入：把硬盘中的数据读取到内存中。O输出：把内存的数据读到硬盘中。
+* 字节流：以字节为单位，可以输入输出任意文件。
+* 字符流：以字符为单位。
+* 输入流：输入数据。
+* 输出流：输出数据。
+* **一切皆为字节**：一切文件数据都是以二进制数字的形式保存的，就是以一个一个字节的形式来存储的。
+
+## 字节流
+
+* 所有流都是在`java.io`包中实现的。
+
+### 字节输出流
+
+* 在`java.io.OutputStream`定义了OutputStream**抽象类**，表示所有输出字节流的超类。
+* 成员方法：
+  * `void close();`:关闭此输出流并释放与此流有关的所有系统资源。
+  * `void flush();`:刷新此输出流并强制写出所有缓冲的输出字节。
+  * `void write(byte[] b);`:将b.length个字节从指定的byte数组写入此输入流。
+  * `void write(byte[] b, int off, int len);`:将指定byte数组中从偏移量off开始的len个字节写入此输出流。
+  * `void write(int b);`:将指定的字节写入此输出流。
+#### FileOutStream类
+
+* OutStream类的子类，叫做文件字节输出流，把内存中的数据写入到硬盘的文件中。
+* 构造方法：参数为写入数据的目的地。
+  * `FileOutputStream(String name)`:创建一个向指定名称的文件中写入数据的输出文件流。
+  * `FileOutputStream(File file)`:创建一个向指定File对象表示的文件中写入数据的文件输出流。
+  * 构造方法的作用：
+    * 创建一个FileOutputStream对象
+    * 会根据构造方法中传递的文件/文件路径，创建一个新的空文件
+    * 会把FileOutputStream对象指向创建好的文件。
+* 字节输出流的使用步骤：
+  1.  **创建**一个FileOutputStream对象，构造方法中传递写入数据的目的地；
+  2.  调用FilePOutputStream对象中的**write方法**，把数据写入文件中；
+  3.  释放资源(调用**close方法**），因为流在使用过程中会占用系统资源。
+* 示例：
+```java
+
+public class Test {
+    public static void main(String[] args) throws IOException {
+    // **创建**一个FileOutputStream对象，构造方法中传递写入数据的目的地；
+    FileOutputStream fos = new FileOutputStream("路径");
+    //调用FilePOutputStream对象中的**write方法**，把数据写入文件中；
+
+    }
+}
+```
+
 
 
 # 网络编程
