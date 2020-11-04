@@ -2142,7 +2142,7 @@ boolean accept (File dir, String name)
     * File dir:构造方法中传递的被遍历的目录；
     * String name：使用ListFiles方法遍历目录，获取的每一个文件/目录的名称
 * 两个过滤器接口是没有实现类的，需要我们自己写实现类，重写过滤器的方法accept，在方法找那个自己定义过滤的规则
-* 示例：
+* 示例：遍历目录，过滤掉不是以.java结尾的文件。使用接口实现类。
 ```java
 import java.io.File;
 
@@ -2153,26 +2153,20 @@ public class Recurison {
     }
 
     public  static void getAllFile(File dir) {
-        File[] files = dir.listFiles(new FileFilterimpl());//传递过滤器对象
+
+        /*
+        * 1.listFiles方法会对目录中传递的目录进行遍历，获取目录中的每一个文件、文件夹--》封装为File对象
+        * 2.listFiles方法会调用参数传递的过滤器的accept方法
+        * 3.listFiles方法会把遍历得到的每一个File对象，传递给accept方法的参数pathname
+        * 4.accept的返回值为true则将传递进去的File对象存入File数组，为false则不保存。
+        */
+        File[] files = dir.listFiles(new FileFilterimpl());//传递过滤器对象,将过滤的规则传递给listFiles方法，最后返回过滤后的数组
         System.out.println(dir);
 
         for(File f : files) {
             if(f.isDirectory()) {
                 getAllFile(f);
             } else {
-                /*
-                * 三选一
-                */
-                //String name = f.getName();
-                //String path = f.getPath();
-                String s = f.toString();
-                
-                //把字符串转换为小写
-                s = s.tolowerCase();
-
-
-                boolean b = s.endWith(".java");
-                if(b) {
                     System.out.println(f);
                 }
             }
@@ -2185,11 +2179,87 @@ public class Recurison {
 public class FileFiterImpl implements FileFilter {
     @overide
     public boolean accept (File pathname) {
-        return false;
+
+        if(pathname.isDirectory()) {
+            return true; //如果是文件夹，则仍存在File数组中。
+        }
+        return pathname.getName().toLowerCase().endWith(".java");
+    }
+}
+```
+* 使用匿名内部类实现过滤器
+```java
+import java.io.File;
+
+public class Recurison {
+
+    public static void main(String[] args) {
+        getAllFile(file);
+    }
+
+    public  static void getAllFile(File dir) {
+
+        /*
+        * 1.listFiles方法会对目录中传递的目录进行遍历，获取目录中的每一个文件、文件夹--》封装为File对象
+        * 2.listFiles方法会调用参数传递的过滤器的accept方法
+        * 3.listFiles方法会把遍历得到的每一个File对象，传递给accept方法的参数pathname
+        * 4.accept的返回值为true则将传递进去的File对象存入File数组，为false则不保存。
+        */
+        File[] files = dir.listFiles(new FileFilterimpl() {
+            @override
+            public boolean accept(File pathname) {
+            return pathname.getName().toLowerCase().endWith(".java") || pathname.isDirectory();
+            }
+        });//传递过滤器对象,将过滤的规则传递给listFiles方法，最后返回过滤后的数组
+        System.out.println(dir);
+
+        for(File f : files) {
+            if(f.isDirectory()) {
+                getAllFile(f);
+            } else {
+                    System.out.println(f);
+                }
+            }
+        }
+    }
+}
+```
+* 使用lambda表达式（接口中只有一个方法）
+```java
+import java.io.File;
+
+public class Recurison {
+
+    public static void main(String[] args) {
+        getAllFile(file);
+    }
+
+    public  static void getAllFile(File dir) {
+
+        /*
+        * 1.listFiles方法会对目录中传递的目录进行遍历，获取目录中的每一个文件、文件夹--》封装为File对象
+        * 2.listFiles方法会调用参数传递的过滤器的accept方法
+        * 3.listFiles方法会把遍历得到的每一个File对象，传递给accept方法的参数pathname
+        * 4.accept的返回值为true则将传递进去的File对象存入File数组，为false则不保存。
+        */
+        File[] files = dir.listFiles((File pathname) -> {
+            return pathname.getName().toLowerCase().endWith(".java") || pathname.isDirectory();
+        }) //传递过滤器对象,将过滤的规则传递给listFiles方法，最后返回过滤后的数组
+        System.out.println(dir);
+
+        for(File f : files) {
+            if(f.isDirectory()) {
+                getAllFile(f);
+            } else {
+                    System.out.println(f);
+                }
+            }
+        }
     }
 }
 ```
 
+## IO流概述
 
 
 
