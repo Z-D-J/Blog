@@ -2288,6 +2288,10 @@ public class Recurison {
 * 构造方法：参数为写入数据的目的地。
   * `FileOutputStream(String name)`:创建一个向指定名称的文件中写入数据的输出文件流。
   * `FileOutputStream(File file)`:创建一个向指定File对象表示的文件中写入数据的文件输出流。
+  * `FileOutputStream(String name, boolean append);`：创建一个向具有指定name的文件中写入数据的的输出文件流。
+    * String name：写入数据的目的地；
+    * boolean append：**追加写**的开关。true:追加写，false：关闭追加写。
+  * `FileOutputStream(File file, boolean append);`:
   * 构造方法的作用：
     * 创建一个FileOutputStream对象
     * 会根据构造方法中传递的文件/文件路径，创建一个新的空文件
@@ -2321,6 +2325,22 @@ public class Test {
 byte[] b = "hello world".getBytes();
 fos.write(b);
 ```
+* 换行
+    * 不同系统的换行符号；
+      * Windows：`\r\n`
+      * linux:`\n`
+      * mac:`\r`
+    * 示例：
+    ```java
+    FileOutputStream fos = new FileOutputStream("a.txt",true);
+            byte[] c = "hello".getBytes();
+            for(int i = 0; i < 10; i++) {
+                fos.write(c);
+                fos.write("\r\n".getBytes());
+            }
+            fos.close();
+    ```
+
 
 ### 文件存储的原理与文本编辑器
 
@@ -2330,7 +2350,21 @@ fos.write(b);
   * 其他值：查询系统默认码表（如中文系统的GBK编码）。
 * 示例：`fos.write(97);`将97写入a.txt文件中，最终用记事本打开看见的结果为字符`a`
 
+### 字节输出流
 
+* `java.io.InputStream`是字节输入流所有类的超类，是抽象类，定义了所有子类共性的方法
+* `int read();`：从输入流中读取数据的下一个字节 
+* `int read(byte[] b);`: 从输入流中读取一定数量的字节，并将其存储在缓冲区数组b中。
+* `void close();`:关闭此输入流并释放与该流关联的所有系统资源。
+
+#### FileInputStream类
+
+* 继承了`InputStream`类。将硬盘文件中的数据，读取到内存中使用。
+* 构造方法：
+  * `FileInputStream(String name)`:String name是要读取的文件的路径
+  * `FileInputStream(File, file)`：File file是要读取的文件。
+  * 作用：创建一个FileInputStream对象，并将此对象指定构造方法中要读取的文件。
+* 
 
 # 网络编程
 
