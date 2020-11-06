@@ -2279,7 +2279,7 @@ public class Recurison {
 * 成员方法：
   * `void close();`:关闭此输出流并释放与此流有关的所有系统资源。
   * `void flush();`:刷新此输出流并强制写出所有缓冲的输出字节。
-  * `void write(byte[] b);`:将b.length个字节从指定的byte数组写入此输入流。
+  * `void write(byte[] b);`:将b.length个字节从指定的byte数组写入此输入流。每次写入数据都会覆盖文件中的所有的数据。
   * `void write(byte[] b, int off, int len);`:将指定byte数组中从偏移量off开始的len个字节写入此输出流。
   * `void write(int b);`:将指定的字节写入此输出流。
 #### FileOutStream类
@@ -2301,13 +2301,34 @@ public class Recurison {
 
 public class Test {
     public static void main(String[] args) throws IOException {
-    // **创建**一个FileOutputStream对象，构造方法中传递写入数据的目的地；
+    // **创建**一个FileOutputStream对象，构造方法中传递写入数据的目的地,在路径不对时会抛出IO异常的子异常（FileNotFoundException）。
     FileOutputStream fos = new FileOutputStream("路径");
     //调用FilePOutputStream对象中的**write方法**，把数据写入文件中；
-
+    fos.write(数据);
+    /*
+    fos.write('b');
+    byte[] b = {'1','a','-'};
+    fos.write(b);
+    fos.write(b, 1,  2);
+    */
+    //释放资源
+    fos.close();
     }
 }
 ```
+* 写入字符串：
+```java
+byte[] b = "hello world".getBytes();
+fos.write(b);
+```
+
+### 文件存储的原理与文本编辑器
+
+* 写到硬盘中的文件是以二进制形式保存的，如果直接以int的形式输入数据，则会转换为二进制形式。如：`fos.write(97)`,实际写数据的时候会将97转化为二进制数1100001。
+* 任意的文本编辑器（如记事本）在打开文件的时候都会查询编码表，把字节转换为字符表示，如果就是以字节形式输入`'a','1'`则会按照原样输出。
+  * 0~127之间的数查询ASCII表；
+  * 其他值：查询系统默认码表（如中文系统的GBK编码）。
+* 示例：`fos.write(97);`将97写入a.txt文件中，最终用记事本打开看见的结果为字符`a`
 
 
 
