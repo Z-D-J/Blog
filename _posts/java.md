@@ -2353,18 +2353,51 @@ fos.write(b);
 ### 字节输出流
 
 * `java.io.InputStream`是字节输入流所有类的超类，是抽象类，定义了所有子类共性的方法
-* `int read();`：从输入流中读取数据的下一个字节 
-* `int read(byte[] b);`: 从输入流中读取一定数量的字节，并将其存储在缓冲区数组b中。
+* `int read();`：从输入流中读取数据的下一个字节，返回值会转换为int类型。读到**文件末尾会返回-1**（因为系统会在每个文件末尾设置一个看不见的结束标记）.如果路径不存在，会有IOExcption异常。每次读取完之后，会自动“指向”后面紧接着的未被读的数据。
+* `int read(byte[] b);`: 从输入流中读取一定数量的字节，并将其存储在缓冲区数组b中。数组b的长度是每次从文件中读取字节的数目。返回值是从文件中成功读取的字节数,如果一个数据都没有读到，则返回-1.
 * `void close();`:关闭此输入流并释放与该流关联的所有系统资源。
 
 #### FileInputStream类
 
 * 继承了`InputStream`类。将硬盘文件中的数据，读取到内存中使用。
-* 构造方法：
-  * `FileInputStream(String name)`:String name是要读取的文件的路径
+* 构造方法：会有FileNotFoundException异常（是IOException异常的子类）。需要抛出或者捕获。
+  * `FileInputStream(String name)`:String name是要读取的文件的路径。
   * `FileInputStream(File, file)`：File file是要读取的文件。
   * 作用：创建一个FileInputStream对象，并将此对象指定构造方法中要读取的文件。
-* 
+* 输入字节流的使用步骤：
+  1.  创建一个FileInputStream对象，构造方法中绑定要读取的数据源。
+  2.  使用FileInputStream对象中的方法read，读取文件。、
+  3.  释放资源（close方法）
+* 一次读取一个字节的示例：
+```java
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class InputStreamTest {
+    public static void main(String[] args) throws IOException { //抛出IOException异常可以同时解决FileNotFound和IoException两个异常
+        FileInputStream fis = new FileInputStream("a.txt");
+        int len = 0;
+        while((len = fis.read() )!= -1) {
+            System.out.print((char)len); //要想显示字符信息，需要强制转换为char类型
+        }
+    }
+}
+```
+* 一次读取多个字节的示例：
+```java
+public class InputStreamTest {
+    public static void main(String[] args) throws IOException {
+        FileInputStream fis = new FileInputStream("a.txt");
+        byte[] b = new byte[1000];
+        int len = fis.read(b);
+        System.out.println(len);
+        System.out.println(new String(b));//利用byte数组作为参数构造String对象可以按照文件中原有的格式输出数据。
+        fis.close();
+        }
+    }
+```
+
+
 
 # 网络编程
 
