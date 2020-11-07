@@ -1695,7 +1695,7 @@ public interface Mortal {
   * 设备错误；
   * 物理限制（存储空间）；
   * 代码错误。
-* **异常处理过程**： 如果某个方法不能够正常的完成，可以通过抛出一个封装了错误信息的异常对象来退出方法。需要退出的方法并不返回任何值，而是直接退出，之后异常处理机制开始搜索能够处理这种异常的异常处理器。
+* **异常处理过程**： 如果某个方法不能够正常的完成，可以通过**抛出**一个封装了错误信息的异常对象来退出方法。需要退出的方法并不返回任何值，而是**直接退出**（中断处理），之后异常处理机制开始搜索能够处理这种异常的异常处理器。
 
 ### 异常分类
 
@@ -1703,9 +1703,9 @@ public interface Mortal {
 * **异常的层次结构**：
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201015184846.jpg)
     * 所有的异常类都是由Throwable类继承而来。
-    * **Error**类层次结构：描述了java运行时的系统内部错误和资源耗尽错误。
+    * **Error**类层次结构：描述了java运行时的系统内部错误和资源耗尽错误，不能人工处理的。
     * **Exception**类层次结构：是设计程序时主要关注的异常。
-    * **RuntimeException**:由编程错误导致的异常（如果出现RuntimeException异常，一定是程序员的问题）。具体包含：
+    * **RuntimeException**:由**编程错误**导致的异常（如果出现RuntimeException异常，一定是程序员的问题），又称运行期异常。具体包含：
       * 错误的强制类型转换；
       * 数组访问越界；
       * 访问null指针。
@@ -1718,7 +1718,7 @@ public interface Mortal {
 ### 声明检查型异常
 
 * 在方法首法使用`throws`关键字声明该方法可能抛出的**检查型异常**：如： `public FileInputStream(String name) throws FileNotFoundException`。如果会抛出多个异常，可以在首部声明所有的检查型异常类,用逗号分隔，如：`public Image loadImage(String s) throws FileNotFoundException, EoFException`
-* 一个方法必须声明所有可能抛出的检查型异常。而非检查型异常是我们无法控制的（Error），或者是我们应该极力在编程时避免的（RuntimeException）。
+* 一个方法必须声明所有可能抛出的**检查型异常**。而非检查型异常是我们无法控制的（Error），或者是我们应该极力在编程时避免的（RuntimeException）。
 * 子类方法中声明的检查型异常是父类方法中的声明的异常的子集。
 
 ### 抛出异常
