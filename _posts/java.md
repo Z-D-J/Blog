@@ -1715,17 +1715,22 @@ public interface Mortal {
       * 试图根据给定的字符串查找并不存在的Class对象。
 * **非检查型异常与检查型异常**：所有派生于Error或者RuntimeException类的异常称为非检查型异常。其余异常为检查型异常。
 
-### 声明检查型异常
+### 异常处理的第一种方式：声明检查型异常
 
 * 在方法首法使用`throws`关键字声明该方法可能抛出的**检查型异常**：如： `public FileInputStream(String name) throws FileNotFoundException`。如果会抛出多个异常，可以在首部声明所有的检查型异常类,用逗号分隔，如：`public Image loadImage(String s) throws FileNotFoundException, EoFException`
 * 一个方法必须声明所有可能抛出的**检查型异常**。而非检查型异常是我们无法控制的（Error），或者是我们应该极力在编程时避免的（RuntimeException）。
-* 子类方法中声明的检查型异常是父类方法中的声明的异常的子集。
+* **子类**方法中声明的检查型异常是**父类**方法中的声明的异常相同的，或者是该异常的子类。如果父类没有声明异常，则子类也不可以声明异常。
+* 如果方法中抛出的多个异常都是一个异常的子类，那么只需要声明这写异常的父类异常即可。
+* 声明的检查型异常会抛出给方法的调用者处理，最终交给JVM处理。
+* 调用一个声明了抛出异常的方法，必须处理声明的异常，有以下两种方法：
+  1.  在调用这个方法的方法里继续使用throws声明抛出异常，交给jvm来处理，但是jvm处理异常是通过中断来处理的，在抛出异常对象的语句之后的代码不会再被执行。
+  2.  在该方法里使用`try...catch`语句，自己处理该异常。
 
 ### 抛出异常
 
-* 抛出异常的方法：
+* 抛出指定异常的方法：
   1. 找到一个合适的异常类；
-  2. 创建这个类的对象：如：`var e = new EOFException`
+  2. 创建这个类的**对象**：如：`var e = new EOFException`
   3. 将对象抛出：如`throw e`。
 * 2、3步可以合并为一步：`throw new EOFException`
 * 每个异常类都带有一个字符串参数的构造器，可以用来描述异常的具体信息。如：
@@ -1733,10 +1738,12 @@ public interface Mortal {
 String gripe = "Content-length: " + len +", Recived: " + n;
 throw new EOFException(gripe);
 ```
+* throws 出来的RuntimeException或者其子类异常，就可以直接抛出交给jvm内置的异常处理器来处理。
 ### 创建异常类
 
 * 如果标准的异常类不能描述清楚你程序的问题，那么就需要创建自己的异常类。
-* 自定义的异常类需要派生于Exception类或者Exception的子类。并且这个类中应该包含两个构造器：一个默认的构造器（无参数），一个包含描述异常信息的字符串参数的构造器。示例：
+* 命名以Exception结尾。
+* 自定义的异常类需要派生于Exception类或者Exception的子类（**所有异常类都是Throwable类的子类**）。并且这个类中应该包含两个构造器：一个默认的构造器（无参数），一个包含**描述异常信息的字符串参数的构造器**。示例：
 ```java
 class FileFormatException extends IOException {
     public FileFormatException() {} //默认的构造器
@@ -1746,20 +1753,22 @@ class FileFormatException extends IOException {
 }
 ```
 
-### 捕获异常
+### 异常的第二种处理方法：捕获异常
 
 * 抛出异常是将发生的异常交给异常处理器取处理。而与之相对的**捕获异常**就是将异常交给用户指定的异常处理器去处理。
+* 在调用可能会产生异常的方法时使用`try/catch`来捕获异常，来替代直接throws声明异常将异常继续抛出交给jvm来处理。
 * 捕获异常需要使用`try/catch`语句块，要捕获异常的方法就不再使用`throws`声明抛出异常。示例：
 ```java
     public void read(String filename) {
         try {
+            //放置可能产生异常的代码
             var in = new FileInputStream(filename);
             int b;
             while (b = in.read() != -1) {
                 process input
             }
         }
-        catch (IOException exception) {
+        catch (IOException exception) { //异常类名 异常对象名， 发挥了声明异常中throw new 异常的作用
             exception.printStackTrace(); //调用对应异常的处理器方法
         }
     }
@@ -1772,7 +1781,7 @@ class FileFormatException extends IOException {
     catch (FileNotFoundException e) {
         //emergency action for missing files
     } 
-    catch (IOException e) {
+    catch (IOException e) { //父类异常必须放在子类异常后面，否则子类异常就失去作用了
         //emergency action for all other I/O problems
     }
     ```java
@@ -1803,7 +1812,8 @@ catch (Exception) {
 ### finally子句
 
 * 代码抛出一个异常时，会停止处理这个方法中的剩余的代码，并退出这个方法。但此时可能会有这个方法以及获得的资源没有清理。而finally子句正是用来清理这这些资源的。
-* 如果无论该方法有没有抛出异常，finally子句中的代码都会在前面代码按照普通流程结束后执行（没有异常则顺序执行到finally子句，捕获了异常则再catch中处理了异常再执行finall子句，抛出了异常则抛出异常后执行finally子句），示例：
+* **finally不能单独使用，必须和try一起使用**。
+* **无论该方法有没有抛出异常，finally子句中的代码都会在前面代码按照普通流程结束后执行**（没有异常则顺序执行到finally子句，捕获了异常则在catch中处理了异常再执行finall子句，抛出了异常则抛出异常后执行finally子句），示例：
 ```java
 var in = new FileInputStream;
 try {
@@ -2536,6 +2546,15 @@ public class InputStreamTest {
 * 提供散列码的方法（hashcode）:
   * `static int hash(Object...objects)`，返回一个散列码，由提供的所有对象的散列码组合得到。
   * `static int hashCOde(Object a)`如果a为null返回0，否则返回a.hashCode()的结果（即Object类中的hashCode方法增加了对null的处理）
+* 判断对象是否为空并抛出异常的方法：
+```java
+public static <T> T requireNonNull(T obj,String message) {
+    if (obj == null) {
+        throw new NullPointerException(message);
+    }
+    return obj;
+}
+```
 
 ## java.util.List
 
@@ -2605,7 +2624,9 @@ public class InputStreamTest {
 
 * `Thorwable()`:构造一个Throwable对象但是没有详细的描述信息
 * `Throwable(String message)`: 构造一个Throwable对象，带有指定的详细描述信息。
-* `String getMessage()`:获得Throwable对象的详细描述信息。
+* `String getMessage()`:获得Throwable对象的简短描述信息。
+* `vois PrintStackTrace()`:jvm打印堆栈轨迹（异常的信息），是最全面的异常信息。
+* `String toString();`返回此异常的描述消息字符串。
 
 
 
