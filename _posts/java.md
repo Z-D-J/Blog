@@ -5,6 +5,13 @@ tags:
 
 ---
 
+# java概述
+
+* java EE：java标准版；java SE：java企业版；java ME：java微型版。、
+* java不支持指针。
+* java提供内存管理机制，会自动收集内存垃圾。
+* Application：java应用程序；Applet：java小应用程序（嵌入到web页面中，要依赖HTML文件和web浏览器，且没有main()方法）
+
 # 输入和输出
 
 * 使用`Scanner in = new Scanner(System.in);`可以定义一个可以接受输入的东西`in`（名字是任取的。）。之后要接受输入时，就使用形如`in.nextline()``in.nextint()`的语句。（其中line与int表示接受的输入的数据类型，line是字符串，int是整型）。
