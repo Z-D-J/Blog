@@ -383,4 +383,130 @@ alter table employee add constraint emp_dept_fk foreign key (dep_id) references 
 
 # 多表查询
 
+## 多表查询的基本概念
 
+* 查询基本语法：
+```sql
+select
+   列名列表
+from
+   表的列表（可以写多个表）
+where
+   ...(条件)
+```
+* 示例：`select * from table1, table2;`。不加任何条件查询多个表的结果是：所有表的组合（两个表时是笛卡尔积）。
+
+## 多表查询的分类
+
+1. 内连接查询
+2. 外连接查询
+3. 子查询
+
+### 内连接查询
+
+1. 隐式内连接：使用where条件来消除多个表组合后的无用信息。
+```sql
+select 
+      * 
+from 
+      table1, table2 
+where 
+      table1.`id1` = `table.id2`; -- 组合后不满足的这个条件的行都会被去掉
+
+
+select 
+      table1.name, table2.name -- 要查询两个表里的同名列，需要在列名前面加上表名的限定。
+from 
+      table1, table2 
+where       
+      table1.`id1` = table2.`id2`; 
+
+
+select 
+      t1.name, t2.name 
+from 
+      table1 t1, table2 t2 -- 通过取别名来简化对表名的书写。
+where 
+      t1.`id1` = t2.`id2`; 
+```
+
+2. 显式内连接：
+   * 语法：`select 字段列表 from 表名1 inner join 表名2 on 条件;`
+   * 同样支持对表取别名来简化书写
+```sql
+select
+      * 
+from
+      table1
+inner join
+      table2  -- 两个表是分开放的
+on 
+      table1.`id1` = table2.`id2`;
+
+
+select
+      * 
+from
+      table1 t1
+join              -- inner可以省略
+      table2 t2
+on 
+      t1.`id1` = t2.`id2`;
+```
+
+### 外连接查询
+
+1. 左外连接：
+   * 语法：`select 字段列表 from 表1 left outer join 表2 on 条件;`(outer同样是可以省略的)
+   * 查询的是左表所有数据以及左表和右表数据交集部分。from后面的是左表，join后面是右表。
+2. 右外连接：
+   * 语法：`select 字段列表 from 表1 right outer join 表2 on 条件;`(outer同样是可以省略的)
+   * 查询的是右表所有数据以及左表和右表数据交集部分。from后面的是左表，join后面是右表。
+
+### 子查询
+
+* 查询中嵌套查询，嵌套的查询称为子查询。
+* 示例：
+```sql
+# 查询工资最高的员工的信息需完成两步操作：一：查询最高的工资；二：查询最高工资对应的员工信息
+select
+      * 
+from 
+      table1 -- 外层查询整个表的员工信息
+where 
+      table1.`salary` = (select max(salary) from table1); -- 嵌套一个子查询语句在条件里，完成最高工资的限定
+```
+
+#### 子查询的不同结果
+
+* 子查询结果是**单行单列**的：
+  * 子查询结果可以作为条件，使用判断运算符去判断,如：
+  ```sql
+  table1.`salary` = (select max(salary) from table1);
+  ```
+* 子查询结果是**多行单列**的：
+  * 子查询可以作为条件，使用运算符`in`（是否在这个集合中）去判断，如：
+  ```sql
+  table.`id` in (select id from table1 where name = '1' or name = '2');
+  ```
+* 子查询的结果是**多行多列**的：
+  * 子查询可以作为一张虚拟表，参与查询，如：
+  ```sql
+  # 查询员工的入职日期是`2011-11-11`日之后的员工信息和部门信息
+  
+  -- 子查询方式
+   select
+         *
+   from 
+         dept t1,(select * from emp where emp.`join_date` > '2011-11-11') t2   -- 子查询结果作为一张表参与查询
+   where
+         t1.id = t2.dept_id;
+
+   -- 普通内连接
+   select
+         * 
+   from
+         emp t1, dept t2
+   where
+         t1.`dept_id` = t2.`id` and t1.`join_date` > '2011-11-11';
+   ```
