@@ -2429,8 +2429,81 @@ public class InputStreamTest {
 
 ## 字符流
 
-* 一个中文在GBK中占用2个字节，在utf-8占用3个字节。所以一个字节一个字节的读入文件不能得到正确的中文字符。
+* 一个中文在GBK中占用2个字节，在utf-8占用3个字节。所以一个字节一个字节的读入文件不能得到正确的中文字符。使用字符流可以一次读取一个字符（中文，英文，符号等），解决了这个问题。
 
+### java.io.Reader类
+
+* 字符输入流：是**字符输入最顶层的父类**，定义了一些共性的成员方法，是一个抽象类。
+* 成员方法：
+  * `int read();`:读取单个字符并返回；
+  * `int read(char[] cbuf)`:一次读取多个字符，将字符读入数组；
+  * `void close();`关闭该字符流并释放与之相关的所有资源。
+
+#### java.io.FileReader类
+
+* 继承了`InputStreamReader`和`Reader`类。
+* 作用：把硬盘文件中的数据以字符的方式读取到内存中。
+* 构造方法：
+  * `FileReader(String fileName)`
+  * `FileReader(File file)`
+  * 参数：
+    * String fileName:文件的路径；
+    * File file：一个文件。
+  * 作用：
+    * 创建一个FileReader对象；
+    * 会把FileReader对象指向我们要读取的文件。
+* 字符输入流的使用步骤：
+  1.  创建FileReader对象，构造方法中绑定要读取的数据源；
+  2.  使用FileReader对象中的read()方法读取文件；
+  3.  释放资源（close）。
+* 示例：
+```java
+
+//一个字符读入
+import java.io.FileReader;
+import java.io.IOException;
+
+public class ReaderTest {
+    public static void main(String[] args) throws IOException {
+        //创建对象
+        FileReader fr = new FileReader("a.txt");
+        //使用read读取文件
+        int len = 0;
+        while ((len = fr.read()) != -1) {
+            System.out.print((char)len);
+        }
+        //释放资源
+        fr.close();
+    }
+}
+
+//使用字符数组，一次读入多个字符进入数组
+import java.io.FileReader;
+import java.io.IOException;
+
+public class ReaderTest {
+    public static void main(String[] args) throws IOException {
+
+        //创建对象
+        FileReader fr = new FileReader("a.txt");
+        char[] cs = new char[1024];
+        int len = 0; //记录每次读取的有效字符个数
+        while ((len = fr.read(cs)) != -1) {
+            System.out.println(new String(cs, 0,len));//把字符数组的一部分转换为字符串
+        }
+    }
+}
+```
+
+### java.io.Writer类
+
+* 字符输出流：所有字符输出流最顶层的父类，是一个抽象类；
+* 部分成员方法：
+  * `void write(int c);`写入单个字符；
+  * `void write(char[] cbuf);`写入字符数组；
+  * `void write(String str);`：写入字符串；
+  * `void flush()`：刷新该流的缓冲；
+  * `void close()`:关闭此流，但要先刷新它。
 
 
 # 网络编程
