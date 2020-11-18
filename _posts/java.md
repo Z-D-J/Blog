@@ -2311,7 +2311,7 @@ public class Recurison {
 #### FileOutStream类
 
 * OutStream类的子类，叫做文件字节输出流，把内存中的数据写入到硬盘的文件中。
-* 构造方法：参数为写入数据的目的地。
+* 构造方法：参数为写入数据的目的地。会有FileNotFoundException异常（是IOException异常的子类）。需要抛出或者捕获。
   * `FileOutputStream(String name)`:创建一个向指定名称的文件中写入数据的输出文件流。
   * `FileOutputStream(File file)`:创建一个向指定File对象表示的文件中写入数据的文件输出流。
   * `FileOutputStream(String name, boolean append);`：创建一个向具有指定name的文件中写入数据的的输出文件流。
@@ -2443,7 +2443,7 @@ public class InputStreamTest {
 
 * 继承了`InputStreamReader`和`Reader`类。
 * 作用：把硬盘文件中的数据以字符的方式读取到内存中。
-* 构造方法：
+* 构造方法：会有FileNotFoundException异常（是IOException异常的子类）。需要抛出或者捕获。
   * `FileReader(String fileName)`
   * `FileReader(File file)`
   * 参数：
@@ -2505,6 +2505,69 @@ public class ReaderTest {
   * `void flush()`：刷新该流的缓冲；
   * `void close()`:关闭此流，但要先刷新它。
 
+### java.io.FileWriter类
+
+* 继承了OutputStream和Writer类，把内存中的字符数据写入文件中。
+* 构造方法：会有FileNotFoundException异常（是IOException异常的子类）。需要抛出或者捕获。
+  * `FileWriter(File file);`:根据指定的File对象构造一个FileWriter对象。
+  * `FileWriter(String filename);`:根据指定的文件名构造一个FileWriter对象。
+  * 参数：写入数据的目的地
+    * String filename：文件的路径
+    * File file：文件
+  * 作用：
+    1. 创建一个FileWriter对象
+    2. 根据构造方法中传递的文件/文件的路径创建文件（该文件不存在的情况下）
+    3. 会把FileWriter对象指向创建好的文件。
+* 字符输出流的使用步骤：
+  1. 创建FileWriter对象，构造方法中绑定要写入数据的目的地；
+  2. 使用FileWriter对象中的write()方法，把数据写到**内存数据缓冲区**（字符转换为字节）
+  3. 使用FileWriter对象中的**flush方法**，把内存中的数据，刷新到文件中。
+  4. 释放资源（close():会先把内存缓冲区的文件刷新到文件中，再释放资源）
+* 示例：
+```java
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class WriterTest {
+    public static void main(String[] args) throws IOException {
+        FileWriter fileWriter = new FileWriter("a.txt");
+
+        fileWriter.write("你好!");
+
+        fileWriter.flush();
+
+        fileWriter.close()
+    }
+}
+```
+* 续写：使用append开关：
+  * `FileWriter(String fileName, boolean append);`
+  * `FileWriter(File file, boolean append);`
+  * append是续写的开关，为true则**不会创建新的文件覆盖源文件**，为false则创建新的文件覆盖源文件。
+* 换行：使用换行符号
+  * windows：`\r\n`
+  * linux:`/n`
+  * mac:`/r`
+* 续写和换行示例：
+```java
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class WriterTest {
+    public static void main(String[] args) throws IOException {
+        FileWriter fileWriter = new FileWriter("a.txt",true);
+
+        fileWriter.write("你好"+ "\r\n");
+        fileWriter.write("你好"+ "\r\n");
+
+        fileWriter.flush();
+
+        fileWriter.close();
+    }
+}
+```
+
+## 流中的异常处理
 
 # 网络编程
 
