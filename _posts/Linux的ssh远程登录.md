@@ -33,7 +33,9 @@ tags:
     * 在putty中输入局域网IP
     * 之后开启一个黑色终端界面，在里面输入用户名和密码，连接到linux。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201007115016.jpg)
 
+## ssh通过账号密码登录远程linux服务器
 
+* `ssh 账号@服务器地址`,如：`ssh zhangjie@106.14.197.71`
 
 # 查看linux的网络情况
 
