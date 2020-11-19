@@ -35,16 +35,23 @@ tags:
 
 # MySQL服务的启动
 
-1. 搜索服务，点击打开；
-2. 在cmd输入`services.msc`启动；
-3. 在管理员cmd输入`net start <本机mysql的名字>`或者`net stop <本机mysql的名字>`启动或者关闭。
-
+* 在Windows上：
+  1. 搜索服务，点击打开；
+  2. 在cmd输入`services.msc`启动；
+  3. 在管理员cmd输入`net start <本机mysql的名字>`或者`net stop <本机mysql的名字>`启动或者关闭。
+* 在linux上：
+  1. 启动：`sudo service mysql start`
+  2. 关闭：`sudo service mysql stop`
+  3. 重启：`sudo service mysql restart`
 # MySQL的登录
 
-* 登录本地用户：`mysql -uroot -proot`，-u后面接的是用户名，-p后面接的是root用户的密码。`mysql -uroot -p`,会在之后输入密码。
+* 登录本地用户：`mysql -uroot -proot`，-u后面接的是用户名，-p后面接的是root用户的密码。`mysql -uroot -p`,会在之后输入密码。(在linux上登录root用户需要使用sudo)
 * 登录远程用户：`mysql -h127.0.0.1 -p` -h后面接的是连接目标的ip。
 * 登录：`mysql --host=IP --user=用户名 --passward=连接目标的密码`
 
+# 退出MySQL
+
+* 输入`exit`
 # MySQL的目录结构
 
 1.MySQL的安装目录：
@@ -211,6 +218,27 @@ from
       * `select naem from stu where name like '%德%'(name中含马)
       * `select name from stu where name like '___'`(name为三个字)
 
+## DCL
+
+* 管理用户，授权。对应DBA(数据库管理员)
+* 管理用户：
+  * 添加用户：
+    * 创建用户并设置账户密码：`creat user '用户名'@'主机名' identified by '密码';`
+  * 查询用户：
+    * 切换到mysql数据库`use mysql;`
+    * 查询user表：`select * from user;`,通配符%表示可以在任意主机上使用该用户。`localhost 127.0.0.1 ::1`三者都表示本地机。
+  * 删除用户：
+    * `drop user '用户名'@'主机名';`
+  * 修改用户的密码（在已经登录用户的条件下）：
+    * `update user set password = password('新密码') where user = '用户名';
+    * `set password for '用户名'@'主机名' = password('新密码');` 
+    * 使用password()函数，将密码进行加密之后存储。
+* 授权：
+  * 查询权限：`show grants for '用户名'@'主机名';`
+  * 授予权限：`grant 权限列表 on 数据库名.表名 to '用户名'@'主机名';`
+    * 示例：`grant select,delete,update on db3.account to 'zhangsan'@'%';`
+    * 授予所有库和表的所有权限：`grant all on *.* to 'zhangsan'@'%';`
+  * 撤销权限：`revote 权限列表 on 数据库名.表名 from '用户名'@'主机名';`
 ## 约束
 
 ### 约束概念
@@ -326,7 +354,7 @@ create table empolyee (
 alter table employee drop foreign key emp_dept_key;
 ```
 * 创建表之后添加外键：
-```sql
+```sql 
 alter table employee add constraint emp_dept_fk foreign key (dep_id) references department(id);
 ```
 * **级联操作**:修改有外键连接的两个表的列中的数据，操作会自动同步给关联的另一个列。
@@ -339,7 +367,7 @@ alter table employee add constraint emp_dept_fk foreign key (dep_id) references 
    * 级联删除：ON DELTE CASCADE;
 
 # 数据库的设计
-
+* [参考blog](https://blog.csdn.net/guangod/article/details/88714091?biz_id=102&utm_term=%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-88714091&spm=1018.2118.3001.4449)
 ## 多表关系
 
 1. 一对一关系（使用较少）
