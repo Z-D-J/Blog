@@ -140,22 +140,90 @@ tags:
 
 ##### 整型
 
-* TINYINT[(M)] [UNSIGNED] [ZEROFILL]： **范围非常小的整数**，有符号的范围是 -128到127，无符号的范围是0到 255
-* SMALLINT[(M)] [UNSIGNED] [ZEROFILL] ：范围较小的整数，有符号的范围是 -32768到32767，无符号的范围是0到 65535
-* MEDIUMINT[(M)] [UNSIGNED] [ZEROFILL]: 中等大小的整数，有符号的范围是 -8388608到8388607，无符号的范围是0到 16777215。
-* INT[(M)] [UNSIGNED] [ZEROFILL]: 正常大小的整数，有符号的范围是 -2147483648到 2147483647。无符号的范围是 0到4294967295。
-* BIGINT[(M)] [UNSIGNED] [ZEROFILL]: 大整数，有符号的范围是 -9223372036854775808到 9223372036854775807，无符号的范围是0到 18446744073709551615。
+* `TINYINT[(M)] [UNSIGNED] [ZEROFILL]`： **范围非常小的整数**，有符号的范围是 -128到127，无符号的范围是0到 255
+* `SMALLINT[(M)] [UNSIGNED] [ZEROFILL]` ：范围较小的整数，有符号的范围是 -32768到32767，无符号的范围是0到 65535
+* `MEDIUMINT[(M)] [UNSIGNED] [ZEROFILL]`: 中等大小的整数，有符号的范围是 -8388608到8388607，无符号的范围是0到 16777215。
+* `INT[(M)] [UNSIGNED] [ZEROFILL]`: 正常大小的整数，有符号的范围是 -2147483648到 2147483647。无符号的范围是 0到4294967295。
+* `BIGINT[(M)] [UNSIGNED] [ZEROFILL]`: 大整数，有符号的范围是 -9223372036854775808到 9223372036854775807，无符号的范围是0到 18446744073709551615。
 
 ##### 浮点型
 
-* FLOAT[(M,D)] [UNSIGNED] [ZEROFILL]：一个小的（单精度）浮点数。允许值是-3.402823466E+38 到-1.175494351E-38， 0以及1.175494351E-38 到3.402823466E+38,M是总位数，D是小数点后面的位数。
-* DOUBLE[(M,D)] [UNSIGNED] [ZEROFILL]：正常大小（双精度）浮点数。允许值是 -1.7976931348623157E+308到-2.2250738585072014E-308，0以及 2.2250738585072014E-308到 1.7976931348623157E+308。
+* `FLOAT[(M,D)] [UNSIGNED] [ZEROFILL]`：一个小的（单精度）浮点数。允许值是-3.402823466E+38 到-1.175494351E-38， 0以及1.175494351E-38 到3.402823466E+38,M是总位数，D是小数点后面的位数。
+* `DOUBLE[(M,D)] [UNSIGNED] [ZEROFILL]`：正常大小（双精度）浮点数。允许值是 -1.7976931348623157E+308到-2.2250738585072014E-308，0以及 2.2250738585072014E-308到 1.7976931348623157E+308。
 * **M是总位数，D是小数点后面的位数**，float和double在不指定精度时，默认会按照**实际的精度**来显示。
 
+##### 定点型
 
-* date:日期，只包含年月日，yyyy-mm-dd;
-* datetime:日期，包含年月日时分秒，yyyy-mm-dd HH:mm:ss;
-* timestamp:时间戳类型，包含年月日时分秒（同datetime），但是如果不给这个字段赋值或者赋值为null，则默认使用当前的系统时间来自动赋值。
+* `DECIMAL[(M[,D])] [UNSIGNED] [ZEROFILL]`:常用于存储**精确的小数**，**M是总位数**，**D是小数点后的位数**。小数点和（负数） -符号不计入 M。如果 **D为0，则值没有小数点或小数部分**。最大位数（M）为 65. 最大支持小数（D）为30.**如果D省略，则默认值为0.如果M省略，则默认值为10**,如果二者都省略，则默认为decimal(10,0)。M的范围是1到65。D范围为0到30，且不得大于M。
+
+##### 时间类型
+
+* `TIME`: 范围是'-838:59:59.000000' 到'838:59:59.000000';
+  * TIME的完整的显示为 `D HH:MM:SS`:
+  * D：表示天数，当指定该值时，存储时小时会先乘以该值
+  * HH：表示小时
+  * MM：表示分钟
+  * SS:表示秒
+  * 示例：
+```sql
+INSERT time_db() VALUES('22:14:16');
+
+--   -2表示间隔了2两天
+INSERT time_db() VALUES('-2 22:14:16');
+
+-- 有冒号从小时开始
+INSERT time_db() VALUES('14:16');
+
+-- 没有冒号且没有天数则数据从秒开始
+INSERT time_db() VALUES('30');
+
+-- 有天数也从小时开始
+INSERT time_db() VALUES('3 10');
+
+-- 直接使用数字代替也可以
+INSERT time_db() VALUES(253621);
+```
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201121142312.png)
+
+* `DATE`: 支持的范围是 '1000-01-01'到 '9999-12-31';
+  * 示例：
+```sql
+INSERT date_db() VALUES(20180813);
+INSERT date_db() VALUES(“2018-06-1”);
+INSERT date_db() VALUES(“2018-4-1”);
+INSERT date_db() VALUES(“2018-04-07”);
+```
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201121142549.png)
+
+* `DATETIME`: **日期和时间组合**。支持的范围是 '1000-01-01 00:00:00.000000'到 '9999-12-31 23:59:59.999999';
+  * 示例：
+```sql
+INSERT datetime_db() VALUES(20180102235432);
+INSERT datetime_db() VALUES("2015-04-21 21:14:32");
+INSERT datetime_db() VALUES("2015-04-23");
+```
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201121142737.png)
+
+* `TIMESTAMP`: 时间戳。范围是'1970-01-01 00:00:01.000000'UTC到'2038-01-19 03:14:07.999999'UTC。与datetime类型有差不多，只是范围较小。
+  * 示例：
+```sql
+INSERT timestamp_db() VALUES(20020121);
+INSERT timestamp_db() VALUES(20020121142554);
+INSERT timestamp_db() VALUES("2015-12-16 21:14:15");
+INSERT timestamp_db() VALUES("2015-12-17");
+INSERT timestamp_db() VALUES(NULL);
+INSERT timestamp_db() VALUES(CURRENT_TIMESTAMP);
+INSERT timestamp_db() VALUES();
+```
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201121143202.png)
+* `YEAR`: 范围是 1901到2155;
+  * 示例：
+```sql
+INSERT year_db() VALUES("1993");
+INSERT year_db() VALUES(1993);
+```
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201121143340.png)
+
 * varchar：字符串类型，varchar（20），表示字符串的最多有20个字符。**必须在varchar后面接上（数字），否则就是语法错误。**
 
 ## DML
