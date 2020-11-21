@@ -597,3 +597,36 @@ rollback;
      1. 可以解决所有问题。
 * 数据库查询隔离级别：`select @@tx_isolation;`
 * 数据库设置隔离级别：`set global transaction isolation level 级别字符串;`
+
+# 易错语法
+
+* 语句括号内部少逗号，最后一行多了逗号:
+
+```sql
+-- 创建学生表
+create table `student` (
+    `id` int primary key auto_increment comment '学生id', -- 学生id
+	`name` varchar (30) not null comment '学生姓名', -- 学生姓名
+	`phone` varchar (36) not null comment '学生电话', -- 学生电话
+	`youth_league_branch_name` varchar (60) not null comment '所属团支部名称', -- 所属团支部名称
+	`study_time` datetime not null comment '学习时间'  -- 学习时间 # 少了逗号
+    `gmt_create` datetime null default current_timestamp comment '记录创建时间', -- 记录创建时间
+    `gmt_modified` datetime null default current_timestamp on update current_timestamp comment '记录最近修改时间', -- 记录最近修改时间
+    `youth_league_branch_id` int not null, -- 所属团支部id # 多了逗号
+); 
+
+
+修改：
+
+-- 创建学生表
+create table `student` (
+    `id` int primary key auto_increment comment '学生id', -- 学生id
+	`name` varchar (30) not null comment '学生姓名', -- 学生姓名
+	`phone` varchar (36) not null comment '学生电话', -- 学生电话
+	`youth_league_branch_name` varchar (60) not null comment '所属团支部名称', -- 所属团支部名称
+	`study_time` datetime not null comment '学习时间',  -- 学习时间
+    `gmt_create` datetime null default current_timestamp comment '记录创建时间', -- 记录创建时间
+    `gmt_modified` datetime null default current_timestamp on update current_timestamp comment '记录最近修改时间', -- 记录最近修改时间
+    `youth_league_branch_id` int not null -- 所属团支部id 
+); 
+```
