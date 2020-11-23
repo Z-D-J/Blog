@@ -1596,3 +1596,8 @@ int main(int argc, char **argv)
     return 0;
 }
 ```
+
+# Linux报错解决
+
+* E: 仓库 “http://ppa.launchpad.net/webupd8team/java/ubuntu eoan Release” 没有 Release 文件。
+* [解决](https://www.cnblogs.com/yyee/p/12888675.html)
