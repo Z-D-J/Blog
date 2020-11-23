@@ -224,8 +224,66 @@ INSERT year_db() VALUES(1993);
 ```
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201121143340.png)
 
-* varchar：字符串类型，varchar（20），表示字符串的最多有20个字符。**必须在varchar后面接上（数字），否则就是语法错误。**
+##### 字符串类型
 
+###### char和varchar
+
+* `CHAR[(M)]`: 一个**固定长度**的字符串，在存储时始终**用空格填充**指定长度。 M表示以字符为单位的列长度。M的范围为0到255.如果**M省略，则长度为1**，存储时占用M个字节
+* `VARCHAR(M)`:**可变长度**的字符串，M 表示字符的最大列长度，M的范围是0到65,535，存储时占用L+1（L<=M,L为实际字符的长度）个字节,此处的参数**M是必须指定的**。
+```sql
+-- 创建表
+CREATE TABLE str_db(
+a CHAR(4),
+b VARCHAR(4)
+);
+
+-- 插入数据
+INSERT str_db() VALUES("","");
+INSERT str_db() VALUES("ab","ab");
+INSERT str_db() VALUES("abcd","abcd");
+INSERT str_db() VALUES("abcdefg","abcdefg");//在严格模式下，改条数据会插入失败，非严格模式则会对数据进行截取
+```
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201123110639.png)
+  * char的参数M规定的是字符串必须的长度，不够长度用空格来补充；
+  * varchar的参数M规定的是字符串最长的长度，没有超出最长的长度就存储字符串原来的长度。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201123110718.png)
+
+###### text系列
+
+* `TINYTEXT[(M)]`: 不能有默认值，占用L+1个字节，L<$2^8$;
+* `TEXT[(M)]`: 不能有默认值，占用L+2个字节，L<$2^16$;
+* `MEDIUMTEXT[(M)]`: 不能有默认值，占用L+3个字节，L<$2^24$;
+* `LONGTEXT[(M)]`: 不能有默认值，占用L+4个字节，L<$2^32$;
+  * TEXT系列的存储范围比VARCHAR要大，当VARCHAR不满足时可以用TEXT系列中的类型。需要注意的是TEXT系列类型的字段不能有默认值，在检索的时候不存在大小写转换，没有CHAR和VARCHAR的效率高
+
+###### enum枚举类型
+
+* `ENUM('value1','value2',...)`: ENUM是一个字符串对象，其值从允许值列表中选择，它只能有一个值，从值列表中选择,最多可包含65,535个不同的元素;
+```sql
+CREATE TABLE enum_db (
+  gender ENUM("男","女")
+);
+
+INSERT enum_db() VALUES("男");
+INSERT enum_db() VALUES(1); 也可以使用编号插入值，等同于"男"，序号从1开始
+INSERT enum_db() VALUES("女");
+INSERT enum_db() VALUES(2);等同于"女"
+```
+
+###### set
+在ENUM中我们只能从允许值列表中给字段插入一个值，而在SET类型中可以给字段插入多个值
+* `SET('value1','value2',...)`: 字符串对象，该对象可以有零个或多个值，最多可包含64个不同的成员;
+  *  在ENUM中我们只能从允许值列表中给字段插入一个值，而在SET类型中可以给字段插入多个值.
+```sql
+CREATE TABLE set_db (
+a SET('1','2','3','4','5')
+);
+
+
+INSERT set_db() VALUES('1')
+INSERT set_db() VALUES('1,2,3')
+```
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201123111656.png)
 ## DML
 
 1. 添加数据：
@@ -277,8 +335,8 @@ INSERT year_db() VALUES(1993);
 * 查询指定列：`select 列名1，列名2 from 表名`.示例：
 ```sql
 select 
-      name , -- 姓名
-      age，  -- 年龄
+      name, -- 姓名
+      age,  -- 年龄
 from
       student; --学生表
 ```
@@ -489,6 +547,9 @@ alter table employee add constraint emp_dept_fk foreign key (dep_id) references 
         7. 非主属性：除了码属性组的属性。
   3. 第三范式（3NF）：在2NF的基础上，任何非主属性不依赖于其它非主属性（在2NF的基础上消除传递依赖，解决了数据添加和删除存在的问题）
 
+
+## 触发器
+.....
 # 数据库的备份和还原
 
 * 语法：`mysqldump -u用户名 -p密码 数据库名称 > 备份保存的路径`（保存到以.sql结尾的文件）
@@ -719,3 +780,5 @@ create table `student` (
     `youth_league_branch_id` int not null -- 所属团支部id 
 ); 
 ```
+
+# 
