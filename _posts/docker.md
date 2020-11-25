@@ -293,3 +293,26 @@ Step 4 : RUN useradd runoob
 * 示例：`docker tag 860c279d2fec runoob/centos:dev`
 * `docker tag 镜像ID 用户名称/镜像源名(repository name):新的标签名(tag)`
 
+# Docker容器连接
+
+* 容器中可以运行一些网络应用，要让外部也可以访问这些应用，可以通过 `-P` 或 `-p` 参数来指定端口映射。
+
+## 网络端口映射
+
+* 创建了一个 python 应用的容器：`docker run -d -P training/webapp python app.py`
+* 我们使用 `-P` 参数创建一个容器，使用 docker ps 可以看到容器端口 5000 绑定主机端口 32768。
+```
+runoob@runoob:~$ docker ps
+CONTAINER ID    IMAGE               COMMAND            ...           PORTS                     NAMES
+fce072cc88ce    training/webapp     "python app.py"    ...     0.0.0.0:32768->5000/tcp   grave_hopper
+```
+* 我们也可以使用 `-p` 标识来指定容器端口绑定到主机端口。
+* 两种方式的区别是:
+  * `-P` :是容器内部端口**随机**映射到主机的高端口。
+  * `-p` : 是容器内部端口**绑定**到指定的主机端口,需要自己指定映射关系(如果不指定，则会报错）。
+  * `docker run -d -p 5000:5000 training/webapp python app.py`
+* 另外，我们可以指定容器绑定的**网络地址**，比如绑定 127.0.0.1：` docker run -d -p 127.0.0.1:5001:5000 training/webapp python app.py`.
+* 上面的例子中，默认都是绑定 tcp 端口，如果要绑定 UDP 端口，可以在端口后面加上 `/udp`。`docker run -d -p 127.0.0.1:5000:5000/udp training/webapp python app.py`。
+
+## Docker容器互联
+
