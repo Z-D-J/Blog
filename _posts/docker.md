@@ -229,3 +229,90 @@ training/webapp     latest              6fae60ef3446        11 months ago       
 
 ## 创建镜像
 
+* 当我们从 docker 镜像仓库中下载的镜像不能满足我们的需求时，我们可以通过以下两种方式对镜像进行更改。
+  1. 从**已经创建的容器中更新镜像**，并且提交这个镜像;
+  2. 使用 **Dockerfile 指令**来创建一个新的镜像;
+
+### 更新镜像
+
+* 更新镜像之前，我们需要使用镜像来**创建一个容器**。
+* 示例：
+  * `docker run -t -i ubuntu:15.10 /bin/bash`
+  * 在运行的容器内使用 apt-get update 命令进行更新。
+  * 在完成操作之后，输入 exit 命令来退出这个容器。
+  * 此时 ID 为 e218edb10161 的容器，是按我们的需求更改的容器。我们可以通过命令`docker commit`来提交容器副本。
+  * `docker commit -m="has update" -a="runoob" e218edb10161 runoob/ubuntu:v2`
+* `docker commit`的各个参数说明：
+  * -m: 提交的描述信息
+  * -a: 指定镜像作者
+  * e218edb10161：容器 ID
+  * runoob/ubuntu:v2: 指定要创建的目标镜像名
+
+### 构建镜像
+
+* 我们使用命令`docker build` ， 从零开始来创建一个新的镜像。为此，我们需要创建一个`Dockerfile`文件，其中包含一组指令来告诉 Docker 如何构建我们的镜像。
+* 示例：
+```
+runoob@runoob:~$ cat Dockerfile 
+FROM    centos:6.7
+MAINTAINER      Fisher "fisher@sudops.com"
+
+RUN     /bin/echo 'root:123456' |chpasswd
+RUN     useradd runoob
+RUN     /bin/echo 'runoob:123456' |chpasswd
+RUN     /bin/echo -e "LANG=\"en_US.UTF-8\"" >/etc/default/local
+EXPOSE  22
+EXPOSE  80
+CMD     /usr/sbin/sshd -D
+```
+* 每一个指令都会在镜像上创建一个新的层，每一个指令的前缀都必须是大写的。
+* 第一条FROM，指定使用哪个**镜像源**
+* RUN 指令告诉docker 在镜像内执行命令，安装了什么。。。
+* 然后，我们使用Dockerfile 文件，通过 docker build 命令来构建一个镜像。
+```
+runoob@runoob:~$ docker build -t runoob/centos:6.7 .
+Sending build context to Docker daemon 17.92 kB
+Step 1 : FROM centos:6.7
+ ---&gt; d95b5ca17cc3
+Step 2 : MAINTAINER Fisher "fisher@sudops.com"
+ ---&gt; Using cache
+ ---&gt; 0c92299c6f03
+Step 3 : RUN /bin/echo 'root:123456' |chpasswd
+ ---&gt; Using cache
+ ---&gt; 0397ce2fbd0a
+Step 4 : RUN useradd runoob
+......
+```
+* 参数说明：
+  * -t ：指定要创建的目标镜像名
+  * . ：Dockerfile 文件所在目录，可以指定Dockerfile 的绝对路径
+
+## 设置镜像标签
+
+* 我们可以使用`docker tag`命令，为镜像添加一个新的标签。
+* 示例：`docker tag 860c279d2fec runoob/centos:dev`
+* `docker tag 镜像ID 用户名称/镜像源名(repository name):新的标签名(tag)`
+
+# Docker容器连接
+
+* 容器中可以运行一些网络应用，要让外部也可以访问这些应用，可以通过 `-P` 或 `-p` 参数来指定端口映射。
+
+## 网络端口映射
+
+* 创建了一个 python 应用的容器：`docker run -d -P training/webapp python app.py`
+* 我们使用 `-P` 参数创建一个容器，使用 docker ps 可以看到容器端口 5000 绑定主机端口 32768。
+```
+runoob@runoob:~$ docker ps
+CONTAINER ID    IMAGE               COMMAND            ...           PORTS                     NAMES
+fce072cc88ce    training/webapp     "python app.py"    ...     0.0.0.0:32768->5000/tcp   grave_hopper
+```
+* 我们也可以使用 `-p` 标识来指定容器端口绑定到主机端口。
+* 两种方式的区别是:
+  * `-P` :是容器内部端口**随机**映射到主机的高端口。
+  * `-p` : 是容器内部端口**绑定**到指定的主机端口,需要自己指定映射关系(如果不指定，则会报错）。
+  * `docker run -d -p 5000:5000 training/webapp python app.py`
+* 另外，我们可以指定容器绑定的**网络地址**，比如绑定 127.0.0.1：` docker run -d -p 127.0.0.1:5001:5000 training/webapp python app.py`.
+* 上面的例子中，默认都是绑定 tcp 端口，如果要绑定 UDP 端口，可以在端口后面加上 `/udp`。`docker run -d -p 127.0.0.1:5000:5000/udp training/webapp python app.py`。
+
+## Docker容器互联
+
