@@ -100,6 +100,7 @@ tags:
 ### 启动已停止的容器
 
 * 查看所有的容器命令：`docker ps -a`,不加参数名，则只有表头，没有具体容器的信息。
+* 查看最后一次创建的容器`docker ps -l`。
 * 使用 docker start 启动一个已停止的容器：`docker start b750bbbcfd88`,最后那串数字是容器id的开头一部分，终端会自动识别出整个容器ID。但是这样容器启动后并不会输出相应的数据，我们能看见的只是终端上**打印出的容器id**.
 
 ### 后台运行
@@ -111,7 +112,7 @@ tags:
 ### 停止容器
 
 * 停止容器的命令如下：`docker stop <容器 ID>`
-* 停止的容器可以通过 docker restart 重启：`docker restart <容器 ID>`
+* 停止的容器和正在运行的容器可以通过 docker restart 重启：`docker restart <容器 ID>`
 
 ### 进入容器
 
@@ -131,7 +132,7 @@ tags:
 
 ### 删除容器
 
-* 删除容器使用 docker rm 命令。
+* 删除容器使用 docker rm 命令，删除的容器必须是终止的，否则会报错。
   * 示例：`docker rm -f 1e560fca390`,这串数字是容器id。
 * 下面的命令可以清理掉所有处于终止状态的容器:`docker container prune`
 
@@ -148,9 +149,83 @@ tags:
 
 ### 查看web应用容器
 
+* 使用`sudo docker ps -a`来查看web应用容器。
+  * 这里多了端口信息。
+```
+PORTS
+0.0.0.0:32769->5000/tcp
+```
+  * Docker 开放了 5000 端口（默认 Python Flask 端口）映射到主机端口 32769 上。这时我们可以通过浏览器访问WEB应用. 在浏览器地址栏输入`localhost:32769`即可访问web应用。
+* 我们也可以通过`-p` 参数来设置不一样的端口：` docker run -d -p 5000:5000 training/webapp python app.py`容器内部的 5000 端口映射到我们本地主机的 5000 端口上。 
+* 查看端口号的快捷方式：`docker port <容器id>/<容器名>`来直接查看容器的端口的映射情况。
+
+### 查看web应用的日志信息
+
+* `docker logs <容器id>/<容器名>` 可以查看容器内部的标准输出。示例：
+```
+docker logs -f bf08b7f2cd89
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+192.168.239.1 - - [09/May/2016 16:30:37] "GET / HTTP/1.1" 200 -
+192.168.239.1 - - [09/May/2016 16:30:37] "GET /favicon.ico HTTP/1.1" 404 -
+```
+* -f: 让 docker logs 像使用 tail -f 一样来输出容器内部的标准输出。
+
+### 查看web应用容器的进程
+
+* 我们还可以使用 `docker top <容器id>/<容器名> ` 来查看容器内部运行的进程。
+
+### 检查web应用程序
+
+* 使用`docker inspect <容器id>/<容器名>` 来查看 Docker 的底层信息。它会返回一个 JSON 文件记录着 Docker 容器的配置和状态信息.
 
 
+# Docker镜像使用
 
+* 当运行容器时，使用的镜像如果在本地中不存在，docker 就会自动从 docker 镜像仓库中下载，默认是从 Docker Hub 公共镜像源下载。
 
+## 列出镜像列表
 
+* 我们可以使用 `docker images` 来列出本地主机上的镜像。
+```
+runoob@runoob:~$ docker images           
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              14.04               90d5884b1ee0        5 days ago          188 MB
+php                 5.6                 f40e9e0f10c8        9 days ago          444.8 MB
+nginx               latest              6f8d099c3adc        12 days ago         182.7 MB
+mysql               5.6                 f2e8d6c772c0        3 weeks ago         324.6 MB
+httpd               latest              02ef73cf1bc0        3 weeks ago         194.4 MB
+ubuntu              15.10               4e3b13c8a266        4 weeks ago         136.3 MB
+hello-world         latest              690ed74de00f        6 months ago        960 B
+training/webapp     latest              6fae60ef3446        11 months ago       348.8 MB
+```
+* 各个选项说明:
+  * REPOSITORY：表示镜像的仓库源
+  * TAG：镜像的标签
+    * 同一仓库源可以有多个 TAG，代表这个仓库源的不同个版本，如 ubuntu 仓库源里，有 15.10、14.04 等多个不同的版本，我们使用 REPOSITORY:TAG 来定义不同的镜像。
+    * 如果你不指定一个镜像的版本标签，例如你只使用 ubuntu，docker 将默认使用 ubuntu:latest 镜像。
+  * IMAGE ID：镜像ID
+  * CREATED：镜像创建时间
+  * SIZE：镜像大小
+
+## 获取新镜像
+
+* 当我们在本地主机上使用一个不存在的镜像时 Docker 就会自动下载这个镜像。如果我们想预先下载这个镜像，我们可以使用 `docker pull <镜像名>:<标签>`命令来下载它。
+
+## 查找镜像
+
+* 我们可以从 Docker Hub 网站来搜索镜像，Docker Hub 网址为： https://hub.docker.com/
+* 我们也可以使用`docker search <镜像名>` 命令来搜索镜像。比如我们需要一个 httpd 的镜像来作为我们的 web 服务。我们可以通过 `docker search httpd` 来寻找适合我们的镜像。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201125085937.jpg)
+* 选项说明：
+  * NAME: 镜像仓库源的名称
+  * DESCRIPTION: 镜像的描述
+  * OFFICIAL: 是否 docker 官方发布
+  * stars: 类似 Github 里面的 star，表示点赞、喜欢的意思。
+  * AUTOMATED: 自动构建。
+
+## 删除镜像
+
+* 镜像删除使用`docker rmi <镜像名>:<标签>` 命令，比如我们删除 hello-world 镜像：`docker rmi hello-world`,省略标签，则默认只会删除标签为latest的镜像。
+
+## 创建镜像
 
