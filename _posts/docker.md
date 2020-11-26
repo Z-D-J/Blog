@@ -378,3 +378,24 @@ apt install iputils-ping
 ### 注册
 
 * 在 [DockerHub](https://hub.docker.com) 免费注册一个 Docker 账号。
+
+### 登录和退出
+
+* 登录需要输入用户名和密码，登录成功后，我们就可以从 docker hub 上拉取自己账号下的全部镜像。`docker login`;
+* 退出 docker hub 可以使用以下命令：`docker logout`
+
+### 查找和拉取镜像
+
+* 你可以通过 docker search 命令来查找官方仓库中的镜像，并利用 docker pull 命令来将它下载到本地。
+* 查找：`docker search <镜像名>`,必须带有镜像名；
+* 拉取：`docker pull <镜像名>`.
+
+### 推送镜像
+
+* 在登录进了dockerhub的前提下：
+* 首先需要将本地的镜像名改为`(dockerhub的用户名)/镜像名`的格式。示例：`docker tag ubuntu:18.04 zestaken/ubuntu:18.04`(其中zestaken是我的dockerhub用户名)。
+* 之后再使用`docker push <镜像名>`将镜像推送到dockerhub。
+* 被自己推送到自己仓库的镜像可以直接使用`docker pull <镜像名>`拉取下来，但是search不能够搜到(因为开启这个功能需要花钱升级dockerhub账号到pro版）。
+
+
+
