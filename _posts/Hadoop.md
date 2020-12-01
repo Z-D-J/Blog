@@ -71,3 +71,43 @@ tags:
 
 # Hadoop运行环境搭建
 
+## Docker配置Hadoop环境
+
+* [参考博客](https://blog.csdn.net/sb985/article/details/82722451?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522160652764419195271678757%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=160652764419195271678757&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-82722451.pc_first_rank_v2_rank_v28&utm_term=docker%E9%85%8D%E7%BD%AEHadoop&spm=1018.2118.3001.4449)
+  
+1. 在Ubuntu上安装docker：`sudo apt-get install docker`;
+2. docker去sudo：在Ubuntu下，在执行Docker时，每次都要输入sudo，解决方法就是把当前用户执行权限添加到相应的docker用户组里面
+```
+sudo groupadd docker；// 添加一个新的docker用户组
+sudo gpasswd -a username docker	//添加当前用户到docker用户组里
+sudo service docker restart //重启Docker后台监护进程
+docker ps 试试，如果没有实现当前运行的容器，则系统重启，则生效
+sudo reboot
+```
+3. 拉取ubuntu镜像并运行容器
+```
+docker pull ubuntu //拉取Ubuntu镜像
+docker run -it ubuntu /bin/bash //交互式运行容器
+```
+
+4. 给Ubuntu容器安装java
+```
+apt-get update
+apt install openjdk-11-jdk
+```
+5. 安装wget,ifconfig,ping,vim工具
+```
+ubuntu的镜像默认只有最简单的系统，所以这些工具要自己安装，这三个工具后面都要用到．
+
+apt-get install wget			#wget
+apt-get install net-tools		#ifconfig
+apt-get install iputils-ping    #ping
+apt-get install vim			#你可以下载自己喜欢的编辑器，不一定是vim
+```
+6. 安装Hadoop
+
+1. 首先创建Hadoop安装目录:`mkdir hadoop`
+2. 下载Hadoop：`wget http://archive.apache.org/dist/hadoop/common/hadoop-2.8.3/hadoop-2.8.3.tar.gz`
+3. 解压到Hadoop目录：`tar -xvzf hadoop-2.6.0.tar.gz`
+
+7. 配置环境变量
