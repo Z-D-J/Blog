@@ -15,7 +15,7 @@ tags:
 
 ## 1.导入驱动jar包到项目目录下
 
-1. mysql的jar包下载:[官网](https://dev.mysql.com/downloads/connector/);下载时选择platformIndependent
+1. mysql的jar包下载:[官网](https://dev.mysql.com/downloads/connector/);下载时选择platformIndependent，选择5.xx的版本
 2. 复制jar包到项目的libs目录下（也可以直接导入），右键->add as library
 ## 2. 注册驱动
 
@@ -44,4 +44,87 @@ tags:
 * `conn.close();`
 * `stmt.close();`
 
+```java
+
+package com;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+/*
+ * JDBC入门
+ */
+public class Jdbc1 {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        //注册驱动
+        //Class.forName("com.mysql.jdbc.Driver");
+        //获取数据库连接对象
+        Connection conn = DriverManager.getConnection("jdbc:mysql://3306/youth_study", "root","root");
+        //定义sql语句
+        String sql = "update t_branch set college_id = 2 where id = 1";
+        // 获取执行sql的对象
+        Statement  stmt = conn.createStatement();
+        // 执行sql
+        int count = stmt.executeUpdate(sql);
+        // 处理结果
+        System.out.println(count);
+        // 释放资源
+        conn.close();
+        stmt.close();
+    }
+}
+```
+
 # JDBC对象
+
+## DriverManager
+
+* 驱动管理对象
+
+### 功能：
+
+#### 注册驱动
+
+* 告诉程序该使用哪一个数据库驱动jar包
+* 方法：`static void registerDriver(Driver driver)`,注册与给定的驱动程序
+* 实际使用：`Class.forName("com.mysql.jdbc.Driver");`
+* 在com.mysql.jdbc.Driver的源码中存在静态代码块：
+```java
+Static {
+      try {
+        java.sql.DriverManager.registerDriver(new Driver());
+      } catch (SQLException E) {
+        throw new RuntimeException("Can't register driver!");
+      }
+}
+```
+* 通过导入jar包，就会自动注册驱动程序
+
+#### 获取数据库连接
+
+* 方法：`static Connection getConnection(String url, String user, String password);`
+* 参数：
+  * url:指定连接数据库的路径
+    * 语法：`jdbc:mysql://ip地址(域名):端口号/数据库名称`
+    * 例子：`jdbc:mysql://localhost:3306/db1`
+    * 特例:如果连接的是本机mysql的服务器，并且MySQL服务器的默认端口是3306，则URL可以简写为：`jdbc:mysql:///数据库名称`
+  * user:用户名
+  * password：用户密码
+
+## Connection
+
+* 数据库连接对象
+
+## Statement
+
+* 执行sql的对象
+
+## ResultSet
+
+* 结果集对象
+
+## PreparedStatement
+
+* 是Statement的子类，但是功能更加强大
