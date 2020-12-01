@@ -108,6 +108,75 @@ apt-get install vim			#你可以下载自己喜欢的编辑器，不一定是vim
 
 1. 首先创建Hadoop安装目录:`mkdir hadoop`
 2. 下载Hadoop：`wget http://archive.apache.org/dist/hadoop/common/hadoop-2.8.3/hadoop-2.8.3.tar.gz`
-3. 解压到Hadoop目录：`tar -xvzf hadoop-2.6.0.tar.gz`
+3. 解压到Hadoop目录：`tar -xvzf hadoop-2.8.3.tar.gz`
 
 7. 配置环境变量
+
+* 在home目录下的`.bashrc`文件后添加如下内容（`.bashrc`文件是隐藏文件，使用`ls -al`命令可以查看到）
+```
+export JAVA_HOME=/usr/lib/jvm/openjdk-11-jdk
+export HADOOP_HOME=/root/hadoop/hadoop-2.8.3
+export HADOOP_CONFIG_HOME=$HADOOP_HOME/etc/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+```
+
+8. 配置hadoop
+
+* 在hadoop2.8.3目录下创建三个目录，后续配置的时候会用到：
+```
+cd /hadoop/hadoop.2.8.3 进入hadoop存储目录下
+mkdir tmp：作为Hadoop的临时目录
+mkdir namenode：作为NameNode的存放目录
+mkdir datanode：作为DataNode的存放目录
+```
+* 我们开始修改Hadoop的配置文件。主要配置core-site.xml、hdfs-site.xml、mapred-site.xml这三个文件。
+1. 在core-site.xml文件后添加如下内容(在etc/hadoop目录下)
+```
+<configuration>
+    <property>
+            <name>hadoop.tmp.dir</name>
+            <value>/root/hadoop/hadoop-2.8.3/tmp</value>
+    </property>
+
+    <property>
+            <name>fs.default.name</name>
+            <value>hdfs://master:9000</value>
+            <final>true</final>
+    </property>
+</configuration>
+```
+2. 在hdfs-site.xml文件后添加如下内容（在etc/hadoop目录下）
+```
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>2</value>
+        <final>true</final>
+    </property>
+
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>/root/hadoop/hadoop-2.8.3/namenode</value>
+        <final>true</final>
+    </property>
+
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>/root/hadoop/hadoop-2.8.3/datanode</value>
+        <final>true</final>
+    </property>
+</configuration>
+```
+   * 我们后续搭建集群环境时，将配置一个Master节点和两个Slave节点。所以dfs.replication配置为2。dfs.namenode.name.dir和hdfs.datanode.data.dir分别配置为之前创建的NameNode和DataNode的目录路径
+3. mapred-site.xml配置
+   * Hadoop安装文件中提供了一个mapred-site.xml.template，所以我们之前使用了命令cp mapred-site.xml.template mapred-site.xml，创建了一个mapred-site.xml文件。之后在mapred-site.xml文件中添加如下内容：
+```
+<configuration>
+    <property>
+        <name>mapred.job.tracker</name>
+        <value>master:9001</value>
+    </property>
+</configuration>
+```
+   * 这里只有一个配置项mapred.job.tracker，我们指向master节点机器。
