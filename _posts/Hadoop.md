@@ -180,3 +180,34 @@ mkdir datanode：作为DataNode的存放目录
 </configuration>
 ```
    * 这里只有一个配置项mapred.job.tracker，我们指向master节点机器。
+
+# Docker配置单节点hadoop
+
+* 为Ubuntu容器配置基本命令：
+* 安装openjdk-8-jdk[参考](https://blog.csdn.net/xiaosaerjt/article/details/106033324?biz_id=102&utm_term=Ubuntu20%E5%AE%89%E8%A3%85jdk&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-106033324&spm=1018.2118.3001.4449)
+  * 安装在usr/lib/jvm目录下
+  * 先用`apt search openjdk`查询可用的版本
+  * 再用`sudo apt-get 对应版本`安装
+  * 配置openjdk-8-jdk：
+```
+#配置环境变量
+vim ~/.bashrc
+#在底部添加：
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export JRE_HOME=${JAVA_HOME}/jre
+export PATH=${JAVA_HOME}/bin:$PATH
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+
+#如果之前已经安装了其它版本的jdk,则需要修改javadoc
+cd /etc/alternatives
+rm javadoc
+rm javadoc.1.gz
+ln /usr/lib/jvm/java-8-openjdk-amd64/bin/javadoc* javadoc
+ln /usr/lib/jvm/java-8-openjdk-amd64/man/man1/javadoc.1.gz javadoc.1.gz
+```
+
+* 安装ssh
+  * 安装ssh；`sudo apt-get install ssh`
+  * 安装pdsh:`sudo apt-get install pdsh`
+* 保存镜像：
+  * `docker commit -m "tools installed" -a "zestaken" c2e83b0f9183 zestaken/ubuntu:tools`
