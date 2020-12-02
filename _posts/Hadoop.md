@@ -180,7 +180,13 @@ mkdir datanode：作为DataNode的存放目录
 </configuration>
 ```
    * 这里只有一个配置项mapred.job.tracker，我们指向master节点机器。
-
+4. 修改JAVA_HOME环境变量
+   * 在hadoop-env.sh文件中添加如下内容：(也在etc/hadoop目录下)
+```
+export JAVA_HOME=/usr/lib/jvm/openjdk-11-jdk
+```
+5. 格式化namenode：
+  * 执行命令：`hadoop namenode -format`
 # Docker配置单节点hadoop
 
 * 为Ubuntu容器配置基本命令：
@@ -211,3 +217,4 @@ ln /usr/lib/jvm/java-8-openjdk-amd64/man/man1/javadoc.1.gz javadoc.1.gz
   * 安装pdsh:`sudo apt-get install pdsh`
 * 保存镜像：
   * `docker commit -m "tools installed" -a "zestaken" c2e83b0f9183 zestaken/ubuntu:tools`
+
