@@ -401,4 +401,40 @@ apt install iputils-ping
 
 # Dockermachine
 
+# docker安装的Ubuntu问题
+
+* 通过镜像安装的ubuntu容器为纯净的环境，其好多命令执行不了，即缺少很多可执行脚本，安装即可~~~
+
+执行一切安装之前请先执行 apt-get update
+
+1. lsb_release
+
+apt-get install lsb-release
+
+2. ifconfig
+
+apt install net-tools
+
+3. ping
+
+apt install iputils-ping
+
+4. sudo
+
+apt-get install sudo
+
+5. vim 
+
+apt-get install vim 
+
+6. add-apt-repository
+
+sudo apt-get install software-properties-common 
+
+同理可安装git ,Python等
+
+（
+
+ apt-get install git python-virtualenv libssl-dev libffi-dev build-essential libpython-dev python2.7-minimal authbind 
+）
 
