@@ -10,6 +10,9 @@ tags:
 * JDBC是java database connectivity的缩写。是使用java语言来操作数据库。JDBC实现了使用统一的java代码来操作所有关系型数据库。
 * JDBC是sun公司定义的操作所有关系型数据库的规则，即定义了一套接口。
 * 每一个数据库厂商实现JDBC接口来操作自己的数据库。这些实现类的jar包就叫做**数据库驱动**。
+* MySQL 8.0 以上版本的数据库连接有所不同：
+  1. MySQL 8.0 以上版本驱动包版本 mysql-connector-java-8.0.16.jar。
+  2. `com.mysql.jdbc.Driver` 更换为 `com.mysql.cj.jdbc.Driver`
 
 # JDBC基本使用
 
