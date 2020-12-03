@@ -59,7 +59,7 @@ import java.sql.Statement;
 public class Jdbc1 {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         //注册驱动
-        //Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.jdbc.Driver");
         //获取数据库连接对象
         Connection conn = DriverManager.getConnection("jdbc:mysql://3306/youth_study", "root","root");
         //定义sql语句
@@ -82,10 +82,11 @@ public class Jdbc1 {
 ## DriverManager
 
 * 驱动管理对象
+* 功能：
+  1. 注册驱动
+  2. 获取数据库的连接
 
-### 功能：
-
-#### 注册驱动
+### 注册驱动
 
 * 告诉程序该使用哪一个数据库驱动jar包
 * 方法：`static void registerDriver(Driver driver)`,注册与给定的驱动程序
@@ -102,8 +103,9 @@ Static {
 ```
 * 通过导入jar包，就会自动注册驱动程序
 
-#### 获取数据库连接
+### 获取数据库连接
 
+* 让程序连接到具体的数据库；
 * 方法：`static Connection getConnection(String url, String user, String password);`
 * 参数：
   * url:指定连接数据库的路径
@@ -116,10 +118,31 @@ Static {
 ## Connection
 
 * 数据库连接对象
+* 功能：
+  1. 获取执行sql的对象
+  2. 管理事务
+
+### 获取执行sql的对象
+
+* 创建一个能够接收sql语句的对象；
+* 方法：
+  * `Statement createStatement();`
+  * `PreparedStatement prepareStatement(String sql);`
+
+### 管理事务
+
+* 包含处理事务的开启，提交，回滚的方法；
+* 开启事务：`void setAutoCommit(boolean autoCommit);`,调用该方法并设置参数为**false**，即可开启事务。（因为设为true则代表着着事务是自动提交，也就没有人的管理，所以也就没有开不开启事务之说）
+* 提交事务：`void commit()`
+* 回滚事务：`void rollback();`
 
 ## Statement
 
-* 执行sql的对象
+* 用于执行静态SQL语句并放回其生成的结果的对象。
+* `boolean execute(String sql);`,可以执行任意的sql语句，不常用。
+* `int executeUpdate(String sql);`:执行DML（insert， update， delete）语句，也可以执行DDL（create， alter ，drop）语句（但是这些操作一般不会使用java代码实现，所以这个方法常用于执行DML语句）。
+  * 返回值：该方法的返回值是**执行该sql语句影响的行数**，通过这个返回值来判断sql语句是否执行成功（返回值>0则成功）。
+* `ResultSet executeQuery(String sql);`:执行DQL（select）语句。 
 
 ## ResultSet
 
