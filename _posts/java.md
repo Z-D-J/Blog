@@ -2730,6 +2730,37 @@ for(Object i : arr) {
 ```java
 coll.clear();
 ```
+## Iterator接口
+
+* 迭代：获取Collection集合中元素的通用方法。
+* 全称:`java.util.Iterator`接口，即实现迭代的迭代器。
+* `boolean hasNext()`:判断集合中还有没有下一个元素，有则返回true。
+* `E next()`；取出集合中的下一个元素。
+* 获取Iterator接口的实现类对象方法：
+  * 实现Collection接口的实现类对象调用`iterator()`方法，这个方法返回值就是Iterator接口的实现类对象。
+  * `Iterator<E> iterator();`：迭代器的泛型跟随Collection对象的泛型。
+* 迭代器的使用步骤：
+  1. 使用集合中的iterator方法获取迭代器的实现类对象，使用Iterator接口对象来接收（同Collection对象一样利用多态）；
+  2. 使用Iterator中的hasNext方法来判断是否还有下一个元素
+  3. 使用Iterator中的next方法取出集合中的下一个元素。
+* 迭代器理解：
+  * 可以将集合想象为一个表，迭代器中有一个游标指向当前行，开始时这个游标是指向表头的。每取一次下一个元素，这个游标都会移向下一行（即取出了元素这一行）。
+  * 如果试图取出没有元素的行的值，会出现NoSuchElementException异常。
+```java
+Collection<String> coll = new ArrayList<>();
+coll.add("张三");
+coll.add("李四");
+Iterator<String> it = coll.iterator(); //多态的使用
+while(it.hasNext()) {
+    System.out.println(it.next());
+}
+```
+* 增强for循环：又称for-each循环，是jdk1.5以后，java提供的利用迭代器原理的新特性。用来遍历数组或者集合。(只可以用来遍历，不能用来修改集合或者数组)。
+```java
+for(Object i : coll) {
+    System.out.println(i);
+}
+```
 
 # Java的API
 ---
