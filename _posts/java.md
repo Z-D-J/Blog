@@ -1352,7 +1352,7 @@ public class ADHero extends Hero {
 
 ### Object类型的变量
 
-* 可以使用Object类型的变量引用所有类型的对象。如：`Object obj = new Employee();`。（注意：除了基本类型（int，char，boolean...)不是对象，其他所有类型都是对象。） 
+* 可以使用Object类型的变量引用所有类型的**对象**。如：`Object obj = new Employee();`。（注意：除了基本类型（int，char，boolean...)不是对象，其他所有类型都是对象。） 
 * 所有的数组类型，不管是基本类型的数组还是对象数组都是Object类的扩展。如
 ```java
 Employee[] staff = new Employee[10];
@@ -2694,6 +2694,42 @@ public class WriterTest {
   * LinkedList：底层是**哈希表+链表**实现的，无索引，不可以存储重复元素，但可以包装存储**顺序**。
   * TreeSet:底层是**二叉树**实现，一般用于**排序**。
 
+## Collection接口
+
+* 全称：`java.util.Collection`,是所有单列集合最顶层的接口，定义了所有单列集合共性的方法。
+* 常利用**多态**创建Collection对象,如：`Collection<String> coll = new ArrayList<>();`,即上层接口对象指向下层实现类。
+* 直接打印Collection对象，会打印出集合中所有的元素。如：`System.out.println(coll);`空集会打印一个`[]`,一般会打印`[张三, 李四]`
+* `public boolean add(E e);`：把给定的对象添加到当前集合中去,添加成功返回true。
+```java
+coll.add("张三");
+```
+* `public boolean remove(E e);`:把给定的对象在当前集合中删除，如果要删除的元素存在则返回true。
+```java
+coll.remove("张三");
+```
+* `public boolean contains(E e);`:判断当前集合中是否包含指定的对象，包含则返回true。
+```java
+coll.contains("张三");
+```
+* `public boolean isEmpty();`:判断当前集合是否为空，为空则返回true。
+```java
+coll.isEmpty();
+```
+* `public int size();`:返回集合中的元素个数
+```java
+int size = coll.size();
+```
+* `public Object[] toArray();`:把集合中的元素存储到**数组**中。注意返回值是**Object**类型的数组。
+```java
+Object[] arr = coll.toArray();
+for(Object i : arr) {
+    System.out.println(i);
+}
+```
+* `public void clear();`:清空集合中所有的元素，此时集合变回和刚创建时一样。
+```java
+coll.clear();
+```
 
 # Java的API
 ---
