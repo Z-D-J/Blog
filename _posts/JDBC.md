@@ -166,3 +166,109 @@ Static {
 ## PreparedStatement
 
 * 是Statement的子类，但是功能更加强大
+
+# JDBC工具类
+
+*  作用：将重复的代码封装进一个类中，简化代码的书写。
+*  抽取的代码：
+   *  注册驱动的代码；
+      *  驱动只需注册一次，所以直接在静态代码块中实现
+   *  抽取获取连接对象的代码：
+      *  需求：不传递参数的同时，保证工具类的通用性。
+      *  解决方法：书写`.properties`配置文件。此处是`jdbc.properties`文件.在这个文件中将获取连接对象的参数写好,之后再次使用该工具类连接不同的数据库时，只需要修改配置文件即可。
+```properties
+url = jdbc:mysql://localhost:3306/db3
+user = root
+password = root
+driver = com.mysql.jdbc.Driver
+```
+   *  抽取释放资源的代码。
+* 工具类的实现：JDBCUtils类
+```java
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.*;
+import java.util.Properties;
+
+public class JDBCUtils {
+    private static String url;
+    private static String user;
+    private static String password;
+    private static String driver;
+
+    /*
+     * 文件的读取，只需要读取一次即可拿到这些值。使用静态代码块，只读取一次这些值
+     */
+    static {
+        try {
+            //1. 创建Properties集合类
+            Properties pro = new Properties();
+            //2. 获取src路径下的文件的方式:使用ClassLoader类加载器
+            //获取src文件夹在计算机中的绝对路径
+            ClassLoader classLoader = JDBCUtils.class.getClassLoader();
+            //获取src文件夹下配置文件的url格式的路径
+            URL res = classLoader.getResource("jdbc.properties");
+            //将url路径转换为字符串形式
+            String path = res.getPath();
+
+            //3.加载文件
+            pro.load(new FileReader(path));
+
+            //4.获取数据，赋值
+            url = pro.getProperty("url");
+            user = pro.getProperty("user");
+            password = pro.getProperty("password");
+            driver = pro.getProperty("driver");
+
+            //5. 注册驱动
+            Class.forName(driver);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取连接
+     * @return 连接对象
+     */
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    /**
+     * 释放资源
+     * @param stmt
+     * @param conn
+     * @param rs
+     */
+    public static void close(ResultSet rs, Statement stmt, Connection conn) {
+        if(rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        if(conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+```
