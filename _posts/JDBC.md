@@ -23,6 +23,7 @@ tags:
 ## 2. 注册驱动
 
 * `  Class.forName("com.mysql.jdbc.Driver");`,会产生ClsaaNotFoundException的异常。
+* `The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.`:如果对应的数据库服务未开启，或者名字输错了，就会报这个错。
 
 ## 3. 获取数据库的连接对象
 
