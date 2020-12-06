@@ -135,9 +135,9 @@ Static {
 ### 管理事务
 
 * 包含处理事务的开启，提交，回滚的方法；
-* 开启事务：`void setAutoCommit(boolean autoCommit);`,调用该方法并设置参数为**false**，即可开启事务。（因为设为true则代表着着事务是自动提交，也就没有人的管理，所以也就没有开不开启事务之说）
-* 提交事务：`void commit()`
-* 回滚事务：`void rollback();`
+* 开启事务：`void setAutoCommit(boolean autoCommit);`,调用该方法并设置参数为**false**，即可开启事务。（因为设为true则代表着着事务是自动提交，也就没有人的管理，所以也就没有开不开启事务之说）,在执行sql之前开启事务（通常是刚创建连接生成Conneection对象时），示例：`conn.setAutoCommit(false);`
+* 提交事务：`void commit()`，在所有sql执行完时提交，示例：`conn.commit();`
+* 回滚事务：`void rollback();`，回滚事务的操作一般放在catch块中，即出现异常时才回滚。调用示例：`conn.rollback();`
 
 ## Statement
 
@@ -300,3 +300,10 @@ public class JDBCUtils {
     }
 }
 ```
+
+# 数据库连接池
+
+* 概念：
+  * 在一个容器（集合）中存放数据库连接对象（Connection对象）。
+  * 当系统初始化后，容器被创建，容器中会申请需要使用的连接对象，当用户需要访问数据库时，从容器中获取连接对象，用户访问完之后，会将连接对象归还给容器。
+  * 优化了之前的在用户需要使用连接对象时才申请连接对象，用户用完就释放的连接对象使用方式，节约资源，提高用户访问数据库的效率。
