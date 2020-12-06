@@ -141,7 +141,7 @@ Static {
 
 ## Statement
 
-* 用于执行静态SQL语句并放回其生成的结果的对象。
+* 用于执行**静态SQL语句**并放回其生成的结果的对象。
 * `boolean execute(String sql);`,可以执行任意的sql语句，不常用。
 * `int executeUpdate(String sql);`:执行DML（insert， update， delete）语句，也可以执行DDL（create， alter ，drop）语句（但是这些操作一般不会使用java代码实现，所以这个方法常用于执行DML语句）。
   * 返回值：该方法的返回值是**执行该sql语句影响的行数**，通过这个返回值来判断sql语句是否执行成功（返回值>0则成功）。
@@ -165,7 +165,35 @@ Static {
 
 ## PreparedStatement
 
-* 是Statement的子类，但是功能更加强大
+* 是Statement的子类，但是功能更加强大；
+* SQL注入问题：在拼接sql语句时，有一些sql的特殊关键字参与字符串的拼接，会造成sql语句的含义改变，导致安全问题。
+  * 示例：`String sql = "select * from user where username = '"+username+"' and password = '"+password+"'"`,其中被单双引号包裹的是传进来的字符串参数。(注意这种拼接字符串的特殊格式)。这种直接拼接参数的sql语句也叫做**静态sql语句**。
+  * 如果username = "zhangsan",password = "a' or 'a' = 'a",那么拼接上参数的值后的sql语句为：`sql = "select * from user where username = '"+"zhangsan"+"' and password = '"+"a' or 'a' = 'a""'"`将双引号合并之后为:`sql = "select * from user where username = 'zhangsan' and password = 'a' or 'a' = 'a'"`,这个sql语句的含义就和我们原本的想象大不相同了。
+* 解决SQL注入问题：使用PreparedStatement对象替换原来的Statement对象。
+* **预编译的sql语句**：将sql语句中的参数使用占位符`?`来代替。
+* ParparedStatement类型才是一般情况下通用的JDBC使用方法；
+* 可以防止sql注入问题，效率更高。
+
+### 使用步骤
+
+1. 导入驱动jar包
+2. 注册驱动
+3. 获取数据库连接对象Connection
+4. 定义sql语句：
+   1. 需要参数的地方使用`?`来代替。如：`String sql = "select * from user where username = ? and password = ?`
+5. 获取执行sql语句的PreparedStatement对象：使用Connection.prepareStatement(String sql)方法，如`PreparedStatement patmt = conn.prepareStatement(sql);`
+6. 给`?`占位符赋上参数的值：
+  * 方法：`setXxx(参数1，参数2)`
+     * Xxx是参数的类型；
+     * 参数1是int类型：是参数在sql语句中的相对位置来定的，从左往右，从1开始编号。第一个参数的参数1就是1
+     * 参数2：就是具体的参数。
+     * 示例：`pstmt.setString(1,username);`
+     * `pstmt.setString(2, password);`
+7. 执行sql，接收返回结果，**不需要传递sql语句**（与Statement不同），如：`ResultSet rs = pstmt.excuteQuery();`
+8. 处理结果
+9. 释放资源
+
+
 
 # JDBC工具类
 
