@@ -567,3 +567,47 @@ public class DruidDemo2 {
 }
 ```
 
+# Spring JDBC
+
+* Spring框架对JDBC的简单封装。提供了一个**JDBCTemplate对象**简化JDBC的开发。
+
+## Spring JDBC的使用步骤
+
+1. 导入jar包
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201207173331.jpg)
+2. 创建JDBCTemplate对象。依赖于数据源对象`DataSource ds`
+   1. `JDBCTemplate template = new JDBCTemplate(ds);`
+3. 调用JDBCTemplate的方法来完成CRUD的操作：
+   1. `update()`:执行DML语句，完成增，删，改语句。
+      1. 如果需要往sql语句中传入参数，就使用`update(sql,参数1，参数2...)`,参数的顺序就是他们在sql语句中从左至右的顺序。
+   2. `queryForMap()`:查询结果将结果集封装为Map集合；
+      1. 查询结果集长度只能是1。
+   3. `queryForList()`:查询结果将结果集封装为List集合；
+   4. `query()`:查询结果，将结果封装为JavaBean对象；
+   5. `queryForObject()`:查询结果，将结果集封装为对象（一般是基本数据类型）。
+4. 使用JDBCTemplat**无需释放资源**（会自动进行）。
+* 使用示例：
+```java
+package com.JDBCtemplate;
+
+import com.Utils.JDBCUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+/**
+ * JDBCTemplate入门使用
+ */
+public class JdbcTemplateDemo1 {
+    public static void main(String[] args) {
+        //1.导入jar包
+        //2.创建JDBCTemplate对象
+        JdbcTemplate template = new JdbcTemplate(JDBCUtils.getDataSource());
+        //3.调用方法
+        String sql = "update t_branch set college_id = ? where id = ?";
+        //4,执行sql并传参
+        int count= template.update(sql,555,1);
+        System.out.println(count);
+    }
+}
+```
+
+
