@@ -324,6 +324,246 @@ public class JDBCUtils {
   2. 第一配置文件
      1. 名称；c3p0.properties或者c3p0-config.xml
      2. 路径：直接将文件放在src目录下即可。
+```xml
+<c3p0-config>
+
+    <!-- 默认配置 -->
+    <default-config>
+        <!-- 连接参数 -->
+        <property name ="driverClass">com.mysql.jdbc.Driver</property>
+        <property name ="jdbcUrl">jdbc:mysql://localhost:3306/youth_study</property>
+        <property name="user">root</property>
+        <property name="password">root</property>
+
+        <!-- 连接池参数 -->
+        <!-- <property name="automaticTestTable">con_test</property> -->
+        <property name="checkoutTimeout">3000</property>
+        <!-- <property name="idleConnectionTestPeriod">30</property> -->
+        <property name="initialPoolSize">5</property>
+        <!-- <property name="maxIdleTime">30</property> -->
+        <!-- <property name="maxIdleTimeExcessConnections">10</property> -->
+        <!-- <property name="maxConnectionAge">60</property> -->
+        <!-- <property name="propertyCycle">1</property> -->
+        <property name="maxPoolSize">10</property>
+        <!-- <property name="minPoolSize">5</property> -->
+        <!-- <property name="maxStatements">0</property> -->
+        <!-- <property name="maxStatementsPerConnection">5</property> -->
+        <!-- <property name="maxAdministrativeTaskTime">4</property> -->
+        <!-- <property name="connectionCustomizerClassName">com.mchange.v2.c3p0.test.TestConnectionCustomizer</property> -->
+        <!-- <property name="unreturnedConnectionTimeout">15</property> -->
+        <!-- <property name="debugUnreturnedConnectionStackTraces">true</property> -->
+
+        <!-- <property name="dataSourceName">poop</property> -->
+
+        <!-- <property name="driverClass">org.postgresql.Driver</property> -->
+        <!-- <property name="jdbcUrl">jdbc:postgresql://localhost/c3p0-test</property> -->
+
+    </default-config>
+    
+    <!-- 指定名称的配置 -->
+    <named-config name = "otherconfig">
+        <!-- 连接参数 -->
+        <property name ="driverClass">com.mysql.jdbc.Driver</property>
+        <property name ="jdbcUrl">jdbc:mysql://localhost:3306/youth_study</property>
+        <property name="user">root</property>
+        <property name="password">root</property>
+
+        <!-- 连接池参数 -->
+        <property name="checkoutTimeout">3000</property>
+        <property name="initialPoolSize">5</property>
+        <property name="maxPoolSize">8</property>
+    </named-config>
+</c3p0-config>
+```
   3. 创建核心对象:数据库连接池对象，`ComboPooledDataSource`
-  4. 获取连接：getConnection.
+  ```java
+  //获取DataSorce，使用默认的c3p0-config.xml配置
+   DataSource ds = new ComboPooledDataSource();
+   //获取DataSource,指定名称配置
+    DataSource ds = new ComboPooledDataSource("Otherc3p0");
+  ```
+  4. 获取连接：getConnection
+```java
+Connection conn = ds.getConnection();
+```
+5. 归还连接
+
+```java
+conn.close();
+```
+
+### druid
+
+#### 使用步骤
+
+1. 导入jar包：druid-1.0.9.jar
+2. 定义配置文件：
+   1. 是`.properties`文件
+   2. 可以叫任意名称，放在任意目录下，需要手动加载。
+```properties
+driverClassName=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost:3306/youth_study
+username=root
+password=root
+# 初始化连接数量
+initialSize=5
+# 最大连接数量
+maxActive=10
+# 最长等待时间
+maxWait=3000
+```
+3. 加载配置文件
+```java
+Properties pro = new Properties(); //创建Properties对象
+InputStream is = DruidDemo.class.getClassLoader().getResourceAsStream("druid.properties"); //获取properties文件的输入流
+pro.load(is); //根据输入流来加载配置文件
+```
+4. 获取数据库连接池对象：
+   1. 通过工厂类来获取，DruidDataSourceFactory,需要将Properties配置文件对象传递给工厂方法。
+```java
+DataSource ds = DruidDataSourceFactory.createDataSource(pro);;
+```
+5. 获取连接：getConnnection
+```java
+Connection conn = ds.getConnection();
+System.out.println(conn);
+```
+#### druid工具类
+
+1. 定义一个类JDBCUtils
+2. 提供静态代码块加载配置文件，初始化连接池对象
+3. 提供方法：
+   1. 获取连接方法：通过数据库连接池获取连接
+   2. 释放资源
+   3. 获取连接池的方法
+```java
+package com.Utils;
+
+import com.alibaba.druid.pool.DruidDataSourceFactory;
+
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+
+/**
+ * druid连接池的工具类
+ */
+public class JDBCUtils {
+
+    //1.定义成员变量
+    private static DataSource ds;
+
+    static {
+        try {
+            //1.加载配置文件
+            Properties pro = new Properties();
+            pro.load(JDBCUtils.class.getClassLoader().getResourceAsStream("druid.properties"));;
+            //2. 获取DataSource
+            ds = DruidDataSourceFactory.createDataSource(pro);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取连接
+     */
+    public static Connection getConnection() throws SQLException {
+        return ds.getConnection();
+    }
+
+    /**
+     * 释放资源
+     */
+    public static void close(ResultSet rs, Statement stmt, Connection conn) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+        if (conn != null) {
+            try {
+                conn.close(); //归还连接
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 释放资源的重载，两个参数
+     */
+    public static void close (Statement stmt, Connection conn) {
+        JDBCUtils.close(null, stmt, conn);
+    }
+
+    /**
+     * 获取连接池
+     */
+    public static DataSource getDataSource() {
+        return ds;
+    }
+}
+```
+* 工具类使用示例：
+```java
+package com.druid;
+
+import com.Utils.JDBCUtils;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Properties;
+
+/**
+ * 使用工具类
+ */
+public class DruidDemo2 {
+    public static void main(String[] args) {
+
+        //把要被释放的资源的定义放在try-catch语块之外，使得释放资源时方便，不会出现没有定义的错误
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            //1.获取连接
+            conn = JDBCUtils.getConnection();
+            //2. 定义sql
+            String sql = "update t_branch set college_id = ? where id = ?";
+            //3. 获取PreparedStatement对象
+            pstmt = conn.prepareStatement(sql);
+            //4.给sql语句里面的参数赋值
+            pstmt.setInt(1, 333);
+            pstmt.setInt(2,1);
+            //执行sql语句
+            int count = pstmt.executeUpdate();
+            //结果处理
+            System.out.println(count);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
+            //释放资源
+            JDBCUtils.close(pstmt, conn);
+        }
+    }
+}
+```
 
