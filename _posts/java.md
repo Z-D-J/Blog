@@ -315,8 +315,21 @@ public static boolean sum(int a, int b)
 
 * 同c语言一样，Java方法内部定义的变量在方法外部是不可见的。方法内部定义的本地变量，只在方法内部有效。
 
+## 静态块
 
+* 类中用static关键修饰的块：
+```java
 
+public class 类名称 {
+    static {
+        //静态代码块的内容
+    }
+}
+```
+* 特性：
+  * 当**第一次**用到本类时，静态代码块执行**唯一的一次**；再次使用该类时，不会再执行静态代码块。
+  * 静态内容总是优先于非静态，所以**静态代码块比构造方法先执行**。
+* 用途：用来一次性地对静态成员变量进行赋值。
 # 类与对象
 
 ## 类与对象的基本定义
@@ -1352,7 +1365,7 @@ public class ADHero extends Hero {
 
 ### Object类型的变量
 
-* 可以使用Object类型的变量引用所有类型的对象。如：`Object obj = new Employee();`。（注意：除了基本类型（int，char，boolean...)不是对象，其他所有类型都是对象。） 
+* 可以使用Object类型的变量引用所有类型的**对象**。如：`Object obj = new Employee();`。（注意：除了基本类型（int，char，boolean...)不是对象，其他所有类型都是对象。） 
 * 所有的数组类型，不管是基本类型的数组还是对象数组都是Object类的扩展。如
 ```java
 Employee[] staff = new Employee[10];
@@ -2447,7 +2460,7 @@ public class InputStreamTest {
   * `FileReader(String fileName)`
   * `FileReader(File file)`
   * 参数：
-    * String fileName:文件的路径；
+    * String fileName:文件的**路径**；
     * File file：一个文件。
   * 作用：
     * 创建一个FileReader对象；
@@ -2674,11 +2687,97 @@ public class WriterTest {
 
 ### TCP通信程序实现
 
+# 集合
 
+## 集合概述
+
+* 集合是java提供的一种容器，可以用来存储多个数据。
+* 集合与数组的区别：
+  * 集合的长度是可变的；
+  * 集合存储的都是**对象**，而且对象的类型可以不一致。
+
+## 单列集合的框架
+
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201204142553.png) 
+* List集合:有存储顺序，可以存储重复元素，有索引；
+  * ArrayList：底层是**数组**实现的，查询快，增删慢；
+  * LinkedList:底层是**链表**实现的，查询慢，增删快。
+* Set集合：无索引，不可存储重复元素，存取无序。
+  * HashSet:底层是**哈希表+红黑树**实现的，无索引，不可以存储重复元素，存取无序。
+  * LinkedList：底层是**哈希表+链表**实现的，无索引，不可以存储重复元素，但可以包装存储**顺序**。
+  * TreeSet:底层是**二叉树**实现，一般用于**排序**。
+
+## Collection接口
+
+* 全称：`java.util.Collection`,是所有单列集合最顶层的接口，定义了所有单列集合共性的方法。
+* 常利用**多态**创建Collection对象,如：`Collection<String> coll = new ArrayList<>();`,即上层接口对象指向下层实现类。
+* 直接打印Collection对象，会打印出集合中所有的元素。如：`System.out.println(coll);`空集会打印一个`[]`,一般会打印`[张三, 李四]`
+* `public boolean add(E e);`：把给定的对象添加到当前集合中去,添加成功返回true。
+```java
+coll.add("张三");
+```
+* `public boolean remove(E e);`:把给定的对象在当前集合中删除，如果要删除的元素存在则返回true。
+```java
+coll.remove("张三");
+```
+* `public boolean contains(E e);`:判断当前集合中是否包含指定的对象，包含则返回true。
+```java
+coll.contains("张三");
+```
+* `public boolean isEmpty();`:判断当前集合是否为空，为空则返回true。
+```java
+coll.isEmpty();
+```
+* `public int size();`:返回集合中的元素个数
+```java
+int size = coll.size();
+```
+* `public Object[] toArray();`:把集合中的元素存储到**数组**中。注意返回值是**Object**类型的数组。
+```java
+Object[] arr = coll.toArray();
+for(Object i : arr) {
+    System.out.println(i);
+}
+```
+* `public void clear();`:清空集合中所有的元素，此时集合变回和刚创建时一样。
+```java
+coll.clear();
+```
+## Iterator接口
+
+* 迭代：获取Collection集合中元素的通用方法。
+* 全称:`java.util.Iterator`接口，即实现迭代的迭代器。
+* `boolean hasNext()`:判断集合中还有没有下一个元素，有则返回true。
+* `E next()`；取出集合中的下一个元素。
+* 获取Iterator接口的实现类对象方法：
+  * 实现Collection接口的实现类对象调用`iterator()`方法，这个方法返回值就是Iterator接口的实现类对象。
+  * `Iterator<E> iterator();`：迭代器的泛型跟随Collection对象的泛型。
+* 迭代器的使用步骤：
+  1. 使用集合中的iterator方法获取迭代器的实现类对象，使用Iterator接口对象来接收（同Collection对象一样利用多态）；
+  2. 使用Iterator中的hasNext方法来判断是否还有下一个元素
+  3. 使用Iterator中的next方法取出集合中的下一个元素。
+* 迭代器理解：
+  * 可以将集合想象为一个表，迭代器中有一个游标指向当前行，开始时这个游标是指向表头的。每取一次下一个元素，这个游标都会移向下一行（即取出了元素这一行）。
+  * 如果试图取出没有元素的行的值，会出现NoSuchElementException异常。
+```java
+Collection<String> coll = new ArrayList<>();
+coll.add("张三");
+coll.add("李四");
+Iterator<String> it = coll.iterator(); //多态的使用
+while(it.hasNext()) {
+    System.out.println(it.next());
+}
+```
+* 增强for循环：又称for-each循环，是jdk1.5以后，java提供的利用迭代器原理的新特性。用来遍历数组或者集合。(只可以用来遍历，不能用来修改集合或者数组)。
+```java
+for(Object i : coll) {
+    System.out.println(i);
+}
+```
 
 # Java的API
 ---
-实在是太多了，可以在需要时查看API的[官方文档](https://docs.oracle.com/en/java/javase/15/docs/api/index.html)
+实在是太多了，可以在需要时查看API的[官方文档](https://docs.oracle.com/en/java/javase/15/docs/api/index.html)或者[在线中文文档](https://tool.oschina.net/apidocs/apidoc?api=jdk-zh)
 
 ## java.lang.Object
 
@@ -2690,6 +2789,10 @@ public class WriterTest {
 
 * `String getName()`:返回这个类的名字；
 * `Class getSuperclass()`:以Class对象的的形式返回这个类的超类。
+* `public static Class<T> forName(String className) throws ClassNotFoundException`:返回与带有给定字符串名的类或接口相关联的 Class 对象。调用此方法等效于：`Class.forName(className, true, currentLoader)`其中 currentLoader 表示当前类的定义类加载器。
+  * 例如，以下代码片段返回命名为 java.lang.Thread 的类的运行时 Class 描述符。`Class t = Class.forName("java.lang.Thread")`。参数：className - 所需类的完全限定名。返回：具有指定名的类的 Class 对象。抛出：LinkageError - 如果链接失败;ExceptionInInitializerError - 如果此方法所激发的初始化失败;ClassNotFoundException - 如果无法定位该类。
+* `public String toString()`:将对象转换为字符串。字符串的表示形式为字符串 "class" 或 "interface" 后面紧跟一个空格，然后是该类的完全限定名，它具有 getName 返回的那种格式。如果此 Class 对象表示一个基本类型，则此方法返回该基本类型的名称。如果该 Class 对象表示 void，则此方法返回 "void"。覆盖：类 Object 中的 toString;返回：表示此 class 对象的字符串。
+
 
 ## java.util.Objects
 
@@ -2780,9 +2883,32 @@ public static <T> T requireNonNull(T obj,String message) {
 * `vois PrintStackTrace()`:jvm打印堆栈轨迹（异常的信息），是最全面的异常信息。
 * `String toString();`返回此异常的描述消息字符串。
 
+<<<<<<< HEAD
 ## 
 
 
+=======
+## java.uitl.Properties(配置文件)
+
+* Properties类继承自Hashtable类并且实现了Map接口。该类主要用于**读取Java**的配置文件，不同的编程语言有自己所支持的配置文件，配置文件中很多变量是经常改变的，为了方便用户的配置，能让用户够脱离程序本身去修改相关的变量设置。就像在Java中，其配置文件常为`.properties`文件，是以键值对的形式进行参数配置的。
+* 层次关系：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201206084813.jpg)
+* 字段：`protected Properties defaults`,一个属性列表，包含属性列表中所有**未找到值**的键的默认值。
+* 构造方法：
+  * `public Properties()`:创建一个无默认值的空属性列表。
+  * `public Properties(Properties defaults)`:创建一个带有指定默认值的空属性列表。参数：defaults - 默认值。
+* 方法：
+  * `public String getProperty(String key)`:用指定的键在此属性列表中搜索属性。如果在此属性列表中未找到该键，则接着递归检查默认属性列表及其默认值。如果未找到属性，则此方法返回 null。参数：key - 属性键。
+  * `public String getProperty(String key,String defaultValue)`:用指定的键在属性列表中搜索属性。如果在属性列表中未找到该键，则接着递归检查默认属性列表及其默认值。如果未找到属性，则此方法返回**默认值变量**。参数：key - 哈希表defaultValue - 默认值。返回：属性列表中具有指定键值的值。
+  * `public void load(Reader reader)throws IOException`:按简单的面向行的格式从输入字符流中读取属性列表（键和元素对）此方法返回后，指定的**流仍保持打开状态**。参数：reader - 输入字符流(Reader是FileReader的上两级父类）。抛出：IOException - 如果从输入流读取时发生错误。IllegalArgumentException - 如果输入中出现了错误的 Unicode 转义。。
+
+## java.net.URL
+
+* 类 URL 代表一个统一资源定位符，它是指向互联网“资源”的指针。资源可以是简单的文件或目录，也可以是对更为复杂的对象的引用，例如对数据库或搜索引擎的查询。
+*` http://www.socs.uts.edu.au:80/MosaicDocs-old/url-primer.html`
+* 通常，URL 可分成几个部分。上面的 URL 示例指示使用的**协议**为 http （超文本传输协议）并且该信息驻留在一台名为 www.socs.uts.edu.au 的**主机**上。主机上的信息名称为 /MosaicDocs-old/url-primer.html。主机上此名称的准确含义取决于协议和主机。该信息一般存储在文件中，但可以随时生成。该 URL 的这一部分称为**路径**部分。URL 可选择指定一个“**端口**”，它是用于建立到远程主机 TCP 连接的端口号。如果未指定该端口号，则使用协议默认的端口。
+* `public String getPath()`:获取此 URL 的路径部分。返回：此 URL 的路径部分，如果没有路径，则返回一个空字符串
+>>>>>>> 4128f2f1e208cb66f993554caa379be054bc9808
 
 
 

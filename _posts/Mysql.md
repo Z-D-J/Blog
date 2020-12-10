@@ -38,7 +38,7 @@ tags:
 * 在Windows上：
   1. 搜索服务，点击打开；
   2. 在cmd输入`services.msc`启动；
-  3. 在管理员cmd输入`net start <本机mysql的名字>`或者`net stop <本机mysql的名字>`启动或者关闭。
+  3. 在管理员cmd输入`net start <本机mysql的名字>`或者`net stop <本机mysql的名字>`启动或者关闭。(本机mysql服务的名字叫MYSQL)
 * 在linux上：
   1. 启动：`sudo service mysql start`
   2. 关闭：`sudo service mysql stop`
