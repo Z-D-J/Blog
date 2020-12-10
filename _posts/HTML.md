@@ -51,5 +51,7 @@ tags:
 * head：头标签。用于指定html文档的一些属性，引入外部的资源。
 * title:标题标签；
 * body；体标签。
+* <!DOCTYPE>:定义文档类型标签,html5中定义文档类型的方式。如：`<!DOCTYPE html>`
+* 
 
 
