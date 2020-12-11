@@ -68,7 +68,86 @@ tags:
 * 类似打字机或者等宽的文本效果：`<tt>需要等宽显示的内容<tt>`
 * 呈现大号字体效果:`<big>需要显示大号字体的内容</big>`
 * 呈现小号字体效果:`<small>需要显示小号字体的内容<small>`
-* 规定文本的字体、字体尺寸、字体颜色:`<font color="red", size="5",face="verdana"> 我是红色</font>`,face是指的字体。
+* 规定文本的字体、字体尺寸、字体颜色:`<font color="red", size="5",face="楷体"> 我是红色</font>`,face是指的字体。**已经不建议使用，改变样式现在用css**
+* 文本居中：`<center>需要居中的内容</center>`,居中是相对于父元素来说的。示例：
+```html
+<center>
+<font color="red", size="5",face="楷体"> 我是红色</font>
+</center>
+```
 * 属性：
+  * color:颜色：
+    * 英文单词：red,green,blue等
+    * rgb(值1，值2，值3)；rgb分别是红，绿，蓝三种颜色的占比。值的范围：0~255（不常用）
+    * `#值1值2值3`:值的范围：00~FF之间。效果也是通过三种颜色的占比来配色。如：`#FF00FF`。
+  * width:
+    * 数值:width='20',数值的单位，默认是像素px(像素)；
+    * 数值%：width='50%',相对于父元素的占比。
+  * align:对齐方式
+    * center:居中
+    * left：左对齐
+    * right：右对齐
+
+## 图片标签
+
+* `<img />`:图片标签是自闭合标签
+* 属性：src
+  * src后输入图片的位置；
+  * 相对路径：
+    * `./...`代表当前目录；如：`./image/1.jpg`
+    * `../...`代表上一级目录：如：`../image/2.jpg`
+  * 绝对路径也可以使用
+  * 直接使用链接也可以
+* 示例：
+```html
+<img src = "https://gitee.com/zhangjie0524/picgo/raw/master/img/20201208092240.jpg">
+```
+
+## 列表标签
+
+* 有序列表
+  * ol:定义有序列表
+  * li：定义列表的项目
+```html
+<ol>
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Milk</li>
+</ol>
+```
+效果：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201211102931.jpg)
+* 无序列表：
+  * ul:定义无序列表
+  * li：定义列表的项目
+  * 示例：
+```html
+<ul>
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Milk</li>
+</ul>
+```
+效果：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201211103137.jpg)
+
+## 链接标签
+
+* `<a></a>`:定义超链接
+* 属性：
+  * href：指定访问资源的url
+    * 既可以是网页链接
+    * 也可以是本地的资源，如：`./5_列表标签.html`。
+  * target:
+    * "_self",在当前页面打开链接的网页
+    * "_blank":在一个空白标签页打开链接的网页
+* 示例：
+```html
+<a href = "https://gitee.com/zhangjie0524/picgo/raw/master/img/20201211103137.jpg" target = "_blank">我是超链接</a>
+```
+
+## div和span
+
+
 
 
