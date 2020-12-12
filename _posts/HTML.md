@@ -208,6 +208,8 @@ tags:
 ## 表单标签
 
 * 表单概念：用于采集用户输入的数据，用于和服务器进行交互。
+
+### form标签
 * form标签：用于定义表单，可以定义一个范围，范围表示采集用户数据的页面范围。
   * action属性：指定数据提交的url
   * method属性：指定提交方式(一共有7种，常用一下两种)
@@ -220,3 +222,41 @@ tags:
       * 请求参数的大小没有限制
       * 较为安全。
 * 表单项中的数据想要被提交，必须**指明name属性**，且要位于form标签的范围之内。
+
+
+### 表单项标签
+
+* input:可以通过**type**属性值，改变展现元素的格式。
+  * type属性：
+    * text:文本输入框，是**默认**的type属性值。
+      * placeholder；指定输入框的提示信息，当输入框的内容发生变化之后，会自动清空提示信息；
+    * password:密码输入框
+      * 效果是输入的密码都变为密文，不可见。
+    * radio；单选框
+       * 要想让多个单选框实现单选的效果，则多个单选框的**name属性值**必须一样。
+       * 一般会给每一个单选框提供**value属性值**，指定其被选中后提交的值。
+       * **checked属性值**可以指定默认值，即没有选择的时候会默认选择的值。设置方式：`checked="checked"`或者直接写一个`checked`
+    * checkbox复选框：
+       * 一般会给每一个单选框提供**value属性值**，指定其被选中后提交的值。
+       * **checked属性值**可以指定默认值，即没有选择的时候会默认选择的值。设置方式：`checked="checked"`或者直接写一个`checked`
+  * label属性：指定输入项的文字描述信息
+    * label的**for属性**值与input的**id属性**值相对应，如果对应了，则点击label区域，会让input输入框获取焦点。
+  * 示例：
+```html
+<form action="#", method="post">
+    <label for="username">用户名：</label><input type="text" name = "用户名" id = "username" placeholder="请输入用户名"> <br>
+    <label for="password">密码：</label><input type="password" name = "password" id="password" placeholder="请输入密码"><br>
+    性别：
+        <input type="radio" name="gender" value="male" checked>男
+        <input type="radio" name="gender" value="female"  >女<br>
+   爱好：
+   
+        <input type="checkbox" name="hobby" value="java" checked>java
+        <input type="checkbox" name="hobby" value="c" >c<br>
+    <input type="submit" value="登录">
+</form>
+```
+  * 效果：
+ ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201212175934.jpg)
+* select:
+* textarea:文本域
