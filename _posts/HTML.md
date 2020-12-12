@@ -27,7 +27,7 @@ tags:
   * 正确：`<a><b></b></a>`
 * 在**开始标签**中可以定义属性。属性是由键值对构成，值需要用引号(单双都可，但是要统一)引起来。
 * html的标签不区分大小写，但是建议使用小写
-* 。
+* 示例：
 ```html
 <html>
 
@@ -54,7 +54,7 @@ tags:
 * head：头标签。用于指定html文档的一些属性，引入外部的资源。
 * title:标题标签；
 * body；体标签，放网页显示内容.`<body>` 与 `</body>` 之间的文本是**可见**的页面内容。
-* <!DOCTYPE>:定义文档类型标签,html5中定义文档类型的方式。如：`<!DOCTYPE html>`
+* `<!DOCTYPE>`:定义文档类型标签,html5中定义文档类型的方式。如：`<!DOCTYPE html>`
 
 ## 文本标签
 
@@ -166,7 +166,7 @@ tags:
 * html中的表格只有行的概念。所谓的“列”是行中的单元格。
 * table；定义表格
   * width:宽度
-  * border:边框，会出现两条线，一条是行的边框线，一条是单元格的边框线。
+  * border:边框，会出现两条线，一条是行的边框线，一条是单元格的边框线。数字定义的是边框的宽度（像素为单位）
   * cellpadding；定义内容和单元格的距离
   * cellspaciing:定义单元格之间的距离。如果指定为0，则单元格的线合并为一条。
   * bgcolor:背景色
@@ -176,6 +176,7 @@ tags:
 * td:定义单元格
   * 属性colspan:合并列
   * 属性rowspan；合并行
+  * 属性align:也可以设置单元格的对齐方式
 * th:定义表头单元格
 * 示例：
 ```html
@@ -245,7 +246,7 @@ tags:
      * file；文件选择框
      * hidden:隐藏域，用于提交一些信息。
      * 按钮：
-       * submit:提交按钮，可以提交表单
+       * submit:提交按钮，可以提交表单,用**value属性**定义按钮显示的内容。
        * button:普通按钮，**没有提交表单的功能**。
        * image:图片提交按钮，通过**src**属性指定图片。
      * color：取色器（html5新增的属性）
@@ -263,8 +264,7 @@ tags:
     性别：
         <input type="radio" name="gender" value="male" checked>男
         <input type="radio" name="gender" value="female"  >女<br>
-   爱好：
-
+    爱好：
         <input type="checkbox" name="hobby" value="java" checked>java
         <input type="checkbox" name="hobby" value="c" >c<br>
     <input type="submit" value="登录">
@@ -291,3 +291,58 @@ tags:
 * textarea:文本域标签
   * cols：指定文本框的列数，每一行有少个字符；
   * rows：指定文本框的默认行数，行数如果不够会自动扩充。
+
+# 示例
+
+* 代码：
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+    <!--定义表单-->
+    <form action="#" method="post">
+            <table border="1" align="center" width="500">
+                    <tr>
+                        <td><label for="username">用户名</label></td>
+                        <td><input type="text" name="username" id="username"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="password">密码</label></td>
+                        <td><input type="password" name="password" id="password"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="email">Email</label></td>
+                        <td><input type="email" name="email" id="email"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="name">姓名</label></td>
+                        <td><input type="text" name="name" id="name"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="phonenumber">手机号</label></td>
+                        <td><input type="text" name="phonenumber" id="phonenumber"></td>
+                    </tr>
+                    <tr>
+                        <td><label >性别</label></td>
+                        <td><input type="radio" name="gender" value="male">男
+                            <input type="radio" name="gender" value="female">女
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="date">出生日期</label></td>
+                        <td><input type="date" name="date" id="date"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input type="submit" value="注册"></td>
+                    </tr>
+            </table>
+    </form>
+</body>
+</html>
+```
+* 效果
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201212201738.jpg)
