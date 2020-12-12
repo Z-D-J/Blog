@@ -210,6 +210,7 @@ tags:
 * 表单概念：用于采集用户输入的数据，用于和服务器进行交互。
 
 ### form标签
+
 * form标签：用于定义表单，可以定义一个范围，范围表示采集用户数据的页面范围。
   * action属性：指定数据提交的url
   * method属性：指定提交方式(一共有7种，常用一下两种)
@@ -226,6 +227,8 @@ tags:
 
 ### 表单项标签
 
+#### input标签
+
 * input:可以通过**type**属性值，改变展现元素的格式。
   * type属性：
     * text:文本输入框，是**默认**的type属性值。
@@ -239,6 +242,17 @@ tags:
     * checkbox复选框：
        * 一般会给每一个单选框提供**value属性值**，指定其被选中后提交的值。
        * **checked属性值**可以指定默认值，即没有选择的时候会默认选择的值。设置方式：`checked="checked"`或者直接写一个`checked`
+     * file；文件选择框
+     * hidden:隐藏域，用于提交一些信息。
+     * 按钮：
+       * submit:提交按钮，可以提交表单
+       * button:普通按钮，**没有提交表单的功能**。
+       * image:图片提交按钮，通过**src**属性指定图片。
+     * color：取色器（html5新增的属性）
+     * date:定义date控件，包括年月日
+     * datetime-local：定义date和time控件，包括年月日时分。
+     * email：定义用于输入邮箱地址的输入框，如果输入的数据不符合邮箱格式规范，则会报错无法提交。
+     * number：定义用于输入数字的输入框，不能输入其它数据类型。
   * label属性：指定输入项的文字描述信息
     * label的**for属性**值与input的**id属性**值相对应，如果对应了，则点击label区域，会让input输入框获取焦点。
   * 示例：
@@ -250,7 +264,7 @@ tags:
         <input type="radio" name="gender" value="male" checked>男
         <input type="radio" name="gender" value="female"  >女<br>
    爱好：
-   
+
         <input type="checkbox" name="hobby" value="java" checked>java
         <input type="checkbox" name="hobby" value="c" >c<br>
     <input type="submit" value="登录">
@@ -258,5 +272,22 @@ tags:
 ```
   * 效果：
  ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201212175934.jpg)
-* select:
-* textarea:文本域
+
+#### select标签
+
+* select:下拉列表
+  * 子元素：option，指定列表项
+  * 属性selected可以指定默认选项,如果不指定默认选项，则显示的是第一个列表项。
+* 示例：
+```html
+  省份：<select name="province">
+            <option value="">--请选择--</option>
+            <option value="1" >北京</option>
+            <option value="2" selected>上海</option>
+        </select><br>
+```
+#### textarea标签
+
+* textarea:文本域标签
+  * cols：指定文本框的列数，每一行有少个字符；
+  * rows：指定文本框的默认行数，行数如果不够会自动扩充。
