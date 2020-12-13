@@ -42,7 +42,7 @@ tags:
 ```
 
 # css基本语法
-
+[参考手册](https://www.w3school.com.cn/cssref/index.asp)
 * 格式：
 ```
 选择器 ｛
@@ -53,3 +53,114 @@ tags:
 ```
 * 选择器：筛选具有相似特征的元素
 * 每一对属性需要**使用;隔开**，最后一对属性可以不加。
+
+# 选择器
+
+## 基础选择器
+
+* id选择器： 选择具体的id属性值的元素,一个html页面中的id值唯一。
+  * 语法：`#id属性值{}`
+* 元素选择器：选择具有相同标签名称的元素,标签名可以自定义。
+  * 语法：`标签名称{}`
+  * 注意：id选择器的优先级高于元素选择器
+* 类选择器：选择具有相同class属性值的元素
+  * 语法：`.class属性值{}`
+  * 注意：类选择器的优先级高于元素选择器的优先级，但是低于id选择器的优先级。
+* 示例：
+```html
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <style>
+        #div1{
+            color: red;
+        }
+
+        p{
+          color:green;
+        }
+
+        .class1{
+          color:blue;
+        }
+    </style>
+
+</head>
+<body>
+  <div id="div1">张杰</div>
+  <p>张杰2</p>
+  <p class="class1">zhangjie</p>
+  <m class="class1">张杰</m><!--自定义的标签-->
+</body>
+```
+
+## 扩展选择器
+
+* 选择所有元素选择器：
+  * 语法：`*{}`
+* 并集选择器：选择两个选择器的所有内容
+  * 语法：`选择器1，选择器2{}`
+* 子选择器：筛选选择器1元素下的选择器2元素
+  * 语法：`选择器1 选择器2{}`
+  * 只有在选择器1元素包裹下的选择器2元素才会被选中。
+  * 示例：如果是`div p{}`
+```html
+<div>
+  <p>zhangjie1</p> <!--只有这一行元素才会被选中-->
+</div>
+<p>zhangjie2</p>
+```
+* 父选择器：筛选选择器2上的父元素选择器1
+  * 语法：`选择器1>选择器2{}`
+  * 只有其中包裹了选择器2元素的选择器1元素才会被选中。父选择器改变的是选择器1的样式。
+  * 示例：`div>p{}`
+```html
+<!--只有这个包裹了p元素的div元素会被选中-->
+<div>
+  <p>zhangjie</p>
+</div>
+
+<!--下面这个div就不会被选中-->
+<div>zhangjie2</div>
+```
+* 属性选择器：选择元素名称，属性名=属性值的元素
+  * 语法：`元素名称[属性名:"属性值"]{}`
+  * 一般用来选择input标签元素。
+  * 示例；
+```html
+<head>
+<style>
+input[type="text"]{
+  border:2px solid;
+}
+</style>
+</head>
+
+<input type="text" name="test">
+```
+* 伪类选择器：选择一些元素具有的状态
+  * 语法：`元素:状态{}`
+  * 状态：如`<a>`标签，具有如下状态
+    * link:初始化的状态
+    * visited:被访问过的状态
+    * active：正在被访问的状态
+    * hover:鼠标悬浮状态
+  * 示例：
+```html
+<style>
+a:link{
+  color:pink;
+}
+a:hover{
+  color:red;
+}
+a:active{
+  color:yellow;
+}
+a:visited{
+  color:green;
+}
+</style>
+```
+
+
