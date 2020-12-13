@@ -65,7 +65,7 @@ tags:
   * 注意：id选择器的优先级高于元素选择器
 * 类选择器：选择具有相同class属性值的元素
   * 语法：`.class属性值{}`
-  * 注意：类选择器的优先级高于元素选择器的优先级，但是低于id选择器的优先级。
+  * 注意：类选择器的优先级高于元素选择器的优先级，但是低于id选择器的优先级。**同一级的选择器，放在后面的可以覆盖前面选择器设置的相同的属性**。
 * 示例：
 ```html
 <head>
@@ -162,5 +162,38 @@ a:visited{
 }
 </style>
 ```
+# 属性
+
+## 字体、文本
+
+* color:字体颜色，如：`color:#FF0000;`代表红色。
+* font-size:字体大小，单位为px，如；`font-size:30px;`
+* text-align；文本对齐方式。如：`text-align:center;`
+* line-height:行高，单位也为px，整个文本范围所占的高度。如；`line-align:100px;`
+  
+## 边框
+
+* boder:设置边框，是一个复合属性。
+* 如：`border:1px solid red;`,表示，边框宽是1个像素，是实线，是红色。
+
+## 尺寸
+
+* 设置整个标签内容所占的范围大小。
+* height：范围的高度，单位为px；如：`height:200px;`
+* width:范围的宽度，单位为px：如:`width:200px;`
+
+## 背景
+
+* background:背景颜色，是一个复合属性。如；`background:url("img/logo.jpg") no-repeat center;`,意思为设置背景图片为logo.jpg 图片不要重复，图片在标签内容范围内居中。
+
+## 盒子模型
+
+* 用来控制布局。
+* **margin** :外边距，和父盒子的边框的距离。
+  * 可以用margin-left等属性来设置每一条边距，直接设置margin是设置四条边的边距。
+* **padding**:内边距，和子盒子的边框的距离。
+  * 默认情况下内边距会影响盒子的大小。
+  * **box-sizing**:需要设置盒子的属性，让width和height就是盒子的大小。如；`box-sizing:border-box;`
+* **float**:浮动属性，让不同盒子在顺序在同一行排列。如；`float:left`:左浮动；`float:right;`；有浮动。
 
 
