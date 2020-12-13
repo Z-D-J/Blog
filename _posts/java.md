@@ -2883,11 +2883,7 @@ public static <T> T requireNonNull(T obj,String message) {
 * `vois PrintStackTrace()`:jvm打印堆栈轨迹（异常的信息），是最全面的异常信息。
 * `String toString();`返回此异常的描述消息字符串。
 
-<<<<<<< HEAD
-## 
 
-
-=======
 ## java.uitl.Properties(配置文件)
 
 * Properties类继承自Hashtable类并且实现了Map接口。该类主要用于**读取Java**的配置文件，不同的编程语言有自己所支持的配置文件，配置文件中很多变量是经常改变的，为了方便用户的配置，能让用户够脱离程序本身去修改相关的变量设置。就像在Java中，其配置文件常为`.properties`文件，是以键值对的形式进行参数配置的。
@@ -2908,8 +2904,6 @@ public static <T> T requireNonNull(T obj,String message) {
 *` http://www.socs.uts.edu.au:80/MosaicDocs-old/url-primer.html`
 * 通常，URL 可分成几个部分。上面的 URL 示例指示使用的**协议**为 http （超文本传输协议）并且该信息驻留在一台名为 www.socs.uts.edu.au 的**主机**上。主机上的信息名称为 /MosaicDocs-old/url-primer.html。主机上此名称的准确含义取决于协议和主机。该信息一般存储在文件中，但可以随时生成。该 URL 的这一部分称为**路径**部分。URL 可选择指定一个“**端口**”，它是用于建立到远程主机 TCP 连接的端口号。如果未指定该端口号，则使用协议默认的端口。
 * `public String getPath()`:获取此 URL 的路径部分。返回：此 URL 的路径部分，如果没有路径，则返回一个空字符串
->>>>>>> 4128f2f1e208cb66f993554caa379be054bc9808
-
 
 
 
