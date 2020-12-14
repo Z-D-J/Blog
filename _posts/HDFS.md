@@ -47,4 +47,21 @@ tags:
 
 ## 数据节点(DataNode)
 
+* DataNode是HDFS的**从结点**;
+* DataNode会根据Client的请求和NameNode的指令来从本地存储中读取数据块，或者向本地存储中写入数据块。
+* DataNode会不断向NameNode发送**数据块汇报，心跳和缓存汇报**。
+
+## 客户端(client)
+
+* HDFS提供了多种客户端接口供**应用程序**和**用户**使用，这些接口包括**命令行接口**，**浏览器接口**和**代码API接口**。
+
+## HDFS通信协议
+
+* HDFS的使用流程需要client，NameNode，DataNode三者之间的配合和相互调用。HDFS将这些节点间的调用抽象成不同的**接口**。
+* HDFS节点间的接口主要有两种类型：
+  1. Hadoop RPC接口
+  2. 流式接口
+
+### Hadoop RPC接口
+
 * 
