@@ -42,12 +42,12 @@ tags:
 * `<script>`标签可以写在html页面的任何位置，但是定义的位置的先后会**影响执行顺序**。
 * 同一个html页面**可以定义多个`<script>`标签**。
 
-## 注释
+### 注释
 
 * 单行注释：//注释内容
 * 多行注释：/* 注释内容 */
 
-## 数据类型
+### 数据类型
 
 * 原始数据类型（类似java中的基本数据类型）
   * number:数字。
@@ -61,7 +61,7 @@ tags:
   * boolean：布尔值类型，值为true或者false。
 * 引用数据类型：对象。
 
-## 变量
+### 变量
 
 * 变量定义：一小块存储数据的内存空间
 * java是强类型语言，JavaScript是弱类型语言
@@ -71,7 +71,7 @@ tags:
 * 查看数据类型：`typeof(变量名);`,会返回变量的类型。
 * 输出数据到页面中`document.write(输出的数据);`,如：`document.write(a+"我是a"+"<br>");`
 
-## 运算符
+### 运算符
 
 * 一元运算符：
   * `++`:自增
@@ -97,6 +97,10 @@ tags:
   * `||`:或，也有短路效果。
   * `!`:非，该运算符要求变量类型是boolean。
 * 三元运算符：
+  * `?:`:
+    * 语法：`表达式?值1:值2`
+    * 判断表达式的值，如果是true则取值1，否则取值2；
+    * 示例：`a > b ? 1:0;`
 * 在JavaScript中如果运算数不是运算符所要求的类型，那么js引擎会自动地将运算数进行类型转换。
   * 其它类型转number：
     * String转number：会按照字面值转换，如果**字面值不是数字，那么转换为NaN**.（NaN与任何数运算的结果还是NaN）
@@ -106,3 +110,76 @@ tags:
     * number转为boolean：**0或NaN**为false，其它为true。
     * string转为boolean：**空字符串**为false，其它都为true。空字符串：`string str="";`
     * null和undefined转为boolean：**都是false**。
+
+### 特殊语法
+
+* 语句以分号结尾，如果一行只有一条语句，则分号可以省略（但是一般不建议）；
+* 变量的定义使用var关键字，也可以不使用：（不建议使用）
+  * 使用var定义的局部变量
+  * 不使用var定义的是全局变量
+
+### 流程控制语句
+
+* `if...else`:与java中相同
+* `switch`:
+  * 在java中，switch可以接收的数据类型：byte，int,short ,char ,枚举(1.5之后)，string(1.7之后)；
+  * 在JavaScript中，switch可以接收任意类型的变量。
+```javascript
+
+var a = "hello";
+switch(a) {
+  case 1:
+      alert("number");
+      break;
+  case "hello":
+      alert("string");
+      break;
+  case undefined:
+      alert("undefined");
+      break;
+}
+```
+* `while`:与java一样。
+* `for`:与java一样
+* `do...while`:与java一样。
+
+### 示例：99乘法表
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>99乘法表</title>
+
+    <style>
+        td{
+            border: 1px solid ;
+        }
+    </style>
+    
+    <script>
+        document.write("<table align='center'>"); //在JavaScript的字符串中嵌套html的语句中如果含有双引号，则全部使用单引号，防止和字符串的双引号起冲突
+
+        for(var i = 1; i <= 9; i++) {
+            document.write("<tr>");
+            for(var j = 1; j <= i; j++) {
+                document.write("<td>");
+                document.write(i + "*" + j + "=" + i * j + "&nbsp;&nbsp;&nbsp;&nbsp;");//&nbsp
+                document.write("</td>");
+            }
+            document.write("</tr>");
+        }
+
+        document.write("</table>");
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+```
+* 效果：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201214170043.jpg)
+* 在html代码中，使用转义字符`&nbsp`表示1个空格,在html代码中每输入一个转义字符`&nbsp`就表示一个空格，输入十个`&nbsp`，页面中就显示10个空格位置。而在html代码中输入空格，**不管输入多少个空格，最终在页面中显示的空格位置只有一个**。
+* 在JavaScript的字符串中嵌套html的语句中如果含有双引号，则全部**使用单引号**，防止和字符串的双引号起冲突。
