@@ -62,6 +62,23 @@ tags:
   1. Hadoop RPC接口
   2. 流式接口
 
-### Hadoop RPC接口
+# Hadoop RPC接口
 
-* 
+* Hadoop RPC接口是基于Protobuf实现的，主要定义在`org.apache.hadoop.hdfs.protocol`包和`org.apache.hadoop.hdfs.server.protocol`包中、
+* Hadoop RPC接口主要包含以下几个接口：
+  1. **ClentProtocol**:这个接口定义了**client和NameNode**之间的接口，clent对文件的所有操作都要通过这个接口。
+  2. **ClientDatanodeProtocol**:这是**client和DataNode**之间的接口，其中的方法是在**client获取DataNode的信息时调用**，而不是直接的数据读写交互。
+  3. **DatanodeProtocol**:DataNode通过这个接口和**NameNode通信**，同时NameNode通过这个接口中方法的返回值向DataNode下发指令，这个接口是**DataNode和NameNode之间通信的唯一方式**。
+  4. **InnerDatanodeProtocol**:这是**DataNode和DataNode之间通信的接口**，这个接口主要用于**数据块的恢复操作，以及同步DataNode上存储的数据块副本的信息**。
+  5. **NameNodeProtocol**: **Secondary NameNode和NameNode之间的接口**，如果引入了HA机制，则不使用Secondary NameNode，这个接口作用有限。
+  6. 其它接口：如安全相关接口，HA相关接口。
+
+## ClientProtocol
+
+### 读数据相关方法
+
+* `getBlockLocations()`:客户端调用该方法获取指定范围内所有**数据块的位置信息**。
+  * 参数：HDFS文件的**文件名**和**读取范围**。
+  * 返回值：文件指定范围内所有数据块的文件名以及它们的位置信息，用**LocatedBloclks对象**封装。
+    * 数据块的位置信息是指所有存储这个数据块副本的DataNode信息，这些DataNode会以与当前客户端的距离远近排序。
+  * 定义：`public LocatedBlocks getBLockLocations(String src, long offset,long length);`
