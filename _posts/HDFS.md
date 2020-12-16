@@ -82,3 +82,45 @@ tags:
   * 返回值：文件指定范围内所有数据块的文件名以及它们的位置信息，用**LocatedBloclks对象**封装。
     * 数据块的位置信息是指所有存储这个数据块副本的DataNode信息，这些DataNode会以与当前客户端的距离远近排序。
   * 定义：`public LocatedBlocks getBLockLocations(String src, long offset,long length);`
+  * 使用：client会首先调用`getBlockLocations()`方法获取文件的所有数据块的位置，然后根据这些**位置信息**从DataNode读取数据块。
+* `reportBadBlocks()`:客户端调用该方法向NameNode汇报错误的数据块。
+  * 参数：LocatedBlock对象数组
+  * 定义：`public void reportBadBlocks(LocatedBlock[]  blocks);`
+  * 使用： 当client从DataNode**读取数据块并且发现数据块的校验和并不正确时**，调用这个方法向NameNode汇报这个错误数据块的信息。
+
+### 写/追加写数据相关方法
+
+* `creat()`:用于在HDFS文件系统目录树中创建一个新的空文件。
+  * 参数：由`String src`参数指定创建文件的路径。
+  * 返回值：
+  * 定义:`public HDFSFileStatus create(String src,...(此处省略后续参数));`
+* `append()`:用于打开一个已有的文件。
+  * 如果这个文件的**最后一个数据块没有写满**，则返回这个数据块的位置信息(用LocatedBlock对象封装);
+  * 如果这个文件的**最后一个数据块恰好写满**，则**创建一个新数据块**并添加到这个文件中，然后返回这个新添加数据块的位置信息。
+  * 定义:`public LocatedBlock append(String src, String clientName);`
+* `addBlock()`:向指定文件**添加一个新数据块**，并获取存储这个数据块副本的所有**DataNode的位置信息**。
+  * 调用该方法需要传入**上一个数据块的引用**（即previous参数）；
+  * excludeNodes参数：是DataNode的黑名单，保存了client**无法连接的一些DataNode**；
+  * favoredNodes参数：是client希望保存数据块副本的**DataNode列表**.
+  * 定义：`public LocatedBlock addBlock(String src, String clientName, ExtenedNode previous, DataNodeInfo[] excludeNodes, long fileId,  String[] favoredNodes);`
+* `complete()`:当客户端**完成了整个文件的写入操作后**，会调用该方法**通知NameNode**。
+  * 该方法会**提交所有新写入的数据块信息**；
+  * 当该文件的**所有数据块至少都有一个副本**时，该方法会返回true,这时NameNode中文件的状态也会从**构建中状态转换为正常状态**；
+  * 否则，该方法返回false，**client需要反复调用`complete()`方法,直到返回ture。
+  * 定义：`public boolean complete(String src, String clientName, ExtendedBlock last, long fileId);`
+* 正常写新文件流程：
+  1. client调用`create`方法在文件系统目录树上**创建一个空文件**；
+  2. client调用`addBlock`方法获取存储文件的**数据块的位置信息**；
+  3. client根据数据块的位置信息构建**数据流管道，向DataNode中写入数据**；
+  4. client完成数据的写入，调用`complete`方法**通知NameNode**。
+* 正常追写数据流程：
+  1. client调用`append`方法**获取最后一个可写数据块的位置信息**；
+  2. client根据该数据块的位置信息构建**数据流管道，向这个未写满的DataNode中写入数据**；
+  3. client如果将原文件的最后一个数据块写满了，则调用`addBlock`方法获取存储文件的**数据块的位置信息**；
+  4. client根据数据块的位置信息构建**数据流管道，向DataNode中写入数据**；
+  5. client完成数据的写入，调用`complete`方法**通知NameNode**。  
+
+### 对命名空间的管理相关方法
+
+* HDFS对NameNode信息的修改的相关方法与FileSystem类抽象的所有方法。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201216103550.jpg)
