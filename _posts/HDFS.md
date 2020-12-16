@@ -124,3 +124,13 @@ tags:
 
 * HDFS对NameNode信息的修改的相关方法与FileSystem类抽象的所有方法。
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201216103550.jpg)
+
+### 系统问题与管理操作
+
+* ClientProtocol支持**DFSAdmin工具（供HDFS管理员管理HDFS集群的命令行工具）**的接口方法。
+* 典型的dfsadmin命令：`hdfs dfsadmin[参数]`;
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201216135353.jpg)
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201216135358.jpg)
+* **安全模式**：
+  * 安全模式是NameNode的一种状态，处于安全模式的NameNode不接受client对NameSpace的修改操作，NameSpace处于**只读状态**。同时，NameNode也不会**向DataNode下发任何数据块的复制，删除操作**。
+  * 刚刚启动的NameNode会**自动进入安全模式**。
