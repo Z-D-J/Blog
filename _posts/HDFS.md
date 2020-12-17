@@ -166,4 +166,30 @@ tags:
 
 ## DatanodeProtocol
 
-* 
+* Datanode使用这个接口与NameNode进行握手，注册，发送心跳，进行数据块汇报。
+* NameNode会**在心跳响应中携带名字节点指令**，NameNode向DataNode下发名字节点指令只能通过这个接口进行。
+* DataNode**启动**方法：
+  1. 首先调用`versionRequest();`与NameNode进行握手操作，在这个过程中会判断DataNode的HDFS版本与NameNode的HDFS版本能否协同工作，如果不能，则抛出异常；
+  2. 然后调用`registerDatanode();`向NameNode注册当前的DataNode。
+  3. 接着DataNode调用`blockReport();`方法向NameNode汇报它所管理的所有数据块信息，NameNode根据上报的数据库信息，建立数据块与DataNode之间的对应关系，并且在对`blockReport()`的响应中携带名字节点指令。
+  4. 最后调用`cacheReport()`上报DataNode缓存的所有数据块信息。
+* **心跳**相关方法：
+  * 心跳用来维护节点的健康状态，DataNode会调用用`sengHeartbeat()`定期向NameNode发送心跳,如果NameNode长时间没有收到该DataNode的心跳，会认为该节点失效。
+  * NameNode在对心跳的响应中会包含名字节点指令。
+* **数据块读写**相关方法:
+  * `reportBadBlocks()`:用于汇报损坏的数据块；
+  * `blockReceivedAndDeleted()`：汇报DataNode新接受或者删除的数据块。
+  * 。。。
+* `errorReport()`:用于汇报运行过程中发生的一些状况。
+* DatanodeCommand类描述NameNode向DataNode发送的名字节点指令。
+
+## InterDatanodeProtocol
+
+* 是DataNode和DataNode之间的接口，用于同步数据块的状态。
+
+## NamenodeProtocol
+
+* 是NameNode和Secondary NameNode之间的接口。
+
+# 流式接口
+
