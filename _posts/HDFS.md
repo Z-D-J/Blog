@@ -75,6 +75,7 @@ tags:
 
 ## ClientProtocol
 
+* 是Client发起调用的接口。
 ### 读数据相关方法
 
 * `getBlockLocations()`:客户端调用该方法获取指定范围内所有**数据块的位置信息**。
@@ -134,3 +135,35 @@ tags:
 * **安全模式**：
   * 安全模式是NameNode的一种状态，处于安全模式的NameNode不接受client对NameSpace的修改操作，NameSpace处于**只读状态**。同时，NameNode也不会**向DataNode下发任何数据块的复制，删除操作**。
   * 刚刚启动的NameNode会**自动进入安全模式**。
+
+### 快照操作
+
+* 快照保存了HDFS在一个时间点某个路径中所有数据的拷贝；
+* 快照可以将集群回滚到之间的一个正常的时间点上。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201217151155.jpg)
+
+### 缓存操作
+
+* 集中式缓存管理功能：用户可以指定一些经常使用的数据或者高优先级任务的数据，使它们常驻缓存而不被淘汰到磁盘上。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201217151806.jpg)
+
+### 其它操作
+
+* 如安全相关或者XAtrr相关命令
+
+## ClientDatanodeProtocol
+
+* ClientDatanodeProtocol定义了client和Datonode之间的接口，由client发起调用。
+* `getRepublicaVisibleLength()`:用于从某个DataNode获取某个数据块副本真实的数据长度。
+* `getBlockLocalPathInfo();`:client调用该方法获取指定数据块文件以及数据块校验文件在当前DataNode（和client一个物理机）上的本地路径。
+* `refreshNamenodes()`:用于触发指定的DataNode重新加载配置文件，停止服务那些已经从配置文件中删除的块池，开始服务新添加的块池。
+* `deleteBlockPool();`:用于从指定的DataNode删除指定的块池。
+* `getHdfsBlocksMetadata();`:获取是存储在指定的DataNode的哪个卷上的。
+* `shutdownDatanode();`:用于关闭一个数据节点。
+* `getDatanodeInfo();`:获取指定的DataNode的信息：DataNode运行和配置的HDFS版本，以及DataNode的启动时间等信息。
+* `startReconfiguration();`:触发DataNode异步地从磁盘加载并应用配置。
+* `getReconfigurationStatus();`:用于查询上一次触发的重新加载配置操作的运行情况。
+
+## DatanodeProtocol
+
+* 
