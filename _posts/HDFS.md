@@ -193,3 +193,28 @@ tags:
 
 # 流式接口
 
+* 流式接口是HDFS中基于TCP或者HTTP实现的的接口。
+* 包括：
+  1. 基于TCP的DataTransferProtocol;
+  2. 基于HTTP的HA架构中Active NameNode和Standby之间的接口。
+
+## DataTransferProtocol
+
+* 描述写入或者读出DataNode上的数据。
+* client和DataNode，以及DataNode和DataNode之间的数据传输都是基于这个接口的。
+* 主要方法：
+  1. `readBlock();`:从当前DateNode读取指定的数据块。
+  2. `writeBlock();`:将指定的数据块写入数据流管道中（pipeLine）。
+* 主要类：
+  * `Sender类`:发送DataTransferProtocol请求；
+  * `Receiver类`:接收DataTransferProtocol请求；
+  * 调用示例：
+  ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201217190221.jpg)
+
+## Active Namenode和Standby之间的HTTP接口
+
+* 未采用HA的NameNode会定期将**命名空间**保存到**fsimage**中，但是NameNode会先将**对命名空间的修改操作**保存到editlog文件，然后再定期合并fsimage和editlog文件。
+  * 合并fsimage和editlog文件十分耗费资源，引进Secondary NameNode来专门负责合并。
+* 采用了HA的HDFS，会让Standby NameNode不断将读入的editlog文件写到自己的fsimage中，始终维持一个最新版本的命名空间。
+  * Standby NameNode需要**定期将自己的命名空间写入一个新的fsimage**，并通过**HTTP协议**将这个fsimage文件传回Active NameNode。这就是二者之间的HTTP接口的作用。
+
