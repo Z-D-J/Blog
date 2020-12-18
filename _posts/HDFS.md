@@ -80,7 +80,7 @@ tags:
 
 * `getBlockLocations()`:客户端调用该方法获取指定范围内所有**数据块的位置信息**。
   * 参数：HDFS文件的**文件名**和**读取范围**。
-  * 返回值：文件指定范围内所有数据块的文件名以及它们的位置信息，用**LocatedBloclks对象**封装。
+  * 返回值：文件指定范围内所有数据块的文件名以及它们的位置信息，用**LocatedBlocks对象**封装。
     * 数据块的位置信息是指所有存储这个数据块副本的DataNode信息，这些DataNode会以与当前客户端的距离远近排序。
   * 定义：`public LocatedBlocks getBLockLocations(String src, long offset,long length);`
   * 使用：client会首先调用`getBlockLocations()`方法获取文件的所有数据块的位置，然后根据这些**位置信息**从DataNode读取数据块。
@@ -217,4 +217,82 @@ tags:
   * 合并fsimage和editlog文件十分耗费资源，引进Secondary NameNode来专门负责合并。
 * 采用了HA的HDFS，会让Standby NameNode不断将读入的editlog文件写到自己的fsimage中，始终维持一个最新版本的命名空间。
   * Standby NameNode需要**定期将自己的命名空间写入一个新的fsimage**，并通过**HTTP协议**将这个fsimage文件传回Active NameNode。这就是二者之间的HTTP接口的作用。
+
+# HDFS的主要流程
+
+## 客户端读流程
+
+1. 打开HDFS文件：
+   1. 首先调用：`DistributedFileSystem.open()`方法打开HDFS文件，该方法在底层调用`ClientProtocol.open()`方法；
+   2. 返回得到一个HdfsDataInputStream对象用于读取数据块。
+2. 从NameNode获取DataNode地址：
+   1. 调用`ClientProtocol.getBlockLocations()`方法向NameNode获取该HDFS文件起始数据块的位置。
+   2. 按照距离Client的距离远近来选取最优的DataNode。
+3. 连接到DataNode读取数据块：
+   1. Client通过`DFSInputStream.read()`方法连接到最优的DataNode来读取数据块；
+   2. 数据会以**数据包(packet)**为单位，通过**流式接口**从DataNode传到Client。
+   3. 一个数据块读取到末尾时DFSInputStream对象会再调用`ClientProtocol.getBlockLocations()`方法获取下一个数据块的地址。
+4. 关闭输入流：
+   1. 完成文件读取后，通过`HdfsDataInputStream()`方法，关闭输入流。
+5. 如果数据出现损坏DFSStream会尝试从存有该数据块副本的其它DataNode读取数据。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201218100559.jpg)
+
+## 客户端写流程
+
+1. 创建文件：
+   1. 首先调用`DistributedFileSystem.create()`方法在HDFS文件系统中创建一个新的空文件。这个方法在底层通过调用`ClientProtocol.create()`方法通知NameNode创建新文件。
+   2. 之后，该方法会返回一个HdfsDataOutputStream对象，这个对象在底层封装了DFSOutputStream对象。
+2. 建立数据流管道：
+   1. DFSOutputStream对象首先调用`ClientProtocol.addBlock()`方法向NameNode申请一个空数据块，这个方法返回一个LocatedBlock对象,这个对象包含了存储这个数据块的所有DataNode的位置信息。
+   2. 根据返回的DataNode的位置信息，通过`DFSOutputStream.write()`方法建立数据流管道。
+3. 通过数据流管道写入数据：
+   1. 写入DFSOutputSteam的数据首先被缓存在数据流中；
+   2. 之后这些数据被切分成一个个数据包通过数据流管道发送到DataNode。
+   3. 每个数据包中都含有一个确认包，它会逆序通过数据流管道回到输入流；
+   4. 在确认所有DataNode都已经写入这个数据包后，就会从缓存队列删除这个数据包；
+   5. 当一个数据块被写满之后，就会再调用`addBlock()`方法申请新的数据块，重复上述操作。
+4. 关闭输入流并提交文件：
+   1. 完成对整个文件的写入之后，就会调用`close()`方法关闭输入流，并调用`ClientProtocol.complete()`通知NameNode提交这个文件中的所有数据块。
+5. DataNode汇报
+   1. 当DataNode成功接收一个数据块时，会调用`Datanode.blockRecievedAndDeleted()`向NameNode汇报；
+   2. 之后，NameNode会更新内存中数据块与DataNode之间的对应关系。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201218113317.jpg)
+
+## 客户端追加写流程
+
+1. 打开已有的HDFS文件：
+   1. 调用`DistributedFileSystem.append();`方法打开一个**已有的HDFS文件**
+   2. append方法会首先调用`ClientProtocol.append();`方法获取最后一个数据块的位置信息，如果最后一个数据快已满则返回null。
+   3. 之后创建到这个数据块的DFSOutputStream输出流对象。
+2. 建立数据流管道：
+   1. DFSOutputStream类判断最后一个数据块是否已经写满；
+   2. 如果没有写满，根据第一步返回的数据块位置信息，建立到该数据块的数据流管道；
+   3. 如果已经写满了，则向NameNode新申请一个数据块再建立输出流管道。
+3. 通过数据流管道写入数据；类似
+4. 关闭数据流并提交文件：类似
+
+## DataNode启动，心跳以及执行名字节点指令流程
+
+* Datanode启动流程：
+  1. **握手**：Datanode首先通过`DatanodeProtocol.versionRequese()`方法获取NameNode的版本号等信息，与自身的软件、版本号等进行比较，确保它们是一致的。
+  2. **注册**：Datanode通过`DatanodeProtocol.register()`方法向NameNode注册；
+  3. **汇报**：注册成功后，DataNode会将本地存储的所有数据块和缓存的数据块信息上传到NameNode，NameNode利用这些信息建立数据块到DataNode的对应关系。
+* DataNode启动之后会定期向NameNode发送心跳。
+* DataNode成功的添加或者删除了一个数据块时会向NameNode汇报，NameNode根据这些汇报的信息，更新数据块和Datanode对应关系。
+
+# Hadoop RPC
+
+* RPC（Remote Peocedure CallProtocol 远程过程调用协议），是基于IPC(Inter-Process Communications 进程间通信),模型实现的通信框架。
+* 工作模式:客户端/服务器模式，请求程序是一个客户端，服务提供程序就是一个服务器。
+  1. 客户端首先会发送一个有参数调用的请求到服务器端；
+  2. 服务器端会在睡眠状态等待调用请求到达，之后执行调用请求，向客户端发送响应信息。
+  3. 客户端接收响应信息，远程调用结束。
+* 框架结构：
+  * 通信模块：基于网络通信协议的网络通信模块。
+  * 客户端Stub程序：客户端和服务器端都具有Stub程序，主要用于发起和响应请求。
+  * 服务器端Stub程序：接收调用请求，触发对应的服务程序，并返回响应信息。
+  * 请求程序：调用客户端Stub程序，然后接收服务器Stub程序返回的响应信息。
+  * 服务程序：接收来自服务器端的调用请求，执行对应的操作，并返回结果。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201218180708.jpg)
+
 
