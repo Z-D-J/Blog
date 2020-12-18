@@ -291,4 +291,26 @@ var flag = reg.test(username);
 
 * 是一个**全局对象**，这个对象中封装的方法**不需要任何对象**就可以直接调用，如：`方法名();`
 * 方法：
-  * `encodeURI()`
+  * URL码：因为网络协议中不支持中文，所以需要将汉字转为URL码来传输。
+  * `encodeURI()`:url编码
+  * `decodeURI()`:URL解码，与encodeURI配套使用。
+  * `encodeURICompoent()`:也是进行URL编码，但是编码的字符更多（对有些符号也会进行编码）。
+  * `decodeURICompoent()`:也是进行URL解码，配套使用。
+  * 示例：
+```javascript
+var str = "张杰";
+var encode = encodeURI(str);
+```
+  * `parseInt()`:将字符串转为数字
+    * 逐一判断每一个字符是否为数字，直到不是数字为止，将前边的数字部分转为number。
+```javascript
+var str = "123abc";
+var number = paseInt(str);//结果是123
+```
+  * `isNaN()`:判断一个值是否为NaN
+    * NaN六亲不认，连自己都不认，NaN参与的所有`==`比较，结果都是false。
+    * 因为`NaN == NaN`结果也是false，所以设计这个方法来判断一个值是否为NaN。
+  * `eval()`:将Javascript的字符串转换为脚本代码来执行。示例：
+```javascript
+var jscode="alert(123)";
+eval(jscode);//等效于直接写alert（123）；
