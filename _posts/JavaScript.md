@@ -318,6 +318,17 @@ eval(jscode);//等效于直接写alert（123）；
 
 # BOM
 
+* 概念：Browser Object Model 浏览器对象模型
+* 功能：将浏览器各个组成部分封装成对象
+* 组成：
+  * **Window**：浏览器窗口对象
+  * **History**:历史记录对象
+  * **Location**：地址栏对象
+  * Screen：显示器屏幕对象
+  * Navigator:浏览器对象
+
+
+
 # DOM
 
 * 功能：控制html文档的内容。
@@ -358,3 +369,32 @@ eval(jscode);//等效于直接写alert（123）；
 
 ## 事件
 
+* 功能：某些组件被执行了某些操作后，触发某些代码的执行。
+* 绑定事件：
+  1. 直接在html标签上，指定事件的属性（操作），属性值就是**js代码**。
+     1.  事件：`onclicks`-- 单击事件
+     2.  示例：`<img src="img/on.gif" onclicks="alert("我被点了");">`
+  2. 通过js获取元素对象，指定事件属性，设置一个函数
+     1. 示例：
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+<img id="light" src="img/off.jpg" >
+<script>
+    function fun() {
+      alert("我被点了");
+    }
+
+    var light = document.getElementById("light");
+    light.onclicks=fun;
+</script>
+</body>
+</html>
+```
