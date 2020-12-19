@@ -314,3 +314,47 @@ var number = paseInt(str);//结果是123
 ```javascript
 var jscode="alert(123)";
 eval(jscode);//等效于直接写alert（123）；
+```
+
+# BOM
+
+# DOM
+
+* 功能：控制html文档的内容。
+* 获取页面的标签（元素）对象
+  * `document.getElementByID("id值");`:通过元素的ID获取元素对象，返回一个Element对象。
+* 操作Element对象：
+  1. 修改属性值：
+    * 明确获取的对象是什么元素类型；
+    * 通过API查看对象里有哪些属性；
+    * 通过`element.属性 = ...`的方式修改属性值。
+  2. 修改标签内容：
+    1.获取元素对象
+    2.使用innerHTML属性修改标签体内容
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+<h1 id="title">悔创阿里杰克马</h1>
+<img id="light" src="img/off.jpg">
+<script>
+    var light = document.getElementById("light");
+    alert("我要换图片")；
+    light.src="img/on.jpg";
+    var title = document.getElementById("title");
+    alert("我要换标题");
+    title.innerHTML="不识妻美刘强东";
+</script>
+</body>
+</html>
+```   
+
+## 事件
+
