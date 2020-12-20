@@ -396,9 +396,47 @@ eval(jscode);//等效于直接写alert（123）；
 
 # DOM
 
-* 功能：控制html文档的内容。
-* 获取页面的标签（元素）对象
-  * `document.getElementByID("id值");`:通过元素的ID获取元素对象，返回一个Element对象。
+* 概念：Document Object Model 文档对象模型
+* 功能：将标记语言文档的各个组成部分，封装为对象。可以使用这些对象，对**标记语言文档进行CRUD的动态操作**。
+* DOM将HTMl表达为一个**树**型结构
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201220211801.jpg)
+* W3C DOM标准被分为3个不同的部分：
+  * 核心DOM：针对**任何结构化文档**的标准模型。
+    * Document:文档对象
+    * Element:元素对象
+    * Attribute:属性对象
+    * Text：文本对象
+    * Comment：注释对象
+    * Node：节点对象，其余5个对象的父对象。
+  * XML DOM：针对**XML文档**的标准模型；
+  * HTML DOM：针对**HTML文档**的标准模型。
+
+## 核心DOM
+
+### Document对象
+
+* 创建（获取）：在**HTML DOM模型**中可以使用**window对象**来获取
+  * `window.document;`
+  * `document`;
+* 获取页面的**元素（标签）**对象
+  * `getElementByID("id值");`:通过元素的ID获取元素对象，返回**一个**Element对象。因为id值一般是唯一的。
+  * `getElementsByTagName("标签名");`:根据元素名称（即html标签名）获取元素对象们。返回值是一个**数组**。
+  * `getElementsByClassName("class属性值);`:根据class属性值来获取元素对象们。返回值是一个数组。
+  * `getElmentsByName("name属性值");`:根据name属性值来获取元素对象们。返回值是一个数组。
+  * 示例：
+```html
+<div>div</div>
+<script>
+var div = document.getElementsByTagName("div");
+alert(div.length);
+</script>
+```
+* **创建**其它**DOM对象**
+  * `createAttribute(name);`：创建具有指定名称的属性节点，并返回新的Attr对象。
+  * `createComment();`：创建注释节点。
+  * `creatElement();`：创建**元素节点**
+  * `createTextNode();`:创建文本节点
+  * 示例：`var table = document.createElement("table");`
 * 操作Element对象：
   1. 修改属性值：
     * 明确获取的对象是什么元素类型；
@@ -431,6 +469,23 @@ eval(jscode);//等效于直接写alert（123）；
 </body>
 </html>
 ```   
+
+### Elment对象
+
+* 获取（创建）：通过**doucument**来获取和创建。
+* 方法：
+  * `removeAttribute();`:删除属性
+  * `setAttribute();`:设置属性
+  * 示例：
+```html
+<a>试一试</a>
+
+<script>
+var element_a = document.getElmentsByTagName("a")[0];
+element_a.setAttribute("href", "https://www.baidu.com");
+element_a.removeAttribute("href");
+</script>
+```
 
 ## 事件
 
