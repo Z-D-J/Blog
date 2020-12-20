@@ -369,6 +369,28 @@ eval(jscode);//等效于直接写alert（123）；
     }
 </script>
 ```
+* 属性：
+  * 获取其它BOM对象
+    * history;
+    * location;
+    * navigation;
+    * screen;
+    * 示例：
+    * `var h1 = window.history;`与`var h2 = history;`等效。
+  * 获取DOM对象
+    * document等
+    * 示例：`document.getElementById()`与`window.document.getElementById();`等效。
+
+## Location对象
+
+* 创建（获取）
+  *  通过window对象的属性来获取。`var l1 = window.location;`与`var l2 = location;`等效。
+* 方法：
+  * `reload();`:重新加载当前文档
+* 属性：
+  * `herf`:设置或者返回完整的URL。
+    * 获取：`var href = location.href;`
+    * 设置：`location.herf = "http://baidu.com";`
 
 
 
