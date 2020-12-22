@@ -6,6 +6,7 @@ tags:
 
 # Git
 
+[官方文档](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup)
 ## Git简介
 
 * Git是一个开源的分布式版本控制系统;
