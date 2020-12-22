@@ -486,6 +486,88 @@ element_a.setAttribute("href", "https://www.baidu.com");
 element_a.removeAttribute("href");
 </script>
 ```
+### Node对象
+
+* 节点可以是元素节点，属性节点，文本节点等。
+* 所有DOM对象都可以被认为是一个节点。
+* 方法：
+  * CRUD DOM树：
+    * `appendChild();`:向节点的子节点列表的结尾添加新的子节点。
+    * `removeChild();`:删除（并返回）当前节点的子节点。
+    * `replaceChild();`:用新节点替换一个子节点。
+* 属性：
+  * `parentNode`:返回节点的父节点。
+* 示例：
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+    <!--设置div的样式-->
+        div {
+            border : 1px solid red;
+        }
+        #div1 {
+            width: 200px;
+            height: 200px;
+        }
+
+        #div2 {
+            width:50px;
+            height: 20px;
+        }
+
+        #div3 {
+            width:50px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!--div1的子节点为div2-->
+<div id="div1">
+    <div id="div2">div2</div>
+    div1
+</div>
+
+<div id="div3">div3</div>
+
+<!--用超链接来实现按钮的功能-->
+
+<!--删除子节点的链接-->
+<!--将href设置为javascript:void(0);可以去除href跳转的功能，而保留接收点击的功能-->
+<a href="javascript:void(0);" id="del">删除子节点</a>
+<!--添加子节点的链接-->
+<a href="javascript:void(0);" id="add"> 添加子节点</a>
+
+<script>
+    
+    //获取删除字节点的超链接对象
+    var element_a = document.getElementById("del");
+    //绑定点击事件，点击事件绑定删除子节点的函数
+    element_a.onclick = function () {
+        var div1 = document.getElementById("div1");
+        var div2 = document.getElementById("div2");
+
+        div1.removeChild(div2);
+    }
+
+    var element_a1 = document.getElementById("add");
+
+    element_a1.onclick = function () {
+        var div1 = document.getElementById("div1");
+        var div3 = document.getElementById("div3");
+
+        div1.appendChild(div3);
+    }
+</script>
+</body>
+</html>
+```
 
 ## 事件
 
