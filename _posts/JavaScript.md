@@ -687,6 +687,59 @@ element_a.removeAttribute("href");
 ## 事件
 
 * 功能：某些组件被执行了某些操作后，触发某些代码的执行。
+* **事件**：某些操作。如：单击，双击，键盘按下了，鼠标移动了。。。
+* **事件源**：组件。如：按钮，文本输入框。。。
+* **监听器**：要执行的代码。
+  * 监听器中的的`this`指向引发该监听器的**事件源对象**。
+* **注册监听**：将事件，事件源，监听器**结合**在一起。当事件源发生了某个事件，则触发执行某个监听器代码。 
+* 常见事件：
+  * 点击事件：
+    * `onclick`:单击事件
+    * `ondblclick`:双击事件
+  * 焦点事件：
+    * `onblur`:失去焦点
+      * 一般用于表单校验。
+    * `onfocus`:元素获得焦点
+  * 加载事件：
+    * `onload`:一张页面或者一幅图像完成加载； 
+      * 一般用在window对象或者body对象上
+  * 鼠标事件：
+    * `onmousedown`:鼠标按钮被按下
+      * 定义方法时定义一个形参，接收event对象，event对象的button属性可以获取鼠标上哪个键被按下了的信息。
+    * `onmousesup`:鼠标按钮被松开
+    * `onmousemove`:鼠标按钮被移动
+    * `onmouseover`:鼠标移到某元素之上
+    * `onmouseout`:鼠标从某元素上移开
+  * 键盘事件：
+    * `onkeydown`:某个键盘按键被按下
+      * 定义方法时定义一个形参，接收event对象，event对象的keycode属性可以获取键盘上哪个键被按下了的信息。
+    * `onkeyup`:某个键盘按键被松开
+    * `onkeypress`:某个键盘按键被按下并松开
+  * 选择和改变
+    * `onchange`:域的内容被改变
+    * `onselect`:文本被选中
+  * 表单事件：
+    * `onsubmit`:确认按钮被点击
+      * 可以阻止表单的提交，进行表单校验。
+        * 监听器方法返回false，表单被阻止提交。
+    *  * `onreset`；重置按钮被点击
+    *  示例：
+```html
+<script>
+document.getElementById("form").onsubmit = function () {
+  return false;
+}
+
+//如果是调用函数
+<form action="#" id="form" onclick = "return checkFalse()">
+</form>
+
+function checkFalse() {
+  return false;
+}
+</script>
+```
+   
 * 绑定事件：
   1. 直接在html标签上，指定事件的属性（操作），属性值就是**js代码**。
      1.  事件：`onclicks`-- 单击事件
@@ -794,4 +847,4 @@ fun1();
 </body>
 </html>
 ```
-* 本质是用Js来控制css。
+* 本质是用Js来控制css。 
