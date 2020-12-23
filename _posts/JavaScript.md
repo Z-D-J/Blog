@@ -568,6 +568,113 @@ element_a.removeAttribute("href");
 </body>
 </html>
 ```
+## 动态表格示例
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div {
+            text-align:center;
+            margin:50px;
+        }
+
+        table {
+            border:1px solid;
+            margin:auto;
+            width:500px;
+        }
+        td,th{
+            text-align:center;
+            border:1px solid;
+        }
+
+    </style>
+</head>
+<body>
+
+<div>
+    <input type="text" id="id" placeholder="请输入编号">
+    <input type="text" id="name" placeholder="请输入姓名">
+    <input type="text" id="gender" placeholder="请输入性别">
+    <input type="button" value="添加" id="btn_add">
+</div>
+
+<table>
+    <caption>学生信息表</caption>
+    <tr>
+        <th>编号</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>操作</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>zhangjie</td>
+        <td>man</td>
+        <td><a href="javascript:void(0);">delete</a></td>
+    </tr>
+</table>
+
+<script>
+    /*
+        1.添加
+            1.给添加按钮绑定单击事件
+            2.获取文本框的内容
+            3.创建td，设置td中的文本为文本框的内容
+            4.创建tr
+            5.将td添加到tr中
+            6.获取table，将tr添加到table中
+     */
+    var btn_add = document.getElementById("btn_add");
+    btn_add.onclick = function () {
+        
+        //获取输入框的内容value
+        var id = document.getElementById("id").value;
+        var name = document.getElementById("name").value;
+        var gender = document.getElementById("gender").value;
+
+        //创建td节点
+        var td_id = document.createElement("td");
+        //将文本内容添加到节点中
+        var text_id = document.createTextNode(id);
+        td_id.appendChild(text_id);
+
+        var td_name = document.createElement("td");
+        var text_name = document.createTextNode(name);
+        td_name.appendChild(text_name);
+
+
+        var td_gender = document.createElement("td");
+        var text_gender = document.createTextNode(gender);
+        td_gender.appendChild(text_gender);
+
+        var td_a = document.createElement("td");
+        var ele_a = document.createElement("a");
+        ele_a.setAttribute("href","javascript:void(0);")
+        var text_a = document.createTextNode("delete");
+        ele_a.appendChild(text_a);
+        td_a.appendChild(ele_a);
+
+        //将td节点添加到tr节点中
+        var tr = document.createElement("tr");
+        tr.appendChild(td_id);
+        tr.appendChild(td_name);
+        tr.appendChild(td_gender);
+        tr.appendChild(td_a);
+
+        //将tr节点添加到table节点中去。
+        var table = document.getElementsByTagName("table")[0];
+        table.appendChild(tr);
+    }
+
+</script>
+</body>
+</html>
+```
 
 ## 事件
 
