@@ -570,6 +570,7 @@ element_a.removeAttribute("href");
 ```
 ## 动态表格示例
 
+* 可以动态添加和删除表格中的数据。
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -615,7 +616,7 @@ element_a.removeAttribute("href");
         <td>1</td>
         <td>zhangjie</td>
         <td>man</td>
-        <td><a href="javascript:void(0);">delete</a></td>
+        <td><a href="javascript:void(0);" onclick="del_tr(this)">delete</a></td>
     </tr>
 </table>
 
@@ -631,7 +632,7 @@ element_a.removeAttribute("href");
      */
     var btn_add = document.getElementById("btn_add");
     btn_add.onclick = function () {
-        
+
         //获取输入框的内容value
         var id = document.getElementById("id").value;
         var name = document.getElementById("name").value;
@@ -655,6 +656,7 @@ element_a.removeAttribute("href");
         var td_a = document.createElement("td");
         var ele_a = document.createElement("a");
         ele_a.setAttribute("href","javascript:void(0);")
+        ele_a.setAttribute("onclick", "del_tr(this)");
         var text_a = document.createTextNode("delete");
         ele_a.appendChild(text_a);
         td_a.appendChild(ele_a);
@@ -669,6 +671,12 @@ element_a.removeAttribute("href");
         //将tr节点添加到table节点中去。
         var table = document.getElementsByTagName("table")[0];
         table.appendChild(tr);
+    }
+
+    function del_tr(obj) {
+        var table = obj.parentNode.parentNode.parentNode;
+        var tr = obj.parentNode.parentNode;
+        table.removeChild(tr);
     }
 
 </script>
@@ -707,3 +715,83 @@ element_a.removeAttribute("href");
 </body>
 </html>
 ```
+
+## HTML DOM
+
+* 标签体的设置和获取：innerHTML
+* 使用html元素对象的属性
+* 控制样式
+
+### inner HTML
+
+* 作用：修改标签体内部的内容。
+* 示例：
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<div>
+    div
+</div>
+
+<script>
+  function fun1() {
+      //获取div元素
+      var div = document.getElementsByTagName("div")[0];
+    //将标签内的内容更改
+      div.innerHTML = "更改"
+      //向标签内追加内容
+      div.innerHTML += "<input type='text'>";
+  }
+fun1();
+
+</script>
+</body>
+</html>
+```
+
+### 控制元素的样式
+
+1. 使用元素的style属性来设置。示例：
+```html
+<script>
+  var div1 = document.getElementById("div1");
+  div1.onclick = function () {
+      div1.style.border = "1px solid red";
+  }
+</script>
+```
+   * style后面接的是css的属性，等号后面是css的属性值
+2.提前定义好类选择器的样式，将元素的className与类选择器的类名相对应来设置样式。示例：
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .d1 {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+<div id="div1">
+    div
+</div>
+
+<script>
+  var div1 = document.getElementById("div1");
+  div1.onclick = function () {
+      div1.className = "d1";
+  }
+</script>
+</body>
+</html>
+```
+* 本质是用Js来控制css。
