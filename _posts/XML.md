@@ -53,3 +53,32 @@ tags:
 
 # 约束
 
+* 约束：规定XML文档的书写规则
+* XML与约束之间的关系图：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201225180146.png)
+* 分类：
+  * DTD:简单的约束技术
+  * Schema:复杂的约束技术
+* DTD：
+  * [参考资料](https://www.w3school.com.cn/dtd/dtd_intro.asp)
+  * 约束文件名的后缀为`.dtd`
+  * 引入dtd文档到xml文档中，之后如果xml的书写不满足dtd文档的规范，则会报错。
+    * 内部dtd：将约束规则定义在xml文档中
+      * 样式；`<!DOCTYPE 根标签名 [dtd约束规则内容]>`
+    * 外部dtd：将约束的规则定义在外部的dtd文件中
+      * 本地：`<!DOCTYPE 根标签名 SYSTEM "dtd文件在本机的位置（相对路径）">`
+      * 网络:`<!DOCTYPE 根标签名 PUBLIC "dtd在本地的文件名""dtd文件在网络的位置（URL）">`
+  * 无法规定标签内的内容
+* Schema:
+  * [参考资料](https://www.w3school.com.cn/schema/index.asp)
+  * 是DTD的替代者，可以规定标签体内的内容格式。
+  * Schema文档的后缀名为`.xsd`
+  * 在xml文档中引入Schema文档：
+    1. 填写xml文档的的**根元素**
+    2. 引入xsi前缀：`xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"`,后面的内容又很多种选择，可以根据ide的提示内容来选择。
+    3. 引入xsd文件的命名空间：`xsi:schemaLocation="http://www.w3school.com.cn note.xsd"`前面的内容可以自定义，后面的内容是xsd文件名
+    4. 为每一个xsd约束声明一个前缀，作为标识：`xmlns="http://www.w3school.com.cn`或者`xmlns:a="http://www.w3school2.com.cn`,如果没有指定前缀的话则默认为空前缀。
+    5. 引入的每个xsd文件对应一个前缀，该xsd文件内的标签在使用时必须带上该xsd文件的前缀，（空前缀除外）。如：`<students></students>`和`<a:students></a:students>`
+
+# 解析
+
