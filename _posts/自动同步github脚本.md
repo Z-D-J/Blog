@@ -35,3 +35,5 @@ start cmd /c "cd C:\02Permanent\Blog\source && git pull orgin master"
 ```
 * 设置开机自动运行：
   * 将bat文件放在：C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup下，开机即可自动运行。
+
+**开关机自动执行均失败，未能找到可行办法。。。**
