@@ -108,13 +108,42 @@ tags:
      1. 在[官网](https://jsoup.org/download)下载jar包
   2. 获取Document对象
      1. 获取对应xml的路径：`String path = JsoupDemo1.class.getClassLoader().getResource("student.xml").getPath();`即：`String path = 类名.class.getClassLoader().getResource("xml文档名").getPath();`
-     2. 解析xml文档，加载文档进内存，获取DOM树（对应Document对象）：`Document document = Jsoup.parse(new File(path),"utf-8");` 即：`Document document = Jsoup.parse(new File(path),"和xml文档一致得字符集");`
+     2. 解析xml文档，加载文档进内存，获取DOM树（对应Document对象）：`Document document = Jsoup.parse(new File(path),"utf-8");` 即：`Document document = Jsoup.parse(new File(path),"和xml文档一致的字符集");`
   3. 获取对应的标签（Element对象）
+     1. `Elements elements = document.getElementsByTagName("student");`
   4. 获取数据
-
      1. 获取元素对象：`Elements elements = document.getElementsByTag("name");`即：`Elements elements = Document对象名.getElementsByTag("标签名");`
-     2. Elements是一个类似集合的对象，它里面会依次存好符合条件得所有元素对象。
-  4. 获取数据
+     2. Elements是一个类似集合的对象，它里面会依次存好符合条件的所有元素对象。
+        1. 获取指定对象:`elements.get(0);`
+        2. 获取指定对象，如：`elemets.get(0).text();`
+* 示例：
+```java
+package xml.jsoup;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.File;
+import java.io.IOException;
+
+public class JsoupDemo1 {
+
+    public static void main(String[] args) throws IOException {
+        //1.获取Document对象
+        //1.1获取xml文件的路径
+        String path = JsoupDemo1.class.getClassLoader().getResource("student.xml").getPath();
+        //1.2获取Document对象
+        Document document = Jsoup.parse(new File(path), "UTF-8");
+
+        //2.获取对应的xml标签
+
+        Elements e =  document.getElementsByTag("student");
+
+        System.out.println(e.text());
+    }
+}
+```
 
 ## 对象的使用
 
@@ -122,8 +151,8 @@ tags:
   * parse方法：解析html或者xml文档，返回Document对象
     * `parse(File in ,String charseName)`:解析本地的xml或html文件
     * `parse(String html)`:解析xml或者html字符串；
-    * `parse(URL url, int timeoutMills);`:通过网络路径获取指定的html或xml的文档对象。
-      * timeoutMills：指的是超时时间，如果超过这个时间还没有响应的话则认为获取失败。
+    * `parse(URL url, int timeoutMills);`:通过网络路径获取指定的html或xml的文档对象。（可以用来爬虫）
+      * timeoutMills：指的是**超时时间**，如果超过这个时间还没有响应的话则认为获取失败。
 * Document:文档对象，代表内存中的DOM树
 * Elements：元素ELement对象的集合，可以当作`ArrayList<Element>`来使用
 * Element：元素对象
