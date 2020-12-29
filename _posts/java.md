@@ -102,6 +102,7 @@ tags:
 ## 条件运算符
 
 * `expreBool?expression1 : expression2`：条件为true则执行表达式1，否则执行2.
+* 如：`int c = (a > b)? 1 : 2;`
 
 # 数据类型
 
@@ -236,12 +237,11 @@ switch (控制表达式) {
     default:
         语句
         ...
-        break;
 }
 ```
 * 控制表达式，只能是**整型**的结果，布尔型也不行；
 * 每个case后面都要有**break**语句。
-* 如果所有的case都不匹配，就执行default后面的语句；如果没有设置default语句，就什么也不做。(default后面直接接冒号，没有条件。default后面的语句也可以放break来终止。）
+* 如果所有的case都不匹配，就执行default后面的语句；如果没有设置default语句，就什么也不做。(default后面直接接冒号，**没有条件**。default后面的语句**不用**放break来终止。）
 
 ## 循环语句
 
