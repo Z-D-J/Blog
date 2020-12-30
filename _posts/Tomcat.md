@@ -7,7 +7,7 @@ tags:
 
 # Tomcat简介
 
-* Tomcat 服务器是一个免费的开放源代码的Web 应用服务器，属于轻量级应用[服务器](https://baike.baidu.com/item/服务器)，在中小型系统和并发访问用户不是很多的场合下被普遍使用，是开发和调试JSP 程序的首选。Tomcat是一个使别人能够访问我写的页面的一个程序。
+* Tomcat 服务器是一个免费的开放源代码的**Web 应用服务器**，属于轻量级应用[服务器](https://baike.baidu.com/item/服务器)，在中小型系统和并发访问用户不是很多的场合下被普遍使用，是开发和调试JSP 程序的首选。Tomcat是一个使别人能够访问我写的页面的一个程序。
 * Tomcat与servlet以及数据库的关系：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201008164643.png)
 
 # Tomcat的配置
@@ -17,6 +17,8 @@ tags:
 * 找到Tomcat安装目录的bin目录中的startup.bat文件，打开得到如下界面：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201008170319.jpg)
 
 * 之后再浏览器地址栏输入http://localhost:8080成功显示出如下界面，则证明Tomcat的配置成功了。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201008170513.jpg)
+
+* 如果要卸载，则删除目录即可。
 
 # Tomcat的基础知识
 
@@ -34,6 +36,14 @@ tags:
 	* `tomcat-user.xml`配置用户名密码和相关权限.
 * work文件：
   * work工作目录：该目录用于存放**jsp被访问后生成对应的server文件和.class文件**
+
+## 启动
+
+* bin/startup.bat:运行该文件
+* 访问；浏览器输入：
+  * `http://localhost:8080` 访问自己
+  * `http://别人的IP地址：8080` 访问别人
+  * 8080是Tomcat的默认端口号。
 
 
 
