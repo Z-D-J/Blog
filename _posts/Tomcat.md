@@ -10,7 +10,7 @@ tags:
 * Tomcat 服务器是一个免费的开放源代码的**Web 应用服务器**，属于轻量级应用[服务器](https://baike.baidu.com/item/服务器)，在中小型系统和并发访问用户不是很多的场合下被普遍使用，是开发和调试JSP 程序的首选。Tomcat是一个使别人能够访问我写的页面的一个程序。
 * Tomcat与servlet以及数据库的关系：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201008164643.png)
 
-# Tomcat的配置
+# Tomcat的安装
 
 * Tomcat需要jdk的支持，需要先在电脑上装上jdk，Tomcat会在环境变量中去寻找jdk的支持。
 * 去[官网](https://tomcat.apache.org)下载Windows系统的tomcat安装器：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201008165449.jpg)
@@ -44,10 +44,36 @@ tags:
   * `http://localhost:8080` 访问自己
   * `http://别人的IP地址：8080` 访问别人
   * 8080是Tomcat的默认端口号。
+  * 可能遇到的问题：
+    * 黑窗口一闪而过：
+      * 原因：没有配置好JAVA_HOME
+    * 启动报错：
+      1. 原因：端口号被占用
+      2. 解决方案：
+         1. 找到占用的端口号对应的进程，杀死该进程
+            1. `netstat -an0`
+         2. 修改自身的端口号
+            1. 修改conf/server.xml下的默认端口号
+
+## 关闭
+
+* 正常关闭
+  * bin/shutdown.bat
+  * ctrl+c
+* 强制关闭
+  * 点击启动窗口的x
 
 
+# 配置
 
-# webapps目录：
+* 部署项目的方式
+  1. 直接将项目放到webapps目录下
+     1. 创建一个项目目录，在这个目录中放置资源文件，启动这个项目需要使用在端口地址后增加`/项目目录名/资源文件名`，
+        1. `/项目目录名`:项目的的访问路径->**虚拟项目**。
+     2. 简化部署：将项目打包成一个war包，直接放到webapps目录下，tomcat会自动解压缩这个包。
+  2. 配置虚拟目录法
+
+## webapps目录部署项目
 
 * **在webapps中建立了web1目录**，下面放置我们的html文件，jsp文件，图片等等，**则web1就被当做web应用管理起来**。示例：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009103542.jpg)
 
@@ -86,29 +112,26 @@ tags:
   * 把**web站点的目录分散到其他磁盘管理就需要配置虚拟目录【默认情况下，只有webapps下的目录才能被Tomcat自动管理成一个web站点】**
   * 把web应用所在目录交给web服务器管理，这个过程称之为虚拟目录的映射。
 
-* 虚拟目录的配置方法一：
+* 虚拟目录的配置方法一（不推荐使用）：
 
   * 在其他地方创建一个web站点目录，并创建WEB-INF目录和一个html文件。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009152314.jpg)
-  * 找到Tomcat目录下/conf/server.xml文件
+  * 找到Tomcat目录下**/conf/server.xml**文件
   * 在server.xml中的<Host>节点下添加如下代码。**path表示的是访问时输入的web项目名，docBase表示的是站点目录的绝对路径**` <Context path="/web" docBase="C:\03Temporary\web"/>`
-  * 最后访问配置好的站点:`localhost:8080/web/helloworld.html`，不知为啥，不能成功显示。
+  * 最后访问配置好的站点:`localhost:8080/web/helloworld.html`.
+    * 注：需要重启tomcat，配置文件才能生效。
 
-* 虚拟目录的配置方法二：
+* 虚拟目录的配置方法二（最推荐部署项目的方法）：
 
   * 进入到conf/Catalina/localhost文件下，创建一个xml文件，**该文件的名字就是站点的名字。**（此处名为`hello3.xml`）
 
   * xml文件中的内容：
 
     ```xml
-    <?xml version="1.0" encoding="UTF-8"?> 
-    <Context 
-        docBase="C:\03Temporary\web1" 
-        reloadable="true"> 
-    </Context> 
+    <Context docBase="C:\03Temporary\web1" />  
     ```
     
   * 输入`localhost:8080/hello3/helloworld.html`来访问页面。结果如图：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009181521.jpg)
-
+  * 修改文件后就会**立即生效**，不需要重启服务器，是一种热部署的方式。 
 
 
 # 配置临时域名
