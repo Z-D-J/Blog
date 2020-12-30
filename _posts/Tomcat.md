@@ -63,7 +63,15 @@ tags:
 * 强制关闭
   * 点击启动窗口的x
 
+## 动态项目和静态项目
 
+* 目录结构：
+  * java动态项目：
+    * 项目名称
+      * WEB-INF
+        * web.xml:该项目的核心配置文件
+        * classes目录：放置了字节码文件
+        * lib目录：放置项目依赖的jar包
 # 配置
 
 * 部署项目的方式
@@ -102,9 +110,7 @@ tags:
     * 在浏览器输入`localhost:8080/web1/`得：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009151224.jpg)
       * 因为已经规定了首页为helloworld2.html所以无需指明具体的html文件。
 
-
-
-# 配置虚拟目录
+## 配置虚拟目录
 
 * 虚拟目录的作用：
 
@@ -133,6 +139,9 @@ tags:
   * 输入`localhost:8080/hello3/helloworld.html`来访问页面。结果如图：![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009181521.jpg)
   * 修改文件后就会**立即生效**，不需要重启服务器，是一种热部署的方式。 
 
+# 将Tomcat集成到IDEA
+
+* 实际操作界面和教程完全不同，如何解决？
 
 # 配置临时域名
 
