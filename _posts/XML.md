@@ -154,7 +154,67 @@ public class JsoupDemo1 {
     * `parse(URL url, int timeoutMills);`:通过网络路径获取指定的html或xml的文档对象。（可以用来爬虫）
       * timeoutMills：指的是**超时时间**，如果超过这个时间还没有响应的话则认为获取失败。
 * Document:文档对象，代表内存中的DOM树
+  * 用于获取任意Element对象：
+    * `getElementById(String id)`:根据id属性值获取唯一的element对象；
+    * `getElemnetsByTag(String tagName)`:根据标签名称获取元素对象**集合**；
+    * `getElementsByAttribute(String key)`:根据属性名称获取元素对象的**集合**
+    * `getElementsByAttributeValue(String key, String value)`:根据对应的**属性名和属性值**获取元素的集合。
 * Elements：元素ELement对象的集合，可以当作`ArrayList<Element>`来使用
 * Element：元素对象
+  * 同样的方法但是只能获取当前元素的子元素对象：
+    * `getElementById(String id)`:根据id属性值获取唯一的element对象；
+    * `getElemnetsByTag(String tagName)`:根据标签名称获取元素对象**集合**；
+    * `getElementsByAttribute(String key)`:根据属性名称获取元素对象的**集合**
+    * `getElementsByAttributeValue(String key, String value)`:根据对应的**属性名和属性值**获取元素的集合。
+  * 获取属性：
+    * `String attr(String key)`:根据属性名称获取属性值
+  * 获取文本内容：
+    * `String text()`:获取文本内容；
+    * `String html()`:获取标签体的所有内容（包括子标签的字符串内容）
 * Node：节点对象。
+  * 是Document和Element的父类。
+
+## 快速查询
+
+### selector:选择器
+
+* 使用的方法：`Elements select(String cssQuery)`;
+* 语法：
+  * cssQuery是将css选择器的写法，写到一个字符串中，可以类比css选择器理解
+  * 参照jsoup-javadoc中的网页文档查找selector理解。
+* 示例：
+```java
+//查询name标签
+Elements elements = document.select("name");
+//查询id值为zhangjie的元素
+ELements elements = document.select("#zhangjie");
+//获取student标签并且number属性值为java的age子标签
+
+//1.获取student标签并且number属性值为java
+Elements elements = document.select("student[number=\"java\"]");
+//2.获取age子标签
+Elements elemetns = document.select("student[number=\"java\"] > age");
+```
+
+### XPath
+
+[参考文档](https://www.w3school.com.cn/xpath/index.asp)
+* XPath是一门在 XML 文档中查找信息的语言。XPath 用于在 XML 文档中通过元素和属性进行导航。
+* 使用Jsoup的xpath需要额外jar包：JsoupXpath-x.x.x.jar
+* 使用步骤：
+  1. 获取Document对象
+  2. 根据Document对象创建JXDocument对象：
+     1. `JXDocument jxDocument = new JXDocument(document);`
+  3. 集合xpath语法查询
+     1. `List<JXNode> jxNodes = jxDocument.selN("xpath语法");`
+* 示例：
+```java
+//查询所有student标签
+List<JXNode> jxNodes = jxDocuement.selN("//student");
+//查询所有student标签下的name标签
+List<JXNode> jxNodes = jxDocument.selN("//student/name");
+//查询student标签下带有id属性的name标签且id属性值为zhangjie
+List<JXNode> jxNodes = jxDocument.selN("//student/name[@id='zhangjie']);
+```
+
 
