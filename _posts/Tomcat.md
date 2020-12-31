@@ -51,7 +51,8 @@ tags:
       1. 原因：端口号被占用
       2. 解决方案：
          1. 找到占用的端口号对应的进程，杀死该进程
-            1. `netstat -an0`
+            1. 找到进程：`netstat -ano`
+            2. 杀死进程：`taskkill /pid 进程号 -t -f`
          2. 修改自身的端口号
             1. 修改conf/server.xml下的默认端口号
 
