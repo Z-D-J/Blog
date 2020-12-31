@@ -14,6 +14,18 @@ tags:
 
 # 快速入门
 
+## IDEA上配置tomcat
+
+* 使用的ide是IDEA，需要先在IDEA上配置Tomcat。(需要IDEA的utilmate版).
+  1. 点击Run---EDit Configurations...
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165243.jpg)
+  2.点击左侧“+”号，找到Tomcat Server---Local。
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165641.jpg)
+  3.找到tomcat存放位置并配置到idea中：
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165926.jpg)
+
+## 编写servlet程序的步骤
+
 1. 创建**javaEE**项目
 2. 定义一个类，实现Servlet接口：`public class ServletDemo1 implements Servlet`
 3. 实现接口中的抽象方法
@@ -31,6 +43,104 @@ tags:
     </servlet-mapping>
 ```
 
+# 执行原理/解析过程
+
+1. 当服务器接受到浏览器的请求后，会解析URL路径，获取访问的**Servlet**的资源路径。
+2. 查找web.xml文件，是否有对应的`<url-pattern>`标签内容。
+3. 如果有，则再找到对应的`<servlet-class>`全类名。
+4. tomcat会将字节码文件加载进内存，并且创建其对象。
+5. 调用其方法。
+
+# 生命周期
+
+* 方法
+```java
+import javax.servlet.*;
+import java.io.IOException;
+
+public class ServletDemo1 implements Servlet {
+    /**
+     * 初始化方法
+     * 在servlet被创建时执行，只会执行一次
+     * @param servletConfig
+     * @throws ServletException
+     */
+    @Override
+    public void init(ServletConfig servletConfig) throws ServletException {
+        System.out.println("init");
+    }
+
+    /**
+     * 获取ServletConfig对象
+     * ServletConfig：Servlet的配置对象
+     * @return
+     */
+    @Override
+    public ServletConfig getServletConfig() {
+        return null;
+    }
+
+    /**
+     * 提供服务的方法
+     * 每一次Servlet被访问时，执行，可以执行多次（每刷新一次页面都会执行一次）
+     * @param servletRequest
+     * @param servletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
+        System.out.println("service");
+    }
+
+    /**
+     * 获取Servlet的一些信息，版本，作者等。
+     * @return
+     */
+    @Override
+    public String getServletInfo() {
+        return null;
+    }
+
+    /**
+     * 销毁方法
+     * 在服务器正常关闭时执行一次。
+     */
+    @Override
+    public void destroy() {
+        System.out.println("destroy");
+    }
+}
+```
+
+* 生命周期
+  1. 被创建：执行init方法，只执行一次,一般用于**获取资源**.
+     1. Servlet被创建的时间
+        1. 默认情况下，第一次被访问时（即在浏览器中访问该页面时），Servlet被创建
+        2. 可以在web.xml配置执行Servlet的创建时间：
+            * 在`<servlet>`标签下配置
+              1. 第一次被访问时创建:`<load-on-startup>`的值为负数
+              2. 在服务器启动时创建：`<load-on-startup>`的值为0或者正数。
+     2. Servlet的init方法，只执行一次，说明一个Servlet在内存中只存在一个对象，Servlet是单例的
+        1. 多个用户同时访问时，可能存在线程安全问题。
+        2. 解决：尽量不再在Servlet中定义成员变量，即使定义了，也不要修改它。
+  2. 提供服务：执行service方法，可执行多次
+     1. 每次被访问Servlet时，Service方法都会被调用一次。
+  3. 被销毁：执行destroy方法，只执行一次
+     1. Servlet被销毁时执行。
+     2. 服务器关闭时，Servlet被销毁
+     3. 只有服务器正常关闭时，才会执行destroy方法
+     4. destroy方法在Servlet被销毁之前执行，一般用于**释放资源**。
+
+## IDEA上配置tomcat
+
+* 使用的ide是IDEA，需要先在IDEA上配置Tomcat。(需要IDEA的utilmate版).
+  1. 点击Run---EDit Configurations...
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165243.jpg)
+  2.点击左侧“+”号，找到Tomcat Server---Local。
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165641.jpg)
+  3.找到tomcat存放位置并配置到idea中：
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165926.jpg)
 # HTTP协议
 
 ## HTTP协议的概念
@@ -121,19 +231,7 @@ tags:
 * 所有的**classes**文件都放在classes目录下
 * **jar文件**放在lib目录下。
 
-# 实现Servlet接口编写Servlet程序
-
-## IDEA上配置tomcat
-
-* 使用的ide是IDEA，需要先在IDEA上配置Tomcat。(需要IDEA的utilmate版).
-  1. 点击Run---EDit Configurations...
-    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165243.jpg)
-  2.点击左侧“+”号，找到Tomcat Server---Local。
-    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165641.jpg)
-  3.找到tomcat存放位置并配置到idea中：
-    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165926.jpg)
 
 
-## 编写servlet程序的步骤
 
 
