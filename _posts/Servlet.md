@@ -14,7 +14,23 @@ tags:
 
 # 快速入门
 
-1. 
+1. 创建**javaEE**项目
+2. 定义一个类，实现Servlet接口：`public class ServletDemo1 implements Servlet`
+3. 实现接口中的抽象方法
+4. 配置servlet，在web.xml中
+```xml
+<!-- 配置Servlet -->
+<servlet>
+        <servlet-name>demo1</servlet-name>
+        <servlet-class>web.ServletDemo1</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>demo1</servlet-name>
+        <url-pattern>/demo1</url-pattern>
+    </servlet-mapping>
+```
+
 # HTTP协议
 
 ## HTTP协议的概念
