@@ -11,7 +11,7 @@ tags:
 * servelet用来实现对服务器的动态资源的控制。
 * servelet就是一个**接口**，定义了java类被浏览器访问的规则。
 * 我们需要自定义一个类，这个类**实现servelet接口，复写其方法**。
-
+* Servlet带给我们最大的作用就是能够**处理浏览器带来HTTP请求**，并**返回一个响应**给浏览器，从而实现**浏览器和服务器的交互**。servlet是作用于服务器这一端。
 # 快速入门
 
 ## IDEA上配置tomcat
@@ -180,6 +180,18 @@ public @interface WebServlet {
 }
 ```
 
+# Servlet的体系结构
+
+* Servlet接口：最上层。
+* GenericServlet:实现了Servlet接口的**抽象类**,处于第二层。
+  * 将Servlet接口中的其他的方法都做了默认空实现，只将service()方法作为抽象。
+  * 将来定义Servlet的类时，可以继承GenericServlet，实现**service()方法即可**。（但是不常用）
+* HttpServlet：继承自GenricServlet的**抽象类**,处于第三层。
+  * 所有方法都没有要求实现。
+  * 对http协议的一种封装，简化操作。
+  * 使用：
+    * 定义类继承HttpServlet
+    * 复写doGet()/doPost()等方法。
 
 # HTTP协议
 
@@ -256,9 +268,7 @@ public @interface WebServlet {
 * Connection: close/Keep-Alive 【服务器告诉浏览器连接方式】
 * Date: Tue, 11 Jul 2000 18:23:51 GMT【服务器告诉浏览器回送数据的时间】
 
-## servlet的作用
 
-* Servlet带给我们最大的作用就是能够**处理浏览器带来HTTP请求**，并**返回一个响应**给浏览器，从而实现**浏览器和服务器的交互**。servlet是作用于服务器这一端。
 
 # JAVAWEB的目录结构
 
