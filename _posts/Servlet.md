@@ -23,6 +23,9 @@ tags:
     ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165641.jpg)
   3.找到tomcat存放位置并配置到idea中：
     ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165926.jpg)
+* IDEA会为每一个tomcat部署的项目单独建立一份配置文件
+  * 查看控制台的log找到这个配置文件的存储位置：`CATALINA_BASE:     /home/zestaken/.cache/JetBrains/IntelliJIdea2020.2/tomcat/Tomcat_9_0_411_tomcat3`
+* WEB-INF目录下的资源不能被浏览器直接访问。
 
 ## 编写servlet程序的步骤
 
@@ -114,7 +117,7 @@ public class ServletDemo1 implements Servlet {
 ```
 
 * 生命周期
-  1. 被创建：执行init方法，只执行一次,一般用于**获取资源**.
+  1. 被创建：执行init方法，只执行一次,一般用于**加载资源**.
      1. Servlet被创建的时间
         1. 默认情况下，第一次被访问时（即在浏览器中访问该页面时），Servlet被创建
         2. 可以在web.xml配置执行Servlet的创建时间：
@@ -132,15 +135,52 @@ public class ServletDemo1 implements Servlet {
      3. 只有服务器正常关闭时，才会执行destroy方法
      4. destroy方法在Servlet被销毁之前执行，一般用于**释放资源**。
 
-## IDEA上配置tomcat
+# 注解配置
 
-* 使用的ide是IDEA，需要先在IDEA上配置Tomcat。(需要IDEA的utilmate版).
-  1. 点击Run---EDit Configurations...
-    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165243.jpg)
-  2.点击左侧“+”号，找到Tomcat Server---Local。
-    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165641.jpg)
-  3.找到tomcat存放位置并配置到idea中：
-    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010165926.jpg)
+* Servlet3.0之后，**支持注解配置，可以不用写web.xml了。
+* 步骤：
+  1. 创建JavaEE项目，选择Servlet的版本3.0以上，**可以不创建web.xml**(也可以创建，因为注解配置会覆盖web.xml的配置)
+  2. 定义一个类，实现Servlet接口;
+  3. 复写方法;
+  4. 在类上使用`@WebServlet`注解，进行配置：
+     1. `@WebServlet(loadOnStartup="资源路径名")`与`@WebServlet(value="资源路径名")`与`@WebServlet("资源路径名")`等效。
+* `@WebServlet`注解的具体内容：
+```java
+package javax.servlet.annotation;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface WebServlet {
+    String name() default "";
+
+    String[] value() default {};
+
+    String[] urlPatterns() default {};
+
+    int loadOnStartup() default -1;
+
+    WebInitParam[] initParams() default {};
+
+    boolean asyncSupported() default false;
+
+    String smallIcon() default "";
+
+    String largeIcon() default "";
+
+    String description() default "";
+
+    String displayName() default "";
+}
+```
+
+
 # HTTP协议
 
 ## HTTP协议的概念
