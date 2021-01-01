@@ -3,9 +3,7 @@ title: HTTP协议
 date: 2021-01-01 17:40:01
 tags:
 ---
-# HTTP协议
-
-## HTTP协议的概念
+# HTTP协议的概念
 
 * **超文本传输协议（HTTP，HyperText Transfer Protocol)**是互联网上应用最为广泛的一种网络协议。所有的WWW文件都必须遵守这个标准。它是TCP/IP协议的一个应用层协议简单来说，HTTP协议就是**客户端和服务器交互**的一种通迅的格式。
 * 特点：
@@ -19,32 +17,39 @@ tags:
 * HTTP1.0协议中，客户端与web服务器建立连接后，只能获得**一个web资源**【短连接，获取资源后就断开连接】
 * HTTP1.1协议，允许客户端与web服务器建立连接后，在一个连接上获取**多个web资源**【保持连接】
 
-## HTTP请求
+# HTTP请求
 
 * 浏览器向服务器请求某个web资源时，称之为浏览器向服务器发送了一个http请求。一个完整http请求应该包含三个部分：
-  1.  请求行【描述客户端的请求方式、请求的资源名称，以及使用的HTTP协议版本号】
+  1. 请求行【描述客户端的请求方式、请求的资源名称，以及使用的HTTP协议版本号】
   2. 多个消息头【描述客户端请求哪台主机，以及客户端的一些环境信息等】
-  3. 一个空行
+  3. 一个空行：分割POST请求的请求头和请求体；
+  4. 请求体（正文：post方式才有）：封装POST请求消息的请求参数。
 
-### 请求行
+## 请求行
 
-* 请求行：`GET /java.html HTTP/1.1`。请求行中的GET称之为请求方式，之后跟请求的路径，最后是请求协议版本。请求方式有：POST,GET,HEAD,OPTIONS,DELETE,TRACE,PUT。
-* 常用的请求方式有：POST,GET
+* 请求行：`GET /java.html HTTP/1.1`。请求行中的**GET称之为请求方式，之后跟请求的路径，最后是请求协议版本**。请求方式有：POST,GET,HEAD,OPTIONS,DELETE,TRACE,PUT。
+* 常用的请求方式有：**POST,GET**
   * 一般来说，当我们点击超链接，通过地址栏访问都是get请求方式。通过表单提交的数据一般是post方式。
   * 可以简单理解GET方式用来**查询数据**,POST方式用来**提交数据**，get的提交速度比post**快**。
-  * GET方式：在URL地址后附带的参数是有限制的，其**数据容量通常不能超过1K**。
-  * POST方式：可以在请求的实体内容中向服务器**发送数据，传送的数据量无限制**。
-
+  * GET方式：
+    * 请求参数在请求行中（即url后）
+    * 请求的url是有限制的。
+  * POST方式：
+    * 请求的参数在请求体中;
+    * 请求的url长度没有限制。
 ### 请求头
 
+* 格式：`请求头名称：请求头值`
+* **User-Agent**: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)【浏览器告诉服务器，我访问你使用的浏览器的版本信息】
+  * 可以在服务器端捕获该头的信息，解决浏览器的兼容问题。
+* **Referer**: http://www.it315.org/index.jsp【浏览器告诉服务器，当前请求是从那个页面来的---反盗链】
+  * 可以用作**反盗链**和**统计流量来源信息**。
 * Accept: text/html,image/* 【浏览器告诉服务器，它支持的数据类型】
 * Accept-Charset: ISO-8859-1 【浏览器告诉服务器，它支持哪种字符集】
 * Accept-Encoding: gzip,compress 【浏览器告诉服务器，它支持的压缩格式】
 * Accept-Language: en-us,zh-cn 【浏览器告诉服务器，它的语言环境】
 * Host: www.it315.org:80【浏览器告诉服务器，它想访问哪台主机】
 * If-Modified-Since: Tue, 11 Jul 2000 18:23:51 GMT【浏览器告诉服务器，缓存数据的时间】
-* Referer: http://www.it315.org/index.jsp【浏览器告诉服务器，客户机是从那个页面来的---反盗链】
-* 8.User-Agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)【浏览器告诉服务器，浏览器的内核是什么】
 * Cookie【浏览器告诉服务器，带来的Cookie是什么】
 * Connection: close/Keep-Alive 【浏览器告诉服务器，请求完后是断开链接还是保持链接】
 * Date: Tue, 11 Jul 2000 18:23:51 GMT【浏览器告诉服务器，请求的时间】
