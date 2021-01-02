@@ -231,6 +231,21 @@ public @interface WebServlet {
   1. ServletRequest:最上层接口;
   2. HttpServletRequest:继承自ServletRequest的接口;
   3. org.apache.catalina.connector.RequestFacade：tomcat实现的实现了HttpServlet接口的类。
+## request功能：
+
+### 获取请求消息数据
+
+1. 获取请求行数据：（放在doget方法中）
+  1. **获取虚拟目录**：`/tomcat3_war_exploded`
+   1. `String getContextPath();`
+ 1. **获取请求的URI或URL**:
+      1. `String getRequestURI();`:获取URI，如：`/tomcat3_war_exploded/ServletDemo3`
+      2. `String getRequestURL();`获取URL，如：`http://localhost:8080/tomcat3_war_exploded/ServletDemo3`
+      3. URI和URL都是**统一资源定位符**,但是URI表示的范围比URL大。
+ 2. 获取Servlet路径：`/ServletDemo3`
+      1. `String getServletPath();`
+ 3. 获取get方式请求参数：
+    1. `String getQueryString();`,如：`name=%22zhangsan%22&age=13`
 
 
 
