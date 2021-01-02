@@ -201,9 +201,6 @@ public @interface WebServlet {
     * 定义类继承HttpServlet
     * 复写doGet()/doPost()等方法。
 
-
-
-
 # JAVAWEB的目录结构
 
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201009104107.png)
@@ -214,6 +211,27 @@ public @interface WebServlet {
 * `web.xml`文件是web程序的**主要配置文件**。
 * 所有的**classes**文件都放在classes目录下
 * **jar文件**放在lib目录下。
+
+# Request对象和Resoponse对象
+
+## 服务器与客户端交互流程
+
+1. tomcat服务器会根据请求url中的资源路径创建对应的**实现Servlet的类的对象**;
+2. tomcat**服务器**会创建**request**和**response**对象，request对象中封装请求的消息数据;
+3. tomcat将request和response对象传递给**service**方法，并且调用service方法;
+4. 程序员通过request对象**获取请求的消息数据**，通过response对象**设置响应的消息数据;
+5. 服务器在给浏览器做出响应之前会从**response对象**中拿程序员设置的响应消息数据。
+
+## Request对象
+
+* 原理：
+  * request对象和reponse对象是由服务器创建的;
+  * request对象获取请求消息，response对象设置响应消息。
+* request对象的继承体系结构：
+  1. ServletRequest:最上层接口;
+  2. HttpServletRequest:继承自ServletRequest的接口;
+  3. org.apache.catalina.connector.RequestFacade：tomcat实现的实现了HttpServlet接口的类。
+
 
 
 
