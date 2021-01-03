@@ -235,7 +235,7 @@ public @interface WebServlet {
 
 ### 获取请求消息数据
 
-1. 获取请求行数据：（放在doget方法中）
+1. 获取请求行数据：（get方式就放在doget方法中，POST方法则放在dopost方法中）
   1. **获取虚拟目录**：`/tomcat3_war_exploded`
    1. `String getContextPath();`
  1. **获取请求的URI或URL**:
@@ -246,7 +246,24 @@ public @interface WebServlet {
       1. `String getServletPath();`
  3. 获取get方式请求参数：
     1. `String getQueryString();`,如：`name=%22zhangsan%22&age=13`
+2. 获取请求头数据：
+   1. `String getHeader(String name)`:通过请求头的名称获取请求头的数据;
+   2. `Enumeration<String> getHeaderName()`:获取所有的请求头数据;
+3. 获取请求体数据：
+   1. 请求体：只有POST方式才有。
+   2. 步骤：
+      1. 获取流对象：
+         1. `BufferedReader getReader();`获取字符输入流，只能操作字符数据;
+         2. `ServletInputStream getInputStream()`:获取字节输入流，可以操作所有类型的数据；
+      2. 从流对象中将数据拿出来
 
+### 获取请求参数的通用方式
+
+* 不论是get还是post方式都可以使用。（如果doget和dopost的代码完全一样的话，在doget里写`this.doPost()`即可)
+1. **根据参数名称来获取参数值**:`String getParameter(String name)`，如果一个参数有多个值的话，则无法获取完。
+2. 根据参数名称来获取参数值的数组：`String[] getParameterValues(String name)`;
+3. 获取所有请求的参数名称：`Enumeration<String> getParameterNames()`;
+4. **获取所有参数的Map集合**：`Map<String, String[]> getParameterMap()`。
 
 
 
