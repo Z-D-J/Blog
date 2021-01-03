@@ -281,7 +281,18 @@ public @interface WebServlet {
   * 只能转发到当前服务器内部资源中;
   * 转发是一次请求（即多个资源共用一次请求的信息）。
 
+### 共享数据
 
+* 域对象：一个有作用范围的对象，可以在范围内共享数据;
+* request域：代表**一次请求**的范围，一般用于请求转发的多个资源中共享数据;
+* request共享数据的方法：
+  * 存储数据：`void setAttribute(String name, Object obj)`;
+  * 通过键获取值：`Object getAttribute(String name)`;
+  * 通过键移除值对：`void removeAttribute(String name)`;
+
+### 获取ServletContext对象
+
+* request对象获取ServletContext对象的方法：`ServletContext getServletContext();`
 
 
 
