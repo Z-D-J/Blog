@@ -265,6 +265,24 @@ public @interface WebServlet {
 3. 获取所有请求的参数名称：`Enumeration<String> getParameterNames()`;
 4. **获取所有参数的Map集合**：`Map<String, String[]> getParameterMap()`。
 
+* 获取请求参数的中文乱码问题：
+  * get方式：tomcat 8 已经将get方式乱码问题解决了;
+  * post方式：在获取参数前，设置request的编码`request.setCharacterEncoding("utf-8");`
+
+### 请求转发
+
+* 在服务器内部之间的资源跳转方式。
+* 步骤：
+  1. 通过request对象来获取请求转发器对象：`RequestDispatcher getRequestDispatcher(String path)`
+  2. 使用RequestDispatcher对象来进行转发：`forward(ServletRequest request, ServletResponse response)`
+  3. 示例：`request.getRequestDispathcher("/ServletDemo4").forward(request,response)`
+* 特点：
+  * 浏览器地址栏路径不会发生变化;
+  * 只能转发到当前服务器内部资源中;
+  * 转发是一次请求（即多个资源共用一次请求的信息）。
+
+
+
 
 
 
