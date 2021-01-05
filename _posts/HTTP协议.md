@@ -60,26 +60,36 @@ tags:
   1. 一个响应行【用于描述服务器对请求的处理结果。】
   2. 多个响应头【用于描述服务器的基本信息，以及数据的描述，服务器通过这些数据的描述信息，可以通知客户端如何处理等一会儿它回送的数据】
   3. 一个响应空行
-  4. 响应体【服务器向客户端回送的数据】
+  4. 响应体：服务器向客户端回送的数据
 
-### 状态行
+### 响应行
 
 * 格式： HTTP版本号　状态码　原因叙述
-* 状态行：HTTP/1.1 200 OK
-* 状态码用于表示服务器对请求的处理结果，它是一个三位的十进制数。响应状态码分为5类:
+* 响应行：HTTP/1.1 200 OK
+* 状态码用于表示服务器对请求的处理结果和响应的状态，它是一个三位的十进制数。响应状态码分为5类:
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201010121055.png)
+  1. 1xx:服务器接收客户端消息，但没有接收完成，等待一段时间后，发送1xx代码;
+  2. 2xx：成功。代表：200
+  3. 3xx:重定向。代表：302（重定向），304（访问缓存）。
+  4. 4xx：客户端错误
+     1. 404：请求路径没有对应资源;
+     2. 405：请求方式没有对应的doXxx方法;
+  5. 5xx:服务器端错误。代表：500（服务器内部出现异常）。
 
 ### 响应头
 
+* 格式：头名称：值
+* **Content-Type**: text/html; charset=UTF8 【服务器告诉浏览器本次响应体数据的格式（html）以及编码格式（UTF-8）】
+* **Content-Disposition**: 
+  * attachment; filename=aaa.zip【服务器告诉浏览器以下载方式打开数据】
+  * in-line:默认值，在当前页面打开数据
 * Location: http://www.it315.org/index.jsp 【服务器告诉浏览器要跳转到哪个页面】
 * Server:apache tomcat【服务器告诉浏览器，服务器的型号是什么】
 * Content-Encoding: gzip 【服务器告诉浏览器数据压缩的格式】
 * Content-Length: 80 【服务器告诉浏览器回送数据的长度】
 * Content-Language: zh-cn 【服务器告诉浏览器，服务器的语言环境】
-* Content-Type: text/html; charset=GB2312 【服务器告诉浏览器，回送数据的类型】
 * Last-Modified: Tue, 11 Jul 2000 18:23:51 GMT【服务器告诉浏览器该资源上次更新时间】
 * Refresh: 1;url=http://www.it315.org【服务器告诉浏览器要定时刷新】
-* Content-Disposition: attachment; filename=aaa.zip【服务器告诉浏览器以下载方式打开数据】
 * Transfer-Encoding: chunked 【服务器告诉浏览器数据以分块方式回送】
 * Set-Cookie:SS=Q0=5Lb_nQ; path=/search【服务器告诉浏览器要保存Cookie】
 * Expires: -1【服务器告诉浏览器不要设置缓存】
@@ -87,3 +97,4 @@ tags:
 * Pragma: no-cache 【服务器告诉浏览器不要设置缓存】
 * Connection: close/Keep-Alive 【服务器告诉浏览器连接方式】
 * Date: Tue, 11 Jul 2000 18:23:51 GMT【服务器告诉浏览器回送数据的时间】
+  
