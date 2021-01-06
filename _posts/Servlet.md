@@ -231,9 +231,9 @@ public @interface WebServlet {
   1. ServletRequest:最上层接口;
   2. HttpServletRequest:继承自ServletRequest的接口;
   3. org.apache.catalina.connector.RequestFacade：tomcat实现的实现了HttpServlet接口的类。
-## request功能：
+### request功能
 
-### 获取请求消息数据
+#### 获取请求消息数据
 
 1. 获取请求行数据：（get方式就放在doget方法中，POST方法则放在dopost方法中）
   1. **获取虚拟目录**：`/tomcat3_war_exploded`
@@ -257,7 +257,7 @@ public @interface WebServlet {
          2. `ServletInputStream getInputStream()`:获取字节输入流，可以操作所有类型的数据；
       2. 从流对象中将数据拿出来
 
-### 获取请求参数的通用方式
+#### 获取请求参数的通用方式
 
 * 不论是get还是post方式都可以使用。（如果doget和dopost的代码完全一样的话，在doget里写`this.doPost()`即可)
 1. **根据参数名称来获取参数值**:`String getParameter(String name)`，如果一个参数有多个值的话，则无法获取完。
@@ -269,7 +269,7 @@ public @interface WebServlet {
   * get方式：tomcat 8 已经将get方式乱码问题解决了;
   * post方式：在获取参数前，设置request的编码`request.setCharacterEncoding("utf-8");`
 
-### 请求转发
+#### 请求转发
 
 * 在服务器内部之间的资源跳转方式。
 * 步骤：
@@ -281,7 +281,7 @@ public @interface WebServlet {
   * 只能转发到当前服务器内部资源中;
   * 转发是一次请求（即多个资源共用一次请求的信息）。
 
-### 共享数据
+#### 共享数据
 
 * 域对象：一个有作用范围的对象，可以在范围内共享数据;
 * request域：代表**一次请求**的范围，一般用于请求转发的多个资源中共享数据;
@@ -290,11 +290,23 @@ public @interface WebServlet {
   * 通过键获取值：`Object getAttribute(String name)`;
   * 通过键移除值对：`void removeAttribute(String name)`;
 
-### 获取ServletContext对象
+#### 获取ServletContext对象
 
 * request对象获取ServletContext对象的方法：`ServletContext getServletContext();`
 
+## Response对象
 
+* 功能：设置响应消息
+* 设置**响应消息**:
+  * `setStatus(int sc)`
+* 设置**响应头**:
+  * `setHeader(String name , String value)`
+* 设置**响应体**:
+  1. 获取输出流：
+     1. 字符输出流：`PrintWrtier getWriter()`
+     2. 字节输出流：`ServletOutputStream getOutputStream()`
+  2. 使用输出流：将数据输出到客户端浏览器。
+   
 
 
 
