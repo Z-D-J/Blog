@@ -269,7 +269,7 @@ public @interface WebServlet {
   * get方式：tomcat 8 已经将get方式乱码问题解决了;
   * post方式：在获取参数前，设置request的编码`request.setCharacterEncoding("utf-8");`
 
-#### 请求转发
+#### 请求转发(forward)
 
 * 在服务器内部之间的资源跳转方式。
 * 步骤：
@@ -280,6 +280,7 @@ public @interface WebServlet {
   * 浏览器地址栏路径不会发生变化;
   * 只能转发到当前服务器内部资源中;
   * 转发是一次请求（即多个资源共用一次请求的信息）。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210106131528.png)
 
 #### 共享数据
 
@@ -306,7 +307,84 @@ public @interface WebServlet {
      1. 字符输出流：`PrintWrtier getWriter()`
      2. 字节输出流：`ServletOutputStream getOutputStream()`
   2. 使用输出流：将数据输出到客户端浏览器。
-   
 
+### 使用案例
 
+#### 重定向（redirect)
 
+* 资源的跳转方式
+* 方式一：逐步设置响应状态码和响应头
+```java
+@WebServlet("/ServletDemo2")
+public class ServletDemo2 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+     System.out.println("demo2");
+    resp.setStatus(302);
+    resp.setHeader("location", "/tomcat3_war_exploded/ServletDemo3");
+    }
+}
+
+@WebServlet("/ServletDemo3")
+public class ServletDemo3 extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        System.out.println("demo3");
+    }
+}
+```
+* 方式二：直接使用`sendRedirect`方法
+```java
+@WebServlet("/ServletDemo2")
+public class ServletDemo2 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+     System.out.println("demo2");
+     //动态获取虚拟目录
+     String contextPath = req.getContextPath();
+     resp.sendRedirect(contextpath+"/ServletDemo3");
+    // resp.sendRedirect("/tomcat3_war_exploded/ServletDemo3");
+    }
+}
+
+@WebServlet("/ServletDemo3")
+public class ServletDemo3 extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        System.out.println("demo3");
+    }
+}
+```
+* 转发的特点：
+  * 浏览器地址栏路径不会发生变化;
+  * 只能转发到当前服务器内部资源中;
+  * 转发是一次请求（即多个资源共用一次请求的信息），可以使用request对象来共享数据。
+* 重定向的特点：
+  * 浏览器地址栏路径**会发生变化**;
+  * 重定向可以访问**其他站点（服务器）**资源;
+  * 重定向是**两次请求**。**不能使用request对象来共享数据**。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210106130407.png)
+* 动态方式获取**虚拟目录**。`String contextPath = request.getContextPath();`
+* 路径写法：
+  * 相对路径：
+    * 不以`/`开头，以`.`开头;
+    * 规则：
+      * `./`：当前目录下;
+      * `../`：上一级目录下;
+  * 绝对路径：
+    * 以`/`开头的路径;
+    * 给客户端浏览器使用的绝对路径需要加**虚拟目录**(项目的访问路径);
+      * 建议虚拟目录动态获取;
+      * 如：重定向中使用的路径是`/tomcat3_war_exploded/ServletDemo3`
+    * 给服务器使用，不需要加虚拟目录;
+      * 如转发中使用的路径：`/ServletDemo3`
