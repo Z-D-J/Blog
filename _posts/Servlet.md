@@ -388,3 +388,24 @@ public class ServletDemo3 extends HttpServlet {
       * 如：重定向中使用的路径是`/tomcat3_war_exploded/ServletDemo3`
     * 给服务器使用，不需要加虚拟目录;
       * 如转发中使用的路径：`/ServletDemo3`
+
+#### 服务器输出字符数据到浏览器
+
+* 步骤：
+  1. 获取字符输出流：`PrintWriter pw = response.getWriter();`(获取的流的默认编码是ISO-8859-1)
+  2. 输出数据：`pw.write("你好 response")`
+  3. 流对象是由response创建的，会随着response的关闭而关闭，不用再人为的close。
+* 中文乱码问题：
+  * 原因：因为浏览器使用的字符集和服务器使用的字符集不一致导致的。
+  * 需要在**获取字符输出流之前**返回一个告诉浏览器服务器返回消息使用的字符集和格式：
+    * 通过设置content-type头的内容来解决：`response.setHeader("content-type", "text/html;charset=utf-8");`
+    * response对象有一个内置的简化方法：`responde.setContentType("text/html;charset=utf-8");`
+
+#### 服务器输出字节数据到浏览器
+
+* 步骤：
+  1. 获取字节输出流：`ServletOutputStream sos = response.getOutputStream();`
+  2. 输出数据：`sos.write("你好".getBytes("utf-8"));`
+* 还是需要在**获取字节输出流之前**通知浏览器字符集的设置。
+
+
