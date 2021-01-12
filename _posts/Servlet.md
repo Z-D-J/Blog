@@ -408,4 +408,53 @@ public class ServletDemo3 extends HttpServlet {
   2. 输出数据：`sos.write("你好".getBytes("utf-8"));`
 * 还是需要在**获取字节输出流之前**通知浏览器字符集的设置。
 
+#### 服务器验证码
+
+* 验证码的作用：防止恶意重复提交表单。（机器人）
+* 实现的功能，服务器自动生成验证码图片，并且对图片进行美化。
+* 步骤：
+  1. 创建图片
+  2. 美化图片（增加验证码的内容）
+  3. 输出图片到浏览器上
+* 示例：
+```java
+        //图片长宽设置
+        int width = 100;
+        int height = 50;
+        
+        //1.创建一对象，在内存中创建图片（验证码的图片）
+        BufferedImage image = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
+
+        //2.美化图片
+        Graphics g = image.getGraphics();//获取画笔对象
+        g.setColor(Color.PINK);//设置画笔颜色
+        g.fillRect(0,0,width,height);//填充背景色
+        g.setColor(Color.BLACK);//设置画笔颜色
+        g.drawRect(0,0,width-1, height - 1);//画边框
+
+        String str = "QWERTYUIOOOOOPASDFGHJKKLZXCVBNMMqwertyuiopasdfghjklzxcvbnm0123456789";//设置可以写到验证码图片上的字符
+        Random random = new Random();//获取生成随机数的对象
+        //将随即字符写到图片上去
+        for(int i = 1; i < 5; i++) {
+            int index = random.nextInt(str.length());//获取在字符串大小范围内的随机索引值
+            char ch = str.charAt(index);
+            g.drawString(ch+"", width/5*i ,height/2);
+        }
+        
+        //画干扰线
+        g.setColor(Color.GREEN);
+
+        //生成随机坐标来划线
+        for(int i = 0; i < 10; i++) {
+            int x1 = random.nextInt(width);
+            int x2 = random.nextInt(width);
+            int y1 = random.nextInt(height);
+            int y2 = random.nextInt(height);
+            g.drawLine(x1,y1,x2,y2);
+        }
+
+        //3.将图片输出到浏览器上
+        ImageIO.write(image, "jpg", resp.getOutputStream());
+    }
+```
 
