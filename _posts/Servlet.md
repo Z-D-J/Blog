@@ -458,3 +458,26 @@ public class ServletDemo3 extends HttpServlet {
     }
 ```
 
+# ServletContext对象
+
+1. 概念:代表整个web应用（一个web应用里只有唯一的一个ServletContext对象），可以和程序的容器（服务器）来通信;
+2. 获取ServletContext对象：
+   1. 通过Request对象来获取:`request.getServletContext();`
+   2. 通过HttpServlet获取（我们创建的Servlet类都是从这里继承的）：`this.getServletContext();`
+3. 方法：
+   1. 获取MIME类型：
+      1. MIME类型：在互联网通信过程中定义的一种文件数据类型，格式为：`大类型/小类型`，如：`text/html`,`image/jpeg`.
+      2. 获取的方法：`String getMIMEType(String file)`,参数是文件名称;
+   2. 作为域对象：
+      1. ServletContext对象的范围：所有用户所有请求的数据;
+      2. `setAttribute(String name, Object value);`
+      3. `getAttribute(String name)`
+      4. `removeAttribute(String name)`
+   3. 获取文件的真实（服务器）路径：
+      1. 我们经常需要使用的是一个文件部署到服务器上的路径，而不是该文件在本地工作空间的路径;
+      2. 方法：`String getRealPath(String path)`
+      3. 参数：文件在本地工作空间的相对路径
+         1. 在web目录下的资源：`/文件名`
+         2. 在WEB_INF目录下的资源：`/WEB-INF/文件名`
+         3. 在源文件（src目录或者java目录下）的资源：`/WEB-INF/classes/文件名`
+
