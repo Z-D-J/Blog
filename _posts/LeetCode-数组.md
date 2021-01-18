@@ -20,17 +20,42 @@ tags:
 输出：[1,3,6,10]
 解释：动态和计算过程为 [1, 1+2, 1+2+3, 1+2+3+4] 。
 
-* Java解法
----
+## Java解法
 
-* 动态求和过程中，每一项都是前一项与自身之和。
-* 第一个元素没有前一个元素，对它没有操作，所以直接从第二个元素开始遍历求和。
+* 法一：
+  * 设置一个新数组，每一项为前面所有项之和；
+  * 通过双重循环实现。
 ```java
-import java.util.Scanner;
-
 public class Sums {
 
-    public int[] runningSums (int[] nums) {
+    public static int[] runningSums(int nums[]) {
+        int[] sums = new int[nums.length];
+        for(int i = 0 ; i < nums.length; i++) {
+            for(int j = 0; j <= i; j++) {
+                sums[i] += nums[j];
+            }
+        }
+        return sums;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {1, 2, 3, 4,5};
+
+        int[] sums = Sums.runningSums(nums);
+
+       for(int i : sums) {
+           System.out.println(i);
+       }
+    }
+}
+```
+* 法二：
+  * 动态求和过程中，每一项都是前一项与自身之和。
+  * 第一个元素没有前一个元素，对它没有操作，所以直接从第二个元素开始遍历求和。
+```java
+public class Sums {
+
+    public static int[] runningSums (int[] nums) {
 
         for(int i = 1; i < nums.length; i++) {
 //            if(i == 0) {
@@ -42,30 +67,16 @@ public class Sums {
     }
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int Maxsize;
-        System.out.println("输入数字个数：");
-        Maxsize = in.nextInt();
-        int[] nums = new int[Maxsize]; //Maxsize必须在在这里使用之前就初始化
+        int[] nums = {1, 2, 3,4};
 
-
-
-        System.out.println("请输入数字：");
-        for (int i = 0; i < nums.length; i++) {
-            nums[i] = in.nextInt();
-        }
-
-        Sums run = new Sums();
-
-        // nums = run.runningSums(nums);因为nums是引用（可以类似c语言的指针），所以nums传进函数的对象被修改了，但是nums依然指向那个对象，所以可以不用接收返回值
-        run.runningSums(nums);
-
-        for (int i : nums) { //此时的i不再是数组下标，在foreach循环中，是直接将数组元素的值赋给i
-            System.out.print(i + " ");
+        int[] sums = Sums.runningSums(nums);
+        for (int i : sums) {
+            System.out.println(i);
         }
     }
 }
 ```
+
 # 拥有糖果最多的孩子 1431
 
 * 题目：
@@ -92,61 +103,35 @@ public class Sums {
 * 先找到拥有糖果数量最多的孩子，将加上补充的糖果数后的与这个最大比较
 ```java
 public class Candy {
-
-    public List<Boolean> kidsWithCandies(int[] candies, int extraCandies) { //List<Boolean>是来自List接口的
-        int max = candies[0];
-        List<Boolean> most = new ArrayList<>();
-
-        for (int i = 1; i < candies.length; i++) {
-           // max = Math.max(candies[i-1]，candies[i]); 这种方法实际上每次只比较了两个数的大小，而不是整个数组的大小
-            max = Math.max(candies[i], max); //每次和已知的最大值比较，可以避免计数变量的计算
+    public static boolean[] isMax(int kids[], int extraCandies) {
+        //找出原有最多的数
+        int max = 0;
+        for(int i = 0; i < kids.length; i++) {
+            if(max < kids[i]) {
+                max = kids[i];
+            }
         }
-
-
-//     for(int i = 0; i < candies.length; i++) {
-//       if(candies[i] + extraCandies >= max) {
-//         most.add(true);
-//        }
-//            else {
-//              most.add(false);
-//            }
-//        }
-        //用foreach循环代替上面的普通for循环，因为计数变量i除了除了用来指示当前数组变量，没有任何作用。
-        for (int candy : candies) {
-                    if (candy + extraCandies >= max) {
-                        most.add(true);
-                    } else {
-                        most.add(false);
-                    }
-                }
-
-        return most;
+        //设置判别数组
+        boolean[] isMax = new boolean[kids.length];
+        for(int i = 0; i < kids.length; i++) {
+            if(kids[i] + extraCandies >= max) {
+                isMax[i] = true;
+            } else{
+                isMax[i] = false;
+            }
+        }
+        return isMax;
     }
-    //测试
-      public static  void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int Maxsize;
-        System.out.println("输入孩子个数：");
-        Maxsize = in.nextInt();
-        int[] candies = new int[Maxsize];
 
-        System.out.println("请输入每个孩子的糖果数量：");
-        for (int i = 0; i < candies.length; i++) {
-            candies[i] = in.nextInt();
+    public static void main(String[] args) {
+        int[] kids = {2, 3, 5, 1, 3};
+        int extraCandies = 3;
+        boolean[] isMax = Candy.isMax(kids, extraCandies);
+        for(boolean i : isMax) {
+            System.out.println(i);
         }
-
-        System.out.println("输入增加的糖果：");
-        int extraCandies = in.nextInt();
-
-        Candy candy = new Candy();
-
-        List<Boolean> most2 = candy.kidsWithCandies(candies, extraCandies);
-
-        for(int i = 0; i < candies.length; i++) {
-            System.out.print(most2.get(i) + " ");
-        }
-
     }
+}
 ```
 
 # 重新排列数组 1470
