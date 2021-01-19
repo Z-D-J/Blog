@@ -15,6 +15,10 @@ tags:
   * session没有数据大小限制，而cookie有;
   * session数据存储在服务器端相对安全。
 
+
+
+
+
 # session快速入门
 
 1. 获取HttpSession对象：`HttpSession session = request.getSession();`
