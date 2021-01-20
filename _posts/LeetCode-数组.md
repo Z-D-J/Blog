@@ -155,38 +155,24 @@ public class Candy {
 ---
 * 法一：设置一个额外的数组，用来将重排后的数据记录；
 ```java
-import java.util.Scanner;
-
 public class Resort1470 {
+    public static int[] resort(int[] nums1){
+        int n = nums1.length / 2;
+        int[] nums2 = new int[nums1.length];
 
-    public int[] reshuffle(int[] nums, int n) {
-        int i;
-        int j;
-        int[] result = new int[2 * n];
-
-        for(i = 0, j = 0; j < n; i++, j++) {
-            result[i] = nums[j];
-            result[++i] = nums[n + j];
+        for(int i = 0 ,j = 0; j < n;  i++, j++) {
+            nums2[i] = nums1[j];
+            nums2[++i] = nums1[n + j];
         }
-        return result;
+
+        return nums2;
     }
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-
-        System.out.println("请输入数组的的长度：");
-        int n = in.nextInt() / 2;
-        System.out.println("请输入数字：");
-        int[] nums = new int[2 * n];
-        for(int i = 0 ; i < nums.length; i++) {
-            nums[i] = in.nextInt();
-        }
-
-        Resort1470 resort = new Resort1470();
-        nums = resort.reshuffle(nums, n);
-
-        for(int i = 0; i < nums.length; i++) {
-            System.out.print(nums[i] + " ");
+        int[] nums1 = {2,5,1,3,4,7};
+        int[] nums2 = Resort1470.resort(nums1);
+        for(int i : nums2) {
+            System.out.println(i);
         }
     }
 }
@@ -242,6 +228,38 @@ public class ReverseLeftWords {
             System.out.print(s.charAt(i) + " ");
         }
 
+    }
+}
+```
+* 数组形式解法：
+```java
+public class ReverseLeftWords {
+    public static char[] reverseLeftWords(char[] nums, int n) {
+        char[] nums1 = new char[n];
+        char[] nums2 = new char[nums.length];
+
+        for(int i = 0; i < nums.length; i++) {
+            if(i < n) {
+                nums1[i] = nums[i];
+            }else {
+                nums2[i - n] = nums[i];
+            }
+        }
+        for(int i = 0; i < n; i++) {
+            nums2[nums.length - n + i] = nums1[i];
+        }
+
+        return nums2;
+    }
+
+    public static void main(String[] args) {
+       char[] nums = {'a','b','c','d','e'};
+
+       char[] nums2 = ReverseLeftWords.reverseLeftWords(nums, 2);
+
+       for(char i : nums2) {
+           System.out.println(i);
+       }
     }
 }
 ```
