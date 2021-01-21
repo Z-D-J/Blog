@@ -5,6 +5,7 @@ tags:
 ---
 # Filter概述
 
+* JavaWeb的三大组件（servlet，Filter，Listener)之一。
 * web中的过滤器：当访问服务器的资源时，过滤器可以将每次请求拦截下来，完成一些特殊的功能;
 * 作用：
   * 一般用于完成**通用的操作**,如：登录验证，统一编码处理，敏感字符过滤。
@@ -12,7 +13,7 @@ tags:
 # Filter快速入门
 
 * 步骤：
-  1. 定义一个类，实现接口Filter,注意这个Filter接口是java.servlet包下的（因为java.util包下也有Filter接口）;
+  1. 定义一个类，实现**接口Filter**,注意这个Filter接口是java.servlet包下的（因为java.util包下也有Filter接口）;
   2. 复写方法，（主要起作用的方法是doFilter)
   3. 配置拦截路径：
      1. 在web.xml文件中去配置;
