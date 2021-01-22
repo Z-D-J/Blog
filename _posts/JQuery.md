@@ -140,3 +140,55 @@ $(function(){
    * attr和prop的区别：
      * 如果操作的是元素的**固有属性**,则建议使用prop;
      * 如果操作的是元素的**自定义属性**,则建议使用attr。
+2. 对class属性的操作：
+   1. `addClass()`:添加class属性值;
+   2. `removeClass()`:删除class属性值，如：`removeClass("one")`,删除class="one"的属性。
+   3. `toggleClass()`:切换class属性值;
+      1. 如：`toggleClass("one")`:判断元素对象上存在class="one"，则将属性值one删除掉;如果元素对象上不存在class="one",则添加。
+3. CRUD操作：
+   1. `append()`:父元素将子元素追加到末尾。
+      1. 对象1.append(对象2):将对象2**添加到对象1元素内部**,并且在末尾。（对象2会移动）
+   2. `prepend()`:父元素将子元素追加到开头。
+      1. 对象1.perpend(对象2）：将对象2**添加到对象1元素内部**,并且在开头。
+   3. `appendTo()`:
+      1. 对象1.appendTo(对象2):将对象1添加到对象2内部，并且在末尾。
+   4. `prependTo()`:
+      1. 对象1.prepend(对象2):将对象1添加到对象2内部，并且在开头。
+   5. `after()`:添加元素到元素后边
+      1. 对象1.after(对象2):将对象2添加到对象1后边，**对象1和对象2是兄弟关系**。
+   6. `before()`:添加元素到元素前边
+      1. 对象1.before(对象2):将对象2添加对象1前边，**对象1和对象2是兄弟关系**。
+   7. `insertAfter()`:
+      1. 对象1.insertAfter(对象2):将对象1添加到对象2后边，**对象1和对象2是兄弟关系**。
+   8. `insertBefore()`:
+      1. 对象1.insertBefore(对象2):将对象1添加到对象2前边，**对象1和对象2是兄弟关系**。
+   9. `remove()`：移除元素
+      1.  对象.remove():将对象删除掉;
+   10. `empty()`:清空元素的所有后代元素。
+       1.  对象.empty():将对象的后代元素全部清空，但是**保留当前对象以及其属性节点**。
+   11. `clone()`:克隆元素并且选中这些克隆。
+
+
+# JQuery动画
+
+* 默认显示和隐藏方式：
+  1. `show([speed], [easing],[fn])`:
+     1. speed:动画的速度。三个预定义的值(slow,normal,fast)或表示动画时长的毫秒数值(如：1000);
+     2. easing:用来指定切换效果。默认是swing,可用参数是linear;
+        1. swing:动画执行时效果是，先慢，中间快，最后又慢。
+        2. linear：动画执行是匀速的。
+     3. fn:在动画执行结束时执行的函数，每个元素执行一次。
+  2. `hide([speed], [easing],[fn])`;
+  3. `toggle([speed], [easing],[fn])`:在show和hide之间切换。
+
+* 滑动显示和隐藏方式： 
+  1. `slideDown([speed], [easing],[fn])`
+  2. `slideUp([speed], [easing],[fn])`
+  3. `slideToggle([speed], [easing],[fn])`
+* 淡入淡出显示和隐藏方式：
+  * `fadeIn([speed],[easing],[fn])`
+  * `fadeOut([speed],[easing],[fn])`
+  * `fadeToggle([speed],[easing],[fn])`
+  
+# JQuery遍历
+
