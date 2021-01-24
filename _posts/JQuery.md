@@ -192,3 +192,16 @@ $(function(){
   
 # JQuery遍历
 
+* JS的遍历方式：`for(初始化值;循环结束条件;步长)`，也适用于JQ
+* JQ的遍历方式：
+  1. `jq对象.each(callback)`:callback是一个函数。
+     1. 语法：`jq对象.each(function(index,element)[]{})`
+        1. `index`:就是元素在集合中的索引
+        2. `element`：就是集合中每一个元素对象。
+        3. `this`:集合中的当前元素对象。
+     2. 回调函数的返回值：
+        1. `true`:如果当前的function返回为false，则结束循环。(break)
+        2. `false`:如果当前的function返回为true,则结束本次循环，继续下次循环。（continue)
+  2. `$.each(object, callback)`,其中callback是回调函数。
+  3. `for...of:jq对象`:3.0版本后提供的方式
+     1. 语法：`for（元素对象 of 容器对象)`.
