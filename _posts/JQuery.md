@@ -205,3 +205,48 @@ $(function(){
   2. `$.each(object, callback)`,其中callback是回调函数。
   3. `for...of:jq对象`:3.0版本后提供的方式
      1. 语法：`for（元素对象 of 容器对象)`.
+
+# JQuery事件绑定
+
+1. jquery标准事件绑定方式：`jq对象.事件方法（回调函数)`
+   1. 如果调用事件方法，不传递回调函数，则会触发浏览器的默认行为。如：
+      1. `jq对象.focus()`，使对象获得焦点;
+      2. `表单对象.submit()`,使表单提交。
+2. on绑定事件/off解除绑定：
+   1. `jq对象.on("事件名称",回调函数)`;
+   2. `jq对象.off("事件名称")`:
+      1. 如果off方法不传递任何参数，则将组件上的所有事件全部解除。
+3. 事件切换：toggle
+   1. `jq对象.toggle(fn1,fn2,...)`:当单击jq对象对应的组件后，会执行fn1,第二次点击会执行fn2,依次循环往复。
+   2. 注意：1.9版本后，toggle方法的事件切换功能被删除，jquery Migrate插件（js代码）可以恢复此功能。此js文件需要自行下载。
+      1. `<script src="../js/jquery-migrate-1.0.0.js" type="text/javascript" charset="utf-8"></script>`
+
+# JQuery插件
+
+1. `$.fn.extend(object)`:
+   1. 增强通过jquery获取的对象的功能。（即`$("选择器")`的功能)
+2. `$.extend(object)`:
+   1. 增强JQuery对象自身的功能。(即`$`自身的功能)
+* 示例：
+```javascript
+
+$.extend({
+   max:function(a,b) {
+      return a >= b ? a : b;
+   },
+   min:function(a,b) {
+      return a <= b ? a : b;
+   }
+})
+
+$.max(2,3);
+
+$.fn.extend({
+   check:function(a,b) {
+      alert("check");
+   }
+})
+
+$("btn-check").check();
+```
+
