@@ -21,58 +21,47 @@ tags:
 * 因为只知道当前结点以及这个结点之后的所有结点，所以无法直接删除当前结点。  
 * 可以将当前结点后的一个结点的值赋给当前结点，然后删除之后的结点，达到删除当前结点的等效效果。（我变成你，再杀了你，就相当于杀了我自己）。
 ```java
-import java.util.Scanner;
-
-public class SinglyLinkedList {
-    //定义单链表结点
-    int val = 0;
-    SinglyLinkedList next = null; //储存下一个结点的引用
-
-    SinglyLinkedList(int x) {
-        this.val = x;
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
     }
-    
-    SinglyLinkedList() {}
+}
 
-    //定义删除某一结点的方法
-    public void deleteNode(SinglyLinkedList node) {
+class Solution {
+    public  void deleteNode(ListNode node) {
         node.val = node.next.val;
         node.next = node.next.next;
     }
 
-    //测试删除的方法
-    public static  void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        
-        //读取数字组，并存入链表中
-        System.out.println("请输入一串数字，以-1结束：");
-        int temp = in.nextInt(); 
-        SinglyLinkedList fnode  = new SinglyLinkedList(temp);
-        SinglyLinkedList list = new SinglyLinkedList();
-        list.next = fnode; //创建一个头结点
-        while (temp != -1) {
-            temp = in.nextInt();
-            SinglyLinkedList lnode = new SinglyLinkedList(temp);
-            fnode.next = lnode;
-            fnode = lnode; //使当前结点始终为链表末尾的结点
-        }
+    public static void main(String[] args) {
+        ListNode node1 = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(3);
+        ListNode node4 = new ListNode(4);
+        ListNode node5 = new ListNode(5);
+        node1.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        node4.next = node5;
+        node5.next = null;
 
-        //找到要删除的结点
-        System.out.println("输入要删除的数字：");
-        SinglyLinkedList node = list.next;
-        int delete = in.nextInt();
-        while (node.val != delete) {
-            node = node.next;
+        System.out.print(node1.val);
+        for(ListNode node = node2; node != null; node = node.next) {
+            System.out.print("->"+node.val);
         }
+        System.out.println();
 
-        //删除结点并打印新链表的结果
-        node.deleteNode(node);
-        node = list.next;
-        while(!(node.next == null)) {
-            System.out.print(node.val + " ");
-            node = node.next;
+        Solution solution = new Solution();
+        solution.deleteNode(node3);
+
+        System.out.print(node1.val);
+        for(ListNode node = node2; node != null; node = node.next) {
+            System.out.print("->"+node.val);
         }
     }
+
 }
 ```
 
@@ -98,6 +87,7 @@ public class SinglyLinkedList {
 ---
 
 * 法一：
+  * 根据数字读取顺序确定对应位的权重
 ```java
 import java.util.Scanner;
 
@@ -112,7 +102,8 @@ public class BtoD  {
 
         node = head;
         for(; node != null; ) {
-            temp = nums;
+            temp = nums; //数字是第几位
+            //算出对应位的权重
             for(index = 1; temp - 1 > 0; temp--) {
                 index *= 2;
             }
@@ -141,6 +132,50 @@ public class BtoD  {
 
         BtoD converse = new BtoD();
         System.out.println("十进制的结果为：" + converse.binaryToDecimal(head));
+    }
+}
+```
+* 法二：
+  * 使用ArrayList，将链表中的数字依次存入集合中，再根据集合的索引确定对应位的权重
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+    }
+}
+
+class Solution {
+
+    public int getDecimalValue(ListNode head) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        //存入集合
+        for(ListNode node = head; node != null; node = node.next) {
+            list.add(node.val);
+        }
+        int n = list.toArray().length - 1;
+        int decimalValue = 0;
+        
+        //确定对应位权重并计算出结果
+        for(int i = 0; i <= n; i++) {
+            decimalValue += list.get(i) * (int)Math.pow(2,n - i);
+        }
+
+        return  decimalValue;
+    }
+
+
+    public static void main(String[] args) {
+            ListNode node1 = new ListNode(1);
+            ListNode node2 = new ListNode(0);
+            ListNode node3 = new ListNode(1);
+            node1.next = node2;
+            node2.next = node3;
+            node3.next = null;
+
+            Solution solution = new Solution();
+            System.out.println(solution.getDecimalValue(node1));
     }
 }
 ```

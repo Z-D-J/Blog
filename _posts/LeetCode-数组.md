@@ -12,8 +12,6 @@ tags:
 
 请返回 nums 的动态和。
 
- 
-
 示例 1：
 
 输入：nums = [1,2,3,4]
@@ -133,7 +131,6 @@ public class Candy {
     }
 }
 ```
-* 
 
 # 重新排列数组 1470
 
@@ -165,7 +162,7 @@ public class Resort1470 {
             nums2[i] = nums1[j];
             nums2[++i] = nums1[n + j];
         }
-
+    
         return nums2;
     }
 
@@ -178,7 +175,6 @@ public class Resort1470 {
     }
 }
 ```
-* 法二：
 
 #  左旋转字符串 剑指offer 58-II
 
@@ -291,34 +287,23 @@ import java.util.Scanner;
 
 public class NumPairs1512 {
 
-    public int numIdenticalPairs(int[] nums) {
+    public static int numIdenticalPairs(int[] nums) {
         int ans = 0;
 
         for(int i = 0; i < nums.length; i++) {
-            for(int j = i + 1; j < nums.length; j++) { //每次统计相同的元素都是从当前位置向后遍历，这样就不会有重复的情况
-                if(nums[i] == nums[j]) {
+            for(int j = 1; j < nums.length; j++) { //每次统计相同的元素都是从当前位置向后遍历，这样就不会有重复的情况
+                if(nums[i] == nums[i+j]) {
                     ans++;
                 }
             }
         }
         return ans;
     }
-
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        System.out.println("请输入数组长度：");
-        int maxsize = in.nextInt();
-        System.out.println("请输入数字：");
-        int[] nums = new int[maxsize];
-
-        for(int i = 0; i < nums.length; i++) {
-            nums[i] = in.nextInt();
-        }
-
-        var pairs = new NumPairs1512();
-        System.out.println("好数对有" + pairs.numIdenticalPairs(nums) + "对");
+        int[] nums = {1,2,3,1,1,3};
+        System.out.println(Solution.numIdenticalPairs(nums));
     }
 }
 ```
-* 法二：
+
 
