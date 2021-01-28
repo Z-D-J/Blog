@@ -3,7 +3,6 @@ title: JSON
 date: 2021-01-25 21:47:27
 tags:
 ---
-
 # JSON概述
 
 * JSON：JavaScript 对象表示法（JavaScript Object Notation）。
@@ -66,7 +65,7 @@ for(var key in person) {
 * JSON的解析器：用于转换json的工具类
   * 常见解析器：Jsonlib,Gson,fastJson,jackson
 
-## Javad对象转换JSON
+## Java对象转换JSON
 
 * 此处使用Jackson
 * 使用步骤：
@@ -91,6 +90,14 @@ mapper.writeValue(new File("c:/person.txt"));
   * `@JsonIgnore`:排除指定属性，不参与转换。将注解放在对应属性定义位置即可。
   * `@JsonFormat`:将属性值转换为格式化字符串。
     * 如；`@JsonFormat(pattern = "yyyy-MM-dd")`
+* List集合转换为JSON是数组格式的，在这个数组中存放JSON对象;
+* Map集合转换为JSON，是一个集合对应一个JSON对象，中间的内容是键值对。
 
+## JSON对象转为Java对象
 
-
+* 此处使用Jackson
+* 使用步骤：
+  1. 导入jackson的相关jar包；
+  2. 创建jackson的核心类对象：ObjectMapper;
+  3. 调用ObjectMapper的相关方法进行转换
+     1. `readValue(json字符串对象,Class)`，如：`Person person = mapper.readValue(jsonString,Person.class)`.
