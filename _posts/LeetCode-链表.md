@@ -180,8 +180,17 @@ class Solution {
 }
 ```
 
-* 法二：使用位运算
-
+* 法三：使用位运算
+  * 当一个数进行左移或右移时候(每左移一位相当于乘上了一个2），如果是正数的情况下，空位补0，如：10 左移一位置，那么就变成 100，利用这个性质，结合这个题目，我们可知道如果将位移后出现的空位再加上我们所获得的值，就可以计算出对应的十进制。
+```java
+    public int getDecimalValue(ListNode head) {
+        int sum = 0;
+        for(ListNode node = head; node != null; node = node.next) {
+            sum = (sum << 1) + node.val;
+        }
+        return  sum;
+    }
+```
 
 # 链表中倒数第k个结点 剑指offer22
 
