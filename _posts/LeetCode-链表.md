@@ -192,7 +192,7 @@ class Solution {
     }
 ```
 
-# 链表中倒数第k个结点 剑指offer22
+# 链表中倒数第k个结点 剑指 Offer 22
 
 * 题目：
 ---
@@ -208,7 +208,7 @@ class Solution {
 
 * Java解法
 ---
-* 数出链表的总结点个数，然后推出正序的排名。
+* 法一：数出链表的总结点个数，然后推出正序的排名。
 ```java
 public static int kthtoLast(SinglyLinkedList head, int k) {
         int nums = 1;
@@ -247,6 +247,91 @@ public static void main(String[] args) {
         KthtoLast reverse = new KthtoLast();
         System.out.println("结果为: " + reverse.kthtoLast(head, k));
 
+
+    }
+}
+```
+
+* 法二：使用ArrayList来记录链表中节点的相对位置。
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+    }
+}
+
+class Solution {
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        ArrayList<ListNode> list = new ArrayList<>();
+        for(ListNode node = head; node != null; node = node.next) {
+            list.add(node);
+        }
+        int n = list.toArray().length - k;
+
+        return list.get(n);
+    }
+
+    public static void main(String[] args) {
+        ListNode head = new ListNode(1);
+        ListNode node1 = head;
+        for(int i = 2; i <= 6; i++) {
+            ListNode node = new ListNode(i);
+            node1.next = node;
+            node1 = node1.next;
+        }
+
+        Solution solution = new Solution();
+        ListNode node = solution.getKthFromEnd(head,3);
+        System.out.println(node.val);
+
+    }
+}
+```
+* 法三：
+  * 若只遍历一次，可使用两个指针，第一个指针先走k-1步，之后第二个指针再跟上，始终保持k-1步的距离，这样当第一个指针遍历完成时，第二个指针所在就是倒数第K个节点。
+  * 注意代码鲁棒性：
+    1. 链表为空
+    2. 链表节点少于K
+    3. k为零
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(){};
+    ListNode(int x) {
+        val = x;
+    }
+}
+
+class Solution {
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        int i = 0;
+        ListNode slow = head;
+
+        for(ListNode fast = head; fast.next != null; fast = fast.next) {
+            i++;
+            if(i > k - 1) {
+                slow = slow.next;
+            }
+        }
+
+        return  slow;
+    }
+
+    public static void main(String[] args) {
+        ListNode head = new ListNode(1);
+        ListNode node1 = head;
+        for(int i = 2; i <= 6; i++) {
+            ListNode node = new ListNode(i);
+            node1.next = node;
+            node1 = node1.next;
+        }
+
+        Solution solution = new Solution();
+        ListNode node = solution.getKthFromEnd(head,3);
+        System.out.println(node.val);
 
     }
 }
