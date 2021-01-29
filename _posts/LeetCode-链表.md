@@ -425,13 +425,138 @@ class Solution {
 	} 
 	```
 	
-* 法二：
+* 法二：先获取链表的长度，再使用一个定长的数组，但是对数组的赋值是从逆向开始的。这样避免了对链表的逆转。
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+    }
+}
 
-  * 使用一个定长的数组，但是对数组的赋值是从逆向开始的。这样避免了对链表的逆转。
+class Solution {
+    public int[] reversePrint(ListNode head) {
+        int n = 0;
+        for(ListNode node = head; node != null; node = node.next) {
+            n++;
+        }
 
-* 法三：‘’
+        int[] result = new int[n];
+        ListNode node = head;
+        for(int t = n; t > 0; t--) {
+            result[t - 1] = node.val;
+            node = node.next;
+        }
 
-  * 使用栈
+        return result;
+    }
+
+    public static void main(String[] args) {
+        ListNode head = new ListNode(1);
+        ListNode node1 = head;
+        for(int i = 2; i <= 6; i++) {
+            ListNode node = new ListNode(i);
+            node1.next = node;
+            node1 = node1.next;
+        }
+
+        Solution solution = new Solution();
+        int[] result = solution.reversePrint(head);
+        for(int i : result) {
+            System.out.println(i);
+        }
+    }
+}
+```
+
+* 法三：使用栈,利用栈的先进后出特性，将压入栈的元素自然弹出，就达到来逆序的效果
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+    }
+}
+
+class Solution {
+    public int[] reversePrint(ListNode head) {
+        Stack<ListNode> stack = new Stack<>();
+        for(ListNode node = head; node != null; node = node.next) {
+            stack.push(node);
+        }
+        int n = stack.size();
+        int[] result = new int[n];
+        for(int i = 0; i < n; i++) {
+            result[i] = stack.pop().val;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        ListNode head = new ListNode(1);
+        ListNode node1 = head;
+        for(int i = 2; i <= 6; i++) {
+            ListNode node = new ListNode(i);
+            node1.next = node;
+            node1 = node1.next;
+        }
+
+        Solution solution = new Solution();
+        int[] result = solution.reversePrint(head);
+        for(int i : result) {
+            System.out.println(i);
+        }
+
+    }
+}
+```
+
+* 法四：使用ArrayList集合记录链表中的节点，再反向遍历该集合，将值存到数组中。
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+    }
+}
+
+class Solution {
+    public int[] reversePrint(ListNode head) {
+        ArrayList<ListNode> list = new ArrayList<>();
+        for(ListNode node = head; node != null; node = node.next) {
+            list.add(node);
+        }
+        int[] result = new int[list.toArray().length];
+        int j = 0;
+        for(int i = list.toArray().length - 1; i >= 0; i--) {
+            result[j] = list.get(i).val;
+            j++;
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        ListNode head = new ListNode(1);
+        ListNode node1 = head;
+        for(int i = 2; i <= 6; i++) {
+            ListNode node = new ListNode(i);
+            node1.next = node;
+            node1 = node1.next;
+        }
+
+        Solution solution = new Solution();
+        int[] result = solution.reversePrint(head);
+        for(int i : result) {
+            System.out.println(i);
+        }
+
+    }
+}
+```
 
 # 移除重复结点 面试题02.01 
 
