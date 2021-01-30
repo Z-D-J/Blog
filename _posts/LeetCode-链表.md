@@ -558,7 +558,7 @@ class Solution {
 }
 ```
 
-# 移除重复结点 面试题02.01 
+# 移除重复节点 面试题02.01 
 
 * 题目
 
@@ -696,12 +696,86 @@ class Solution {
   }
   
   ```
-
   * 法二：
-    * set集合去重
+    * 将已经出现的元素值存入ArrayList集合中，设置双指针，遍历集合，当出现重复元素时，利用双指针跳过当前节点。
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+    }
+}
+
+class Solution {
+    public ListNode removeDuplicateNodes(ListNode head) {
+        ArrayList<Integer> list = new ArrayList<>();
+
+        ListNode front = head;
+        ListNode cur = head;
+        OUT:
+        while(cur != null) {
+            for(int i : list) {
+                if(i == cur.val) {
+                    //如果是重复元素，保持front指针不动，只移动当前元素指针cur
+                    front.next = cur.next;
+                    cur = cur.next;
+                    continue OUT;
+                }
+            }
+            list.add(cur.val);
+            front = cur;
+            cur = cur.next;
+        }
+
+        return  head;
+    }
+
+    public static void main(String[] args) {
+        ListNode node1 = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(3);
+        ListNode node4 = new ListNode(3);
+        ListNode node5 = new ListNode(2);
+        ListNode node6 = new ListNode(1);
+        node1.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        node4.next = node5;
+        node5.next = node6;
+        node6.next = null;
+
+        Solution solution = new Solution();
+        solution.removeDuplicateNodes(node1);
+        for(ListNode node = node1; node != null; node = node.next) {
+            System.out.println(node.val);
+        }
+    }
+}
+```
   * 法三：
-    * 哈希表
-  * 法四：
-    * 位运算
-  * 法五：
-    * 双指针
+    * 哈希表:思路与法二类似，只是哈希表不能存储重复元素，判断无需遍历，速度提升。
+```java
+class Solution {
+    public ListNode removeDuplicateNodes(ListNode head) {
+         if (head == null) {
+            return head;
+        }
+        Set<Integer> occurred = new HashSet<Integer>();
+        occurred.add(head.val);
+        ListNode pos = head;
+        // 枚举前驱节点
+        while (pos.next != null) {
+            // 当前待删除节点
+            ListNode cur = pos.next;
+            if (occurred.add(cur.val)) {
+                pos = pos.next;
+            } else {
+                pos.next = pos.next.next;
+            }
+        }
+        pos.next = null;
+        return head;
+    }
+}
+```
