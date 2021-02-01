@@ -163,4 +163,16 @@ config.setMaxIdel(10);
 JedisPool jedisPool = new JedisPool(config,"localhost",6379);
 ```
 * 可以类似JDBC写Jedis连接池的工具类，来简化代码的书写。
-
+* 注：使用Jedis的连接池还需要额外导入两个包：
+```xml
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.22</version>
+        </dependency>
+```
