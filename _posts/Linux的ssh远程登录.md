@@ -1,41 +1,37 @@
-title: Linux远程登录
+title: Linux的ssh远程登录
 date: 2020-10-07 09:39:28
 tags:
 
-# 虚拟机安装Ubuntu20
+# 法一：Windows通过登录工具远程登录linux
 
-![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201007094327.jpg)
-
-# 创建一个新用户
-
-![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201007095249.jpg)
-* 纯数字的用户名是不合法的，需要加上一个`--force`选项。
-
-# Windows通过ssh远程登录linux
-
-* linux中启动ssh服务
+1. linux中启动ssh服务
     * 安装ssh服务：`sudo apt-get install openssh-server   `
     * 启动ssh服务: `sudo /etc/init.d/ssh start  `
     
-* windows中安装putty
+2. windows中安装putty
   
   * 直接去[官网](https://www.chiark.greenend.org.uk/~sgtatham/putty/)下载安装
   
-* 在linux中安装net-tools来查看局域网ip
+3.  在linux中安装net-tools来查看局域网ip
   * 使用命令`sudo apt-get install net-tools`。
-
   * 使用命令`ifconfig`来查看ip。
-
     ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201007114241.jpg)
-
-* 启动putty
-
+4. 启动putty
     * 在putty中输入局域网IP
     * 之后开启一个黑色终端界面，在里面输入用户名和密码，连接到linux。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201007115016.jpg)
 
-## ssh通过账号密码登录远程linux服务器
+# 法二：ssh通过账号密码登录远程linux服务器
 
 * `ssh 账号@服务器地址`,如：`ssh zhangjie@106.14.197.71`
+* 前提是双方的ssh服务都启动。
+
+# 法三：使用公钥ssh远程登录到linux
+
+* 不用输入密码即可登录，可应用于自动登录。
+* 在客户端中使用`ssh-keygen`来生成ssh秘钥和公钥
+* 将公钥部署到linux服务器上去。命令为`ssh-copy-id -i ~/.ssh/id_rsa.pub  root@111.111.111.111`
+* 在客户端中使用`ssh root@111.111.111.111 -p 22`即可登录linux服务器。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201007172656.jpg)
+
 
 # 查看linux的网络情况
 
@@ -131,16 +127,5 @@ tags:
   - PR 值表示 Priority 值叫动态优先级，是进程在内核中实际的优先级值，进程优先级的取值范围是通过一个宏定义的，这个宏的名称是 MAX_PRIO，它的值为 140。Linux 实际上实现了 140 个优先级范围，取值范围是从 0-139，这个值越小，优先级越高。而这其中的 0 - 99 是实时进程的值，而 100 - 139 是给用户的。其中 PR 中的 100 to 139 值部分有这么一个对应 PR = 20 + (-20 to +19)，这里的 -20 to +19 便是 nice 值，所以说两个虽然都是优先级，而且有千丝万缕的关系，但是他们的值，他们的作用范围并不相同
   - VIRT 任务所使用的虚拟内存的总数，其中包含所有的代码，数据，共享库和被换出 swap 空间的页面等所占据空间的总数
 
-# 使用公钥ssh远程登录到linux
 
-* 在Windows中使用`ssh-keygen`来生成ssh秘钥和公钥
-* 使用`gitbash`将公钥部署到linux上去。命令为`ssh-copy-id 2019091615004@192.168.174.129 -p 22`。
-* 在Windows中使用`ssh 2019091615004@192.168.174.129 -p 22`即可登录linux。![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201007172656.jpg)
-
-# `rm -rf /*` 命令
-
-执行后效果如下![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201007173136.jpg)
-
-* `rm`是删除命令，-r选项是删除目录，-f选项是强制删除，`/*`中`/`是用户的根目录，而`*`是通配符，代表根目录下的全部文件。所以这个命令是删除用户根目录下的全部文件。
-* 但是因为这个用户不是root用户，所以不具有删除根目录下所有文件的权限，所以会出现大量无法删除。
 
