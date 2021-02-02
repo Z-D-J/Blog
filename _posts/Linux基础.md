@@ -7,6 +7,8 @@ banner_img: /img/linuc.jpg
 ---
 # Linux
 
+[linux命令参考](https://www.runoob.com/linux/linux-command-manual.html)
+
 ## 一、操作系统简介
 
 * 计算机是一台机器，它按照用户的要求接收信息、存储数据、处理数据，然后再将处理结果输出（文字、图片、音频、视频等）。计算机由硬件和软件组成。
@@ -24,7 +26,12 @@ banner_img: /img/linuc.jpg
 
 ### Linux历史概述
 
-Linux 内核最初是由李纳斯•托瓦兹（Linus Torvalds）在赫尔辛基大学读书时出于个人爱好而编写的，当时他觉得教学用的迷你版 UNIX 操作系统 Minix 太难用了，于是决定自己开发一个操作系统。第 1 版本于 1991 年 9 月发布，当时仅有 10 000 行代码。李纳斯•托瓦兹没有保留 Linux 源代码的版权，公开了代码，并邀请他人一起完善 Linux。与 Windows 及其他有专利权的操作系统不同，Linux 开放源代码，任何人都可以免费使用它。
+Linux内核最初是由李纳斯•托瓦兹（Linus Torvalds）在赫尔辛基大学读书时出于个人爱好而编写的，当时他觉得教学用的迷你版UNIX操作系统Minix太难用了，于是决定自己开发一个操作系统。第1版本于1991年9月发布，当时仅有10000行代码。李纳斯•托瓦兹没有保留Linux源代码的版权，公开了代码，并邀请他人一起完善Linux。与Windows及其他有专利权的操作系统不同，Linux开放源代码，任何人都可以免费使用它。
+
+### Linux版本
+
+* Linux的版本分为**内核版本**和**发行版本**。
+* Linux有上百种不同的发行版，如基于社区开发的debian、archlinux，和基于商业开发的Red Hat Enterprise Linux、SUSE、Oracle Linux等。
 
 ### Linux特性
 
@@ -119,7 +126,7 @@ sudo apt install chrome-gnome-shell
 
 #### 命令行工具配置及美化
 
-*  安装Terminnator
+*  安装Terminator
 ```
 sudo add-apt-repository ppa:gnome-terminator
 sudo apt update
@@ -170,6 +177,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 ## 四、Linux基本概念及基本操作
 
 ### 1.Linux终端
+
 * 终端的概念：通常我们在使用 Linux 时，并不是直接与系统打交道，而是通过一个叫做 Shell 的中间程序来完成的，在图形界面下为了实现让我们在一个窗口中完成用户输入和显示输出，Linux 系统还提供了一个叫做终端模拟器的程序（Terminal）。 下面是几个比较常见的终端模拟器： gnome-terminal，Konsole，xterm，rxvt，kvt，nxterm 和 eterm 。
 * 终端本质上是对应着 Linux 上的 /dev/tty 设备，Linux 的多用户登录就是通过不同的 /dev/tty 设备完成的，Linux 默认提供了 6 个纯命令行界面的 “terminal”（准确的说这里应该是 6 个 virtual consoles）来让用户登录。可以通过使用[Ctrl]+[Alt]+[F1]～[F6]进行切换。
   * 示例：
@@ -184,10 +192,12 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 
 
 ### 2.shell
+
 * 通常在图形界面中对实际体验带来差异的不是上述的不同发行版的各种终端模拟器，而是这个 Shell（壳）。有壳就有核，这里的核就是指 UNIX/Linux 内核，Shell 是指“提供给使用者使用界面”的软件（命令解析器），类似于 DOS 下的 command（命令行）和后来的 cmd.exe 。普通意义上的 Shell 就是可以接受用户输入命令的程序。它之所以被称作 Shell 是因为它隐藏了操作系统底层的细节。同样的 UNIX/Linux 下的图形用户界面 GNOME 和 KDE，有时也被叫做“虚拟 shell”或“图形 shell”。
 * 在 UNIX/Linux 中比较流行的常见的 Shell 有 bash、zsh、ksh、csh 等等（美化中将bash换为了zsh)，Ubuntu 终端默认使用的是 bash，默认的桌面环境是 GNOME 或者 Unity（基于 GNOME）。
 
 ### 3.命令行基本操作
+
 * 命令：在 linux 中，最最重要的就是命令，这就包含了 2 个过程，输入和输出。
   * 输入：输入当然就是打开终端，然后按键盘输入，然后按回车。
   * 输出：输出会返回你想要的结果，比如你要看什么文件，就会返回文件的内容。如果只是执行，执行失败会告诉你哪里错了，如果执行成功那么会没有输出。
@@ -211,6 +221,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
   * man命令基本使用方法：`man command_name`
   
 ### 4.通配符
+
 * 通配符概念：
   * 通配符是一种特殊语句，主要有星号（*）和问号（?），用来对字符串进行模糊匹配（比如文件名、参数名）。
   * 当查找文件夹时，可以使用它来代替一个或多个真正字符；当不知道真正字符或者懒得输入完整名字时，常常使用通配符代替一个或多个真正字符。
@@ -220,14 +231,16 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
    
 
 ## 五、Linux用户及用户组管理
+
 * Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。
 * 用户的账号一方面可以帮助系统管理员对使用系统的用户进行跟踪，并控制他们对系统资源的访问；另一方面也可以帮助用户组织文件，并为用户提供安全性保护。
 * 每个用户账号都拥有一个唯一的用户名和各自的口令(password)。
 * 用户在登录时键入正确的用户名和口令后，就能够进入系统和自己的主目录。
 
 ### 1.查看用户
+
 * `who`命令查看用户：
-  `who`命令的常用参数：
+* `who`命令的常用参数：
   
 |参数|作用|
 |-|-|
@@ -243,6 +256,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 注：`whoami`命令可查看当前登录用户的用户名
 
 ### 2.创建用户
+
 * root账户：在 Linux 系统里， root 账户拥有整个系统至高无上的权限，比如新建和添加用户。
 * `sudo`命令：一般我们登录系统时都是以普通账户的身份登录的，要创建用户需要 root 权限，这里就要用到 sudo 这个命令了。`sudo <cmd> `可以以特权级别运行 cmd 命令，需要当前用户属于 sudo 组，且需要输入当前用户的密码（注：Linux环境输入密码不会有显示）
 * `su`命令：`su <user> `可以切换到用户 user，执行时需要输入目标用户的密码；`su - <user> `命令也是切换用户，但是同时用户的环境变量和工作目录也会跟着改变成目标用户所对应的。
@@ -251,6 +265,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200626222428.jpg)
 
 ### 3.用户组
+
 * 用户组简介：在 Linux 里面每个用户都有一个归属（用户组），用户组简单地理解就是一组用户的集合，它们共享一些资源和权限，同时拥有私有资源。
 * 查看用户组：
   * 法一：`groups + username`
@@ -264,11 +279,14 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
       你看到上面的 password 字段为一个 x，并不是说密码就是它，只是表示密码不可见而已。这里需要注意，如果用户的 GID 等于用户组的 GID，那么最后一个字段 user_list 就是空的
 
 ### 删除用户和用户组
+
 * 删除用户：`sudo deluser username --remove-home`
 * 删除用户组：`sudo groupdel username --remove-home`
 
 ## 六、Linux文件类型及权限
+
 ### 文件类型
+
 1. 普通文件(regular file)：一般存取的文件。大致可分为
    1. 纯文本文件(ASCII)：这是Unix系统中最多的一种文件类型，之所以称为纯文本文件，是因为内容可以直接读到的数据，例如数字、字母等等。设 置文件几乎都属于这种文件类型。
    2. 二进制文件(binary)：系统其实仅认识且可以执行二进制文件(binary file)。Linux中的可执行文件(脚本，文本方式的批处理文件不算)就是这种格式的。举例来说，命令cat就是一个二进制文件。
@@ -318,12 +336,14 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 * 变更文件所属群组`chgrp <usergroupname> <filename>`:其中 chgrp 是change group的缩写
 
 ### 修改文件权限
+
 * 加减修改法：
   * 示例：`chmod g-w zhangjie.txt`
    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200629201210.jpg) 
   g、o 还有 u 分别表示 group（用户组）、others（其他用户） 和 user（用户），+ 和 - 分别表示增加和去掉相应的权限。
 
 ## 七、Linux目录结构及文件基本操作
+
 ### Linux目录结构与Windows区别
 *  Linux 的目录与 Windows 的目录的区别：或许对于一般操作上的感受来说没有多大不同，但从它们的实现机制来说是完全不同的。
 *  一种不同是体现在目录与存储介质（磁盘，内存，DVD 等）的关系上，以往的 Windows 一直是以存储介质为主的，主要以盘符（C 盘，D 盘...）及分区来实现文件管理，然后之下才是目录，目录就显得不是那么重要，除系统文件之外的用户文件放在任何地方任何目录也是没有多大关系。所以通常 Windows 在使用一段时间后，磁盘上面的文件目录会显得杂乱无章。
@@ -331,8 +351,11 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 *  Linux中每一个文件在此目录树中的文件名(包含完整路径)都是独一无二的。
 
 ### Linux的目录结构-FHS标准
+
 [FHS_3.0官方文档](https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf)
+
 #### FHS简介
+
 * FHS（英文：Filesystem Hierarchy Standard 中文：文件系统层次结构标准），多数 Linux 版本采用这种文件组织形式，FHS 定义了系统中每个区域的用途、所需要的最小构成的文件和目录同时还给出了例外处理与矛盾处理。
 * FHS 定义了两层规范，第一层是， /（根目录） 下面的各个目录应该要放什么文件数据，例如 /etc 应该放置设置文件，/bin 与 /sbin 则应该放置可执行文件等等。
 第二层则是针对 /usr 及 /var 这两个目录的子目录来定义。例如 /var/log 放置系统日志文件，/usr/share 放置共享数据等等。
@@ -344,6 +367,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
   * 可变动的：经常改变的数据，例如登录文件、一般用户可自行收受的新闻组等。
 
 #### FHS标准下目录结构
+
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200630182400.png)
 真机演示：
 利用`tree`命令可查看目录树：
@@ -358,12 +382,14 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
   * 相对路径：相对路径，也就是相对于你当前的目录的路径，相对路径是以当前目录" . "为起点，以你所要到的目录为终点，表现形式如： usr/local/bin （这里假设你当前目录为根目录）。(注意：我们表示相对路径实际并没有加上表示当前目录的那个" ." ，而是直接以目录名开头，因为这个 usr 目录为 / 目录下的子目录，是可以省略这个 . 的；如果是当前目录的上一级目录，则需要使用" .." ，比如你当前目录为 /home/zhangjie 目录下，根目录就应该表示为 ../../ ，表示上一级目录（ home 目录）的上一级目录（ / 目录）。)
 
 #### 与路径相关命令
+
 * `cd`(change directory/改变目录)命令：(注：cd 命令与后面参数间都有一个空格)
   * 进入上一级目录：`cd ..`
   * 进入子目录：`cd <目录名>`
   * 进入具体目录：`cd <绝对路径>`或`cd <相对路径>`
   * 返回home目录：`cd `或`cd /home/<username>`或`cd ~`
   * 返回进入此目录之前所在目录：`cd -`
+  * 进入当前用户的家目录下：`cd ~`.
   * 把上个cd命令的参数作为cd参数使用:`cd !$`
 * pwd（print working directory/显示当前工作目录)命令：（注：显示的是绝对路径）
 示例：
@@ -414,10 +440,15 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 * 删除目录
   * `rm -r <目录名>`:要删除一个目录，需要加上 -r 或 -R 参数。
   * `rm -rf <目录名>`:强制删除。
+  * `rm -rf /*` 命令，执行后效果如下
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20201007173136.jpg)
+    * `rm`是删除命令，-r选项是删除目录，-f选项是强制删除，`/*`中`/`是用户的根目录，而`*`是通配符，代表根目录下的全部文件。所以这个命令是删除用户根目录下的全部文件。
+    * 但是因为这个用户不是root用户，所以不具有删除根目录下所有文件的权限，所以会出现大量无法删除。
   * 示例：
   ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200702214637.jpg)
 
 #### 打开可执行文件
+
 * 在终端输入可执行的文件的全路径（绝对或相对均可）就可运行相应可执行文件
 * 示例：在当前目录下运行a.out文件的命令：`./a.out`
 
@@ -480,6 +511,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
   ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200709152425.jpg)
 
 #### 文件查找
+
 * `whereis `:whereis 只能搜索二进制文件(-b)，man 帮助文件(-m)和源代码文件(-s)。这个搜索很快，因为它并没有从硬盘中依次查找，而是直接从数据库中查询。
   ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200709223029.jpg)
 * `locate`:
@@ -509,6 +541,40 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 -prune                            #忽略某个目录
   * 示例：
   ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200709224529.jpg)
+
+#### 文件内容查找
+
+* `grep`命令:Linux grep 命令用于查找文件里符合条件的字符串。
+* grep指令用于查找内容包含指定的范本样式的文件，如果发现某文件的内容符合所指定的范本样式，预设grep指令会把含有范本样式的那一列显示出来。若不指定任何文件名称，或是所给予的文件名为`-`，则grep 指令会从标准输入设备读取数据。
+* 语法:`grep [-abcEFGhHilLnqrsvVwxy][-A<显示行数>][-B<显示列数>][-C<显示列数>][-d<进行动作>][-e<范本样式>][-f<范本文件>][--help][范本样式][文件或目录...]`
+* 参数：
+-a 或 --text : 不要忽略二进制的数据。
+-A<显示行数> 或 --after-context=<显示行数> : 除了显示符合范本样式的那一列之外，并显示该行之后的内容。
+-b 或 --byte-offset : 在显示符合样式的那一行之前，标示出该行第一个字符的编号。
+-B<显示行数> 或 --before-context=<显示行数> : 除了显示符合样式的那一行之外，并显示该行之前的内容。
+-c 或 --count : 计算符合样式的列数。
+-C<显示行数> 或 --context=<显示行数>或-<显示行数> : 除了显示符合样式的那一行之外，并显示该行之前后的内容。
+-d <动作> 或 --directories=<动作> : 当指定要查找的是目录而非文件时，必须使用这项参数，否则grep指令将回报信息并停止动作。
+-e<范本样式> 或 --regexp=<范本样式> : 指定字符串做为查找文件内容的样式。
+-E 或 --extended-regexp : 将样式为延伸的正则表达式来使用。
+-f<规则文件> 或 --file=<规则文件> : 指定规则文件，其内容含有一个或多个规则样式，让grep查找符合规则条件的文件内容，格式为每行一个规则样式。
+-F 或 --fixed-regexp : 将样式视为固定字符串的列表。
+-G 或 --basic-regexp : 将样式视为普通的表示法来使用。
+-h 或 --no-filename : 在显示符合样式的那一行之前，不标示该行所属的文件名称。
+-H 或 --with-filename : 在显示符合样式的那一行之前，表示该行所属的文件名称。
+-i 或 --ignore-case : 忽略字符大小写的差别。
+-l 或 --file-with-matches : 列出文件内容符合指定的样式的文件名称。
+-L 或 --files-without-match : 列出文件内容不符合指定的样式的文件名称。
+-n 或 --line-number : 在显示符合样式的那一行之前，标示出该行的列数编号。
+-o 或 --only-matching : 只显示匹配PATTERN 部分。
+-q 或 --quiet或--silent : 不显示任何信息。
+-r 或 --recursive : 此参数的效果和指定"-d recurse"参数相同。
+-s 或 --no-messages : 不显示错误信息。
+-v 或 --invert-match : 显示不包含匹配文本的所有行。
+-V 或 --version : 显示版本信息。
+-w 或 --word-regexp : 只显示全字符合的列。
+-x --line-regexp : 只显示全列符合的列。
+-y : 此参数的效果和指定"-i"参数相同。
 
 #### 文件打包与解压缩
 
@@ -643,6 +709,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 ## 九、基础底层知识
 
 ### cpu
+
 * 中央处理器（CPU，central processing unit）作为计算机系统的运算和控制核心，是信息处理、程序运行的最终执行单元。CPU是计算机中负责读取指令，对指令译码并执行指令的核心部件。CPU的功效主要为处理指令、执行操作、控制时间、处理数据。
 * 物理CPU:物理CPU是相对于虚拟CPU而言的概念，指实际存在的处理器,就是我们可以看的见，摸得着的CPU，就是插在主板上面的。
 * 虚拟CPU:虚拟cpu是我们在做虚拟化时候，利用虚拟化技术，虚拟出来的CPU。如使用VMware时为虚拟机分配的CPU。
@@ -659,6 +726,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
   ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200711103931.png)
 
 ### 核心
+
 * 核心（core,又称内核）是一个硬件术语，描述单个计算组件（管芯或芯片）中独立中央处理器的数量。
 * CPU的核心数是指物理上，也就是硬件上存在着几个核心。比如，双核就是包括2个相对独立的CPU核心单元组，四核就包含4个相对独立的CPU核心单元组。
   ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200711105800.png)
@@ -666,12 +734,14 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 * 逻辑核（逻辑CPU或虚拟核）：用Intel的超线程技术(HT)将物理核虚拟而成的逻辑处理单元,现在大部分的主机的CPU都在使用HT技术，用一个物理核模拟两个虚拟核，即每个核两个线程。
 
 ### 超线程技术
+
 * 超线程技术把多线程处理器内部的两个逻辑内核模拟成两个物理芯片，让单个处理器就能使用线程级的并行计算，进而兼容多线程操作系统和软件。超线程技术充分利用空闲CPU资源，在相同时间内完成更多工作。
 * 虽然采用超线程技术能够同时执行两个线程，当两个线程同时需要某个资源时，其中一个线程必须让出资源暂时挂起，直到这些资源空闲以后才能继续。因此，超线程的性能并不等于两个CPU的性能。
 * 超线程技术图示：
   ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200711111930.jpg)
 
 ### 程序、进程、线程
+
 * **进程（process）**：进程是程序在一个数据集合上的一次执行过程，在早期的 UNIX、Linux 2.4 及更早的版本中，它是系统进行资源分配和调度的独立基本单位。
 * **程序（procedure)**：程序是执行一系列有逻辑、有顺序结构的指令，帮我们达成某个结果。
 * **进程与程序的区别**：
@@ -1601,3 +1671,81 @@ int main(int argc, char **argv)
 
 * E: 仓库 “http://ppa.launchpad.net/webupd8team/java/ubuntu eoan Release” 没有 Release 文件。
 * [解决](https://www.cnblogs.com/yyee/p/12888675.html)
+
+# Linux管道
+
+* 管道是Linux由Unix那里继承过来的进程间的通信机制，它是Unix早期的一个重要通信机制。其思想是，在内存中创建一个共享文件，从而使通信双方利用这个共享文件来传递信息。由于这种方式具有单向传递数据的特点，所以这个作为传递消息的共享文件就叫做“管道”。
+* 管道是一种通信机制，通常用于进程间的通信（也可通过socket进行网络通信），它表现出来的形式将前面每一个进程的输出（stdout）直接作为下一个进程的输入（stdin）。
+* 管道命令使用`|`作为界定符号
+* 管道命令仅能处理standard output,对于standard error output会予以忽略。
+* less,more,head,tail...都是可以接受standard input的命令，所以他们是管道命令
+* 管道命令必须要能够接受来自前一个命令的数据成为standard input继续处理才行。
+
+# Linux网络操作
+
+## 主机名配置
+
+* `hostname`:查看主机名;
+* `hostname 新的主机名`:修改主机名，重启后无效
+
+## ip地址查看与配置
+
+* `ifcofig`可以查看和临时修改ip地址。
+
+## 域名解析文件
+
+* `/etc/hosts`文件中有域名的配置文件。
+
+## 网络服务管理
+
+* `service network status`:查看网络服务的状态
+* `service network stop`:停止网络服务
+* `service network start`:启动网络服务
+* `service network restart`:重启网络服务
+* `service --status-all`:查看系统中所有后台服务
+* `netstat -nltp`:查看系统中网络进程的端口监听情况。
+---
+* `service iptables status`:查看防火墙状态
+* `service iptables start`:启动防火墙
+* `service iptables stop`:关闭防火墙
+* `chkconfig iptables off`:禁止防火墙自启
+
+# Linux的几种软件安装方式
+
+1. 二进制发布包：
+   1. 软件已经针对具体的平台编译打包发布，只要解压，修改配置即可。
+2. RPM包：
+   1.软件已经根据redhat的包管理工具规范RPM打包发布，需要获取到相应软件的rpm包，然后用rpm命令安装。
+3. apt(apt-get)在线安装：（ubuntu系列）
+   * `apt-cache search soft` 注：soft是你要找的软件的名称或相关信息 
+   * 如果找到了软件soft.version，则用apt-get install soft.version命令安装软件
+     * 注：只要你可以上网，只需要用apt-cache search查找软件;
+     * 用apt-get install软件详细介绍：
+       * apt-get是debian，ubuntu发行版的包管理工具，与红帽中的yum工具非常类似。
+       * apt-get命令一般需要root权限执行，所以一般跟着sudo命令例sudo apt-get xxxx
+       * apt-get install packagename——安装一个新软件包（参见下文的aptitude）
+       * apt-get remove packagename——卸载一个已安装的软件包（保留配置文件）
+       * apt-get --purge remove packagename——卸载一个已安装的软件包（删除配置文件）
+       * dpkg --force-all --purge packagename ——有些软件很难卸载，而且还阻止了别的软件的应用，就可以用这个，不过有点冒险。
+       * apt-get autoremove——因为apt会把已装或已卸的软件都备份在硬盘上，所以如果需要空间的话，可以让这个命令来删除你已经删掉的软件。
+       * apt-get autoclean——定期运行这个命令来清除那些已经卸载的软件包的.deb文件。通过这种方式，可以释放大量的磁盘空间。如果需求十分迫切，可以使用apt-get clean以释放更多空间。这个命令会将已安装软件包裹的.deb文件一并删除。
+       * apt-get clean——这个命令会把安装的软件的备份也删除，不过这样不会影响软件的使用的。
+       * apt-get upgrade——更新所有已安装的软件包
+       * apt-get dist-upgrade——将系统升级到新版本
+       * apt-cache search string——在软件包列表中搜索字符串
+       * apt-cache showpkg pkgs——显示软件包信息。
+       * apt-cache stats——查看库里有多少软件
+       * apt-cache dumpavail——打印可用软件包列表。
+       * apt-cache show pkgs——显示软件包记录，类似于dpkg –print-avail。
+       * apt-cache pkgnames——打印软件包列表中所有软件包的名称
+       * 简单的说： dpkg只能安装已经下载到本地机器上的deb包. apt-get能在线下载并安装deb包,能更新系统,且还能自动处理包与包之间的依赖问题,这个是dpkg工具所不具备的。
+4. 源码编译安装：
+   1. 软件以源码工程的形式发布，需要获取到源码工程后，用相应的开发工具进行编译打包部署。
+
+# ftp/sftp文件传输
+
+* 使用给予ftp或者sftp的工具进行客户端和服务端之间的文件传输。
+* 如：filezilla，lrzsz，sftp等。
+
+  
+
