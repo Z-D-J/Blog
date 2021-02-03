@@ -369,6 +369,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc //启用oh-my-zsh
 #### FHS标准下目录结构
 
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200630182400.png)
+* 用户安装的软件一般安装到`/usr/local`目录下，其中bin目录放可执行文件，src放源代码文件等。
 真机演示：
 利用`tree`命令可查看目录树：
 ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20200630183448.jpg)
