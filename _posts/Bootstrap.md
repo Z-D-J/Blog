@@ -146,4 +146,4 @@ tags:
 ## js插件
 
 * [文档](https://v3.bootcss.com/javascript/),需要在文档中复制一段代码来实现对应的功能。
-* 轮播图等。。。
+* 轮播图(Carousel)等。。。

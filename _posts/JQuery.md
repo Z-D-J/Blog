@@ -5,6 +5,7 @@ tags:
 ---
 # JQuery概念
 
+[参考文档](https://www.w3school.com.cn/jquery/index.asp)
 * jQuery是一个快速、简洁的**JavaScript框架**，是继Prototype之后又一个优秀的JavaScript代码库（或JavaScript框架）。jQuery设计的宗旨是“write Less，Do More”，即倡导写更少的代码，做更多的事情。它封装JavaScript常用的功能代码，提供一种简便的JavaScript设计模式，优化**HTML文档操作、事件处理、动画设计和Ajax交互**。
 * JavaScript框架：本质上就是一些**js文件**，这些文件中封装了js的原生代码。
 
@@ -127,7 +128,7 @@ $(function(){
 
 1. `html()`:**获取/设置元素的标签体内容**,标签体内容包括该标签中嵌套的标签。
 2. `text()`:获取/设置元素的标签体的**纯文本**内容。
-3. `var()`:获取/设置元素的value属性值。
+3. `val()`:获取/设置元素的value属性值。
 * 注：方法中不传参数，就是获取元素对应内容，方法中传递参数就是修改元素对应的内容。
 
 ## 属性操作
@@ -180,6 +181,7 @@ $(function(){
      3. fn:在动画执行结束时执行的函数，每个元素执行一次。
   2. `hide([speed], [easing],[fn])`;
   3. `toggle([speed], [easing],[fn])`:在show和hide之间切换。
+* JQuery动画效果是同通过修改元素属性来实现的，如hide()就会设置的其中一个属性就是：`style="display:none"`
 
 * 滑动显示和隐藏方式： 
   1. `slideDown([speed], [easing],[fn])`
@@ -200,8 +202,8 @@ $(function(){
         2. `element`：就是集合中每一个元素对象。
         3. `this`:集合中的当前元素对象。
      2. 回调函数的返回值：
-        1. `true`:如果当前的function返回为false，则结束循环。(break)
-        2. `false`:如果当前的function返回为true,则结束本次循环，继续下次循环。（continue)
+        1. `false`:如果当前的function返回为false，则结束循环。(break)
+        2. `true`:如果当前的function返回为true,则结束本次循环，继续下次循环。（continue)
   2. `$.each(object, callback)`,其中callback是回调函数。
   3. `for...of:jq对象`:3.0版本后提供的方式
      1. 语法：`for（元素对象 of 容器对象)`.
