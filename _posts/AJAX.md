@@ -105,3 +105,4 @@ $.post("ajaxServlet",(username:"zhangjie"), function(data){
     alert(data);
 },"text");
 ```
+* `serialize()`:通过序列化**表单**值，创建URL编码文本字符串。您可以选择一个或多个表单元素（比如input及/或文本框），或者 form 元素本身。序列化的值可在生成 AJAX 请求时用于 URL 查询字符串中(即作为data参数）。
