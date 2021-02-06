@@ -79,3 +79,59 @@ public class Solution {
     }
 }
 ```
+* 法二：
+  * 设置一个数字来记录括号的层数，最外层的括号的层数为1，当层数不为1时将括号存入stringBuilder对象中。
+```java
+public String removeOuterParentheses(String S) {
+    StringBuilder stringBuilder = new StringBuilder();
+    int level = 0;
+    for(char i : S.toCharArray()) {
+        //层数按照左括号来记录
+        if(i == '(') {
+            level++;
+        }
+        //层数大于1时存入，需要放在level减1之前，否则右括号存不进去
+        if(level > 1) {
+            stringBuilder.append(i);
+        }
+        //当出现右括号时，将当前的层数减一，类似于用栈记录的出栈效果
+        if(i == ')'){
+            level--;
+        }
+
+    }
+
+    return String.valueOf(stringBuilder);
+}
+```
+
+# 剑指 Offer 09. 用两个栈实现队列
+
+* 题目：
+---
+用两个栈实现一个队列。队列的声明如下，请实现它的两个函数 appendTail 和 deleteHead ，分别完成在队列尾部插入整数和在队列头部删除整数的功能。(若队列中没有元素，deleteHead 操作返回 -1 )
+
+ 
+
+示例 1：
+
+输入：
+["CQueue","appendTail","deleteHead","deleteHead"]
+[[],[3],[],[]]
+输出：[null,null,3,-1]
+示例 2：
+
+输入：
+["CQueue","deleteHead","appendTail","appendTail","deleteHead","deleteHead"]
+[[],[],[5],[2],[],[]]
+输出：[null,-1,null,null,5,2]
+提示：
+
+1 <= values <= 10000
+最多会对 appendTail、deleteHead 进行 10000 次调用
+
+## java解法
+
+1. 法一：
+```java
+
