@@ -6,6 +6,7 @@ tags:
 
 # 数据库简介
 
+[mysql8.0官方文档](https://dev.mysql.com/doc/refman/8.0/en/)
 * 特点：
   1.  持久化保存数据；
   2.  可以实现结构化查询，方便管理。
@@ -30,8 +31,13 @@ tags:
 * MySQL下载安装：
   1.  社区版（免费）
   2.  企业版（收费）
-  3.  下载地址：https://dev.mysql.com/downloads/installer/
+  3.  下载地址：https://devmysql.com/downloads/installer/
   4.  跟随安装指导进行配置。
+
+# MySQL在ubuntu上的安装
+
+1. 安装：`sudo apt-get install mysql-server`
+2. 配置：`sudo mysql_secure_installation`
 
 # MySQL服务的启动
 
@@ -48,10 +54,12 @@ tags:
 * 登录本地用户：`mysql -uroot -proot`，-u后面接的是用户名，-p后面接的是root用户的密码。`mysql -uroot -p`,会在之后输入密码。(在linux上登录root用户需要使用sudo)
 * 登录远程用户：`mysql -h127.0.0.1 -p` -h后面接的是连接目标的ip。
 * 登录：`mysql --host=IP --user=用户名 --passward=连接目标的密码`
+* Mysql设置远程连接权限，[参考文档](https://www.cnblogs.com/surplus/p/11405331.html)
 
 # 退出MySQL
 
 * 输入`exit`
+
 # MySQL的目录结构
 
 1.MySQL的安装目录：
@@ -781,4 +789,4 @@ create table `student` (
 ); 
 ```
 
-# 
+ 
