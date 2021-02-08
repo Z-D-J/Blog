@@ -46,11 +46,11 @@ tags:
             <version>8.0.23</version>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains.externalAnnotations.junit</groupId>
+            <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12-an1</version>
+            <version>4.13</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>>
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
