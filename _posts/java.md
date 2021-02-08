@@ -7,7 +7,8 @@ tags:
 
 # java概述
 
-* java EE：java标准版；java SE：java企业版；java ME：java微型版。
+[官方文档](https://docs.oracle.com/en/java/javase/15/docs/api/index.html)
+* java EE：java企业版；java SE：java标准版；java ME：java微型版。
 * java**不支持指针**。
 * Application：java应用程序；Applet：java小应用程序（嵌入到web页面中，要依赖HTML文件和web浏览器，且没有main()方法）
 * Java可以编写Web服务程序。
