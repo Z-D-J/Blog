@@ -6,6 +6,7 @@ tags:
 
 # maven是什么？
 
+[中央仓库内容查询](https://mvnrepository.com/)
 [参考文档](https://www.runoob.com/maven/maven-tutorial.html)
 * maven是基于POM（project object model:项目对象模型）的软件项目管理工具。
 * Maven 是一个项目管理工具，可以对 Java 项目进行构建、依赖管理。Maven 也可被用于构建和管理各种项目，例如 C#，Ruby，Scala 和其他语言编写的项目。
@@ -30,7 +31,7 @@ tags:
 # Maven POM
 
 * **POM**( Project Object Model，项目对象模型 ) 是 Maven 工程的基本工作单元，是一个**XML文件**，包含了项目的基本信息，用于描述项目如何构建，声明项目依赖，等等。执行任务或目标时，Maven会在当前目录中查找POM。它读取POM，获取所需的配置信息，然后执行目标。
-* **父（Super）POM**是Maven默认的 POM。所有的POM都继承自一个父 POM（无论是否显式定义了这个父 POM）。父 POM 包含了一些可以被继承的默认设置。因此，当Maven发现需要下载POM中的依赖时，它会到Super POM 中配置的[默认仓库](http://repo1.maven.org/maven2) 去下载。
+* **父（Super）POM**是Maven默认的 POM。所有的POM都继承自一个父 POM（无论是否显式定义了这个父 POM）。父 POM 包含了一些可以被继承的默认设置。因此，当Maven发现需要下载POM中的依赖时，它会到Super POM 中配置的[默认仓库](https://mvnrepository.com/) 去下载。
 * POM的文件（xml）中的标签解读[菜鸟教程](https://www.runoob.com/maven/maven-pom.html)
 
 # maven构建生命周期
