@@ -356,3 +356,9 @@ xmlns:p="http://www.springframework.org/schema/p"
     <bean name="p-namespace" class="com.example.ExampleBean"
         p:email="someone@somewhere.com"/>
 ```
+
+# 作用域
+
+## 单例模式
+
+
