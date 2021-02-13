@@ -130,8 +130,75 @@ public String removeOuterParentheses(String S) {
 1 <= values <= 10000
 最多会对 appendTail、deleteHead 进行 10000 次调用
 
+* 题目解释：
+---
+输入：
+
+`["CQueue","appendTail","deleteHead","deleteHead"] `
+这一行表示每一行代码的操作,其CQueue方法是构造器方法，即是创建队列的操作。
+
+`[[],[3],[],[]]`
+这个表示每一行代码操作所需要的参数
+
 ## java解法
 
 1. 法一：
+   1. 设置两个栈，每次添加数据时就向第一个栈中添加数据，每次输出数据时就先将第一个栈中的数据弹出并压入第二个栈中，再依次弹出第二个栈中的数据。
 ```java
+
+package stack;
+
+import java.util.Stack;
+
+public class CQueue {
+    Stack<Integer> stack1;
+    Stack<Integer> stack2;
+
+    public CQueue(){
+        stack1 = new Stack<>();
+        stack2 = new Stack<>();
+    }
+
+    public void appendTail(int value) {
+        stack1.push(value);
+    }
+
+    public int deleteHead(){
+        int temp;
+
+        while(!stack1.isEmpty()) {
+            temp = stack1.pop();
+            stack2.push(temp);
+        }
+
+        if(stack2.isEmpty()) {
+            return -1;
+        }
+
+        int value = stack2.pop();
+
+        while(!stack2.isEmpty()) {
+            temp = stack2.pop();
+            stack1.push(temp);
+        }
+
+        return value;
+    }
+
+    public static void main(String[] args) {
+        CQueue cQueue = new CQueue();
+
+        cQueue.appendTail(1);
+        cQueue.appendTail(2);
+        cQueue.appendTail(3);
+
+        cQueue.deleteHead();
+        Stack<Integer> stack = cQueue.stack1;
+        while(!stack.isEmpty()) {
+            System.out.println(stack.pop());
+        }
+    }
+
+}
+```
 
