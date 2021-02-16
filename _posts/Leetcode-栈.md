@@ -201,4 +201,99 @@ public class CQueue {
 
 }
 ```
+# 1047. 删除字符串中的所有相邻重复项
+
+* 题目：
+---
+给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。
+
+在 S 上反复执行重复项删除操作，直到无法继续删除。
+
+在完成所有重复项删除操作后返回最终的字符串。答案保证唯一。
+
+示例：
+```
+输入："abbaca"
+输出："ca"
+解释：
+例如，在 "abbaca" 中，我们可以删除 "bb" 由于两字母相邻且相同，这是此时唯一可以执行删除操作的重复项。之后我们得到字符串 "aaca"，其中又只有 "aa" 可以执行重复项删除操作，所以最后的字符串为 "ca"。
+```
+提示：
+1 <= S.length <= 20000
+S 仅由小写英文字母组成。
+
+## java解法
+
+* 法一：
+  * 设置一个栈，依次将字符串中字符压栈，栈顶内容始终是当前字符的相邻的前一个字符。
+```java
+class Solution {
+    public String removeDuplicates(String S) {
+        Stack<Character> stack = new Stack<>();
+        //遍历字符串，将字符串删除重复后存入栈中
+        for(char i : S.toCharArray()) {
+            if(stack.isEmpty()) {
+                stack.push(i);
+                continue;
+            }
+            char temp = stack.pop();
+
+            //如果栈顶的内容与刚读取的字符相同，则弹出栈顶内容，并进行下一次循环；如果相同，则将新字符压入栈
+            if(temp == i) {
+                continue;
+            } else {
+                stack.push(temp);
+                stack.push(i);
+            }
+        }
+
+        StringBuilder s1 = new StringBuilder();
+
+        //将栈中内容从头插入新字符串
+        while(!stack.isEmpty()) {
+            char temp  = stack.pop();
+            s1.insert(0,temp);
+        }
+        return s1.toString();
+    }
+
+    public static void main(String[] args) {
+        String s = "abbaca";
+
+        Solution solution = new Solution();
+
+        String s1 = solution.removeDuplicates(s);
+
+        System.out.println(s1);
+    }
+}
+```
+* 法二：
+  * 设置一个存储所有可能的重复情况的集合，然后将字符串与集合中所有内容比较，如果有相同的则替换为空字符串。
+
+```java
+    public String removeDuplicates(String S) {
+        HashSet<String> duplicates = new HashSet<>();
+        StringBuilder sb = new StringBuilder();
+
+        //将重复字符串"aa"到"zz"存入集合中，使用哈希集合的原因是这种集合内部不允许内容重复
+        for(char i = 'a'; i <= 'z'; i++) {
+            sb.setLength(0);
+            sb.append(i);
+            sb.append(i);
+            duplicates.add(sb.toString());
+        }
+
+        //遍历集合，与字符串内容比较，如果字符串中有相同内容则替换为空字符串
+        //设置一个记录字符串长度的变量，如果两次while循环之后的长度没变，说明字符串中的重复字符串已经被替换完了
+        int preLength = -1;
+        while(preLength != S.length()) {
+            preLength = S.length();
+            for(String d : duplicates) {
+                S = S.replace(d,"");
+            }
+        }
+        return S;
+    }
+```
 
