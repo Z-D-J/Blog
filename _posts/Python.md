@@ -8,6 +8,7 @@ tags:
 1. Python是一门解释性语言，无需编译和链接。
 2. Python解释器是可以交互的，因此Python甚至可以用作桌面计算器。
 3. Python是可扩展的，可以为Python的解释器添加内置函数和模块。
+4. 本次学习的是Python3.
 
 
 ## 解释器
@@ -41,7 +42,7 @@ tags:
 
 * 常用的数据类型有int、float，但是Python还有其它很多数据类型。例如复数类型（complex）,这种类型中使用j或者J代表复数部分，如`5+2j`.
 * 基本运算
-  * Python支持基本的`+`,`-`,`*`以及`/`，`%`的运算，但是和c语言不同的是，`/`默认的结果是浮点型。使用`//`可以做返回值为int型的除法运算（类似c语言的普通除法运算）.
+  * Python支持基本的`+`,`-`,`*`以及`/`，`%`（求模/余）的运算，但是和c语言不同的是，`/`默认的结果是浮点型。使用`//`可以做返回值为int型的除法运算（类似c语言的普通除法运算）.
   * Python还支持**幂方运算**`**`,`5**2`表示$5^2$；
   * python仍旧使用`=`为变量赋值，同c语言一样，Python中的变量在使用前必须先进行赋值。（但是在交互式编程中，Python内置了一个变量`_`,存储最近一个表达式的运算结果，这个变量无需赋值，便可直接使用，事实上，`_`是一个只读变量，对它赋值是没有意义的。）
   * python的赋值可以进行多重赋值，例如：`a, b = 0, 1`相当于`a = 0, b = 1`
@@ -163,10 +164,24 @@ tags:
 * 要获取与键相关联的值，可依次指定字典名和放在方括号内的键,如：`print(dict['key1'])`。
 * 注意，键—值对的**排列顺序与添加顺序不同**。Python不关心键—值对的添加顺序，而只关心键和值之间的关联关系。
 * 对于字典中不再需要的信息，可使用**del 语句将相应的键—值对彻底删除**。使用del 语句时，必须指定字典名和要删除的键。如：`del dict['key1']`.
-* 使用方法 `字典名.keys()`可以返回一个字典中的全部关键字。
 * 使用关键字`in`可以确认某个关键字是否在字典中。例如；`'key1' in dict`,如果'key1'存在的话返回True，否则返回False。（类似的还有`'key1' not in dict`的写法）、
-* 可以使用方法`字典名.items()`同时读出字典中的关键字和值（常用在循环中遍历字典）。
+* 可以使用方法`字典名.items()`**同时读出字典中的关键字和值**（常用在循环中遍历字典）。
+* 使用方法 `字典名.keys()`可以返回一个字典中的**全部关键字**。
+* 可使用方法`values() `，它**返回一个值列表，而不包含任何键**。
+* 遍历循环示例：
+```python
+# 遍历键值对
+for key, value in dict.items():
+    print("key = " + key)
+    print("value = " + value)
+
+# 只遍历键
+for key in dict.keys():
+    print("key = "  + key)
+```
+* 可使用函数`sorted()`来获得按特定顺序排列(特定顺序是指按字母的大小写顺序等默认的顺序)的键列表的副本,如：`for name in sorted(dict.keys()):`
 * dic()函数可以从值对列表中创建字典。
+* 通过对包含重复元素的列表调用`set()`方法 ，可让Python找出列表中**独一无二的元素，并使用这些元素来创建一个集合**。如：`for value in set(dict.values()):`
 * 字典推导式也是同样可以使用的。
 * 我们将较大的字典放在多行中:
 ```python
@@ -177,7 +192,36 @@ favorite_languages = {
     'phil': 'python',
     }
 ```
- 
+* 字典和列表等可以相互嵌套，如：
+```python
+# 列表中嵌套字典
+alien_0 = {'color': 'green', 'points': 5}
+alien_1 = {'color': 'yellow', 'points': 10}
+alien_2 = {'color': 'red', 'points': 15}
+aliens = [alien_0, alien_1, alien_2]
+
+# 在字典中嵌套列表
+pizza = {
+'crust': 'thick',
+'toppings': ['mushrooms', 'extra cheese'],
+}
+
+# 在字典中嵌套字典
+users = {
+'aeinstein': {
+'first': 'albert',
+'last': 'einstein',
+'location': 'princeton',
+},
+'mcurie': {
+'first': 'marie',
+'last': 'curie',
+'location': 'paris',
+},
+}
+```
+
+
 # python的流程控制
 
 ## if语句
@@ -216,9 +260,20 @@ for word in words:
 * for语句的末尾有一个**冒号**。
 * 循环中的语句依靠**缩进**来识别。
 
-## break和continue语句，以及循环中的else子句
+## while循环
 
-* 在for循环中，else放在break语句之后，在没有执行break时，执行else语句。break的作用仍然与c语言类似，用于跳出最近的for或while循环。示例：
+* for 循环用于针对**集合中的每个元素**，而while 循环不断地运行，直到**指定的条件不满足**为止。示例：
+```python
+current_number = 1
+while current_number <= 5:
+    print(current_number)
+    current_number += 1
+```
+
+## break和continue语句
+
+* break 语句用于控制程序流程，可使用它来控制哪些代码行将执行，哪些代码行不执行，从而让程序按你的要求执行你要执行的代码。
+* 示例：
 ```python
 >>> for n in range(2, 10):
 ...     for x in range(2, n):#第一次循环，range（2,2)是没有值的,解释器不会输出任何内容
@@ -238,7 +293,7 @@ for word in words:
 8 equals 2 * 4
 9 equals 3 * 3
 ```
-*continue语句与c语言中基本一样，它表示跳过continue语句中后面所有的当前循环的语句（到循环尾），从而直接进入下一次迭代。示例：
+* 要**返回到循环开头**，并根据条件测试结果决定是否继续执行循环，可使用continue 语句，它不像break 语句那样不再执行余下的代码并退出整个循环。continue语句与c语言中基本一样，它表示跳过continue语句中后面所有的当前循环的语句（到循环尾），从而直接进入下一次迭代。示例：
 ```python
 >>> for num in range(2, 10):
 ...     if num % 2 == 0:
@@ -286,10 +341,24 @@ Found a number 9
 
 # 函数
 
+* 函数是带名字的代码块，用于完成具体的工作。
+* 函数编写规范：
+  * 应给函数指定描述性名称，且只在其中使用**小写字母和下划线**;
+  * 每个函数都应包含简要地阐述其功能的注释，该注释应紧跟在函数定义后面，并采用文档字符串格式；
+  * 给形参指定默认值时以及函数调用中的关键字实参，**等号两边不要有空格**；
+  * 如果程序或模块包含多个函数，可使用**两个空行将相邻的函数分开**，这样将更容易知道前一个函数在什么地方结束，下一个函数从什么地方开始。
+  * 所有的**import 语句都应放在文件开头**，唯一例外的情形是，在文件开头使用了注释来描述整个程序。
+  * 如果形参很多，导致函数定义的长度超过了79字符，可在函数定义中输入左括号后按回车键，并在下一行按两次Tab键，从而将形参列表和只缩进一层的函数体区分开来。如：
+  ```python
+  def function_name(
+        parameter_0, parameter_1, parameter_2,
+        parameter_3, parameter_4, parameter_5):
+    function body...
+  ```
 ## 函数定义
 
 * 使用`def`定义函数，`def`后接函数的名字，以及她的形参列表，最后就像大多数功能语句一样，以`:`开启函数体。
-* 函数体的书写必须必须全部相对定义缩进。示例：
+* 函数体的书写必须必须**全部相对定义缩进**。示例：
 
 ```python
 >>> def fib(n):    # write Fibonacci series up to n
@@ -304,7 +373,8 @@ Found a number 9
 ... fib(2000)
 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597
 ```
-* 函数体的第一行可以写字符串（用三个双引号包起来），来对该函数做说明，相当于另一种形式的注释。
+* 函数第一行处的文本是被称为**文档字符串 （docstring）**的注释，描述了函数是做什么的。文档字符串用**三引号**括
+起，Python使用它们来生成有关程序中函数的文档。。
 
 ## 函数调用
 
@@ -317,17 +387,79 @@ f(10)
 ```
 与直接`fib(10)`效果一样。
 
+## 函数的参数
 
+* 鉴于函数定义中可能包含**多个形参**，因此函数调用中也可能包含多个实参。向函数传递实参的方式很多，可使用**位置实参** ，这要求实参的顺序与形参的顺序相同；也可使用**关键字实参** ，其中每个实参都由变量名和值组成；还可使用列表和字典。
+* **位置实参**：要求实参的顺序与形参的顺序相同，如：
+```python
+def describe_pet(animal_type, pet_name):
+    """显示宠物的信息"""
+    print("\nI have a " + animal_type + ".")
+    print("My " + animal_type + "'s name is " + pet_name.title() + ".")
 
-# 模块
+describe_pet('hamster', 'harry')
+describe_pet('dog', 'willie')
+```
+* **关键字实参**：每个实参都由变量名和值组成；还可使用列表和字典，如：
+```python
+def describe_pet(animal_type, pet_name):
+    """显示宠物的信息"""
+    print("\nI have a " + animal_type + ".")
+    print("My " + animal_type + "'s name is " + pet_name.title() + ".")
 
-## 模块的概念
+describe_pet(animal_type='hamster', pet_name='harry')
+```
+* **形参的默认值**：编写函数时，可给每个形参指定默认值 。在调用函数中给形参提供了实参时，Python将使用指定的实参值；否则，将使用形参的默认值。因此，给形参指定默认值后，可在函数调用中省略相应的实参。使用默认值可简化函数调用，还可清楚地指出函数的典型用法。
+```python
+def describe_pet(pet_name, animal_type='dog'):
+    """显示宠物的信息"""
+    print("\nI have a " + animal_type + ".")
+    print("My " + animal_type + "'s name is " + pet_name.title() + ".")
+```
+* 如果传递的参数是列表等复杂类型，**函数中对列表等的修改是永久生效的**（类似传递给该函数的是对该列表的引用）
+  * 若想要仅仅**传一个副本给函数**，可使用切片的方法。如：`function_name(list_name[:])`。
+* 传递**任意数量的实参**：在形参的前面加上`*`可以生成一个元组，将所有接收到的元组都封装到这个元组中，使用参数时便在这个元组中去取。示例：
+```python
+def make_pizza(*toppings):
+    """概述要制作的比萨"""
+    print("\nMaking a pizza with the following toppings:")
+    for topping in toppings:
+      print("- " + topping)
 
-* 模块是一个在其中封装了函数的Python程序。模块可以比作一整盒拼装玩具，而函数就是其中的一块块积木。
+make_pizza('pepperoni')
+make_pizza('mushrooms', 'green peppers', 'extra cheese')
+```
+* 结合使用**位置形参和任意数量的实参**：如果要让函数接受不同类型的实参，必须在函数定义中将接纳任意数量实参的形参放在最后。Python**先匹配位置实参和关键字实参**，再将余下的实参都收集到最后一个形参中。
+* **任意数量的关键字实参**：有时候，需要接受任意数量的实参，但预先不知道传递给函数的会是什么样的信息。在这种情况下，可将函数编写成能够接受任意数量的**键—值对**——调用语句提供了多少就接受多少。
+  * 使用`**`能够将接收到的关键字实参封装为一个字典。示例：
+```python
+def build_profile(first, last, **user_info):
+    """创建一个字典，其中包含我们知道的有关用户的一切"""
+    profile = {}
+    profile['first_name'] = first
+    profile['last_name'] = last
+    for key, value in user_info.items():
+      profile[key] = value
+    return profile
+
+user_profile = build_profile('albert', 'einstein',
+                              location='princeton',
+                              field='physics')
+print(user_profile) 
+```
+## 函数的返回值
+
+* 在函数中，可使用return 语句将值返回到调用函数的代码行。
+* 函数可返回任何类型的值，包括列表和字典等较复杂的数据结构。
+
+## 模块
+### 模块的概念
+
+* 模块是一个在其中**封装了函数的Python程序**。模块可以比作一整盒拼装玩具，而函数就是其中的一块块积木。
 * 模块是包含了函数的定义的Python文件。这个文件的名称是模块名.py。
 * 模块中也可以导入其它模块。
 
-## 模块的导入与调用
+### 模块的导入与调用
 
 * `import 模块名`导入模块名。这种方法导入的模块名，使用名模块内的函数时，必须再加上模块名。即类似`模块名.函数名`的调用方法。示例：
 模块(fibo.py)内容：
@@ -358,7 +490,9 @@ def fib2(n): # return Fibonacci series up to n
 >>> fib(500)
 1 1 2 3 5 8 13 21 34 55 89 144 233 377
 ```
-* `from 模块名 import 函数名`导入函数,这样不会导入模块名，但是导入的函数可以不依赖模块而直接调用。还可以使用`from 模块名 import *`来导入模块中所有除了以下划线`_`开头的定义。示例：
+* `from 模块名 import 函数名`导入函数,这样不会导入模块名，但是导入的函数可以不依赖模块而直接调用。
+  * 通过用逗号分隔函数名，可根据需要从模块中导入任意数量的函数：`from module_name import function_0, function_1, function_2`
+* 还可以使用`from 模块名 import *`来导入模块中所有除了以下划线`_`开头的定义。示例：
 ```python
 >>> from fibo import fib, fib2 #导入
 >>> fib(500) #直接调用函数
@@ -367,21 +501,24 @@ def fib2(n): # return Fibonacci series up to n
 >>> fib(500)
 1 1 2 3 5 8 13 21 34 55 89 144 233 377
 ```
+* 使用`as`**给导入的函数指定别名**：如果要导入的函数的名称可能与程序中现有的名称冲突，或者函数的名称太长，可指定简短而独一无二的别名 ——函数的另一个名称，类似于外号。如：`from module_name import function_name as fn`.
+* 使用`as`给**模块指定别名**：通过给模块指定简短的别名（如给模块pizza 指定别名p ），让你能够更轻松地调用模块中的函数。如：`import module_name as mn`
+* 最佳的做法是，要么只导入你需要使用的函数，要么导入整个模块并使用句点表示法。这能让代码更清晰，更容易阅读和理解。
 
-## 模块的搜索路径
+### 模块的搜索路径
 
 * 在导入一个模块时，解释器会从**当前目录**， **环境变量PYTHONPATH**指定的目录列表以及**Python的默认安装路径中**搜索模块。
 * 解释器的实际搜索路径是由变量`sys.path`指定的。
 
-## 标准模块
+### 标准模块
 
 * Python默认内置了很多标准模块，可以直接调用和配置。
 
-## dir（）函数
+### dir（）函数
 
 * dir（）函数用来按模块名搜索模块的定义。
 
-## 包（模块集）
+### 包（模块集）
 
 * 包是模块的上层，调用包中的模块与调用模块中的函数大体是相同的。可以直接`import 包名.模块名.函数名`,也可以用`from 包名 import 模块名/函数、变量名`或者`from 包名.模块名 import 子模块名/函数、变量名`。当然，类似模块的导入，包也同样有`from 包名 import *`的导入方式。
 * 同样的，包内也可以引用其他包。
@@ -414,7 +551,7 @@ sound/                          Top-level package
 
 # 输入和输出
 
-## 格式化输出
+## 格式化输出-print()
 
 * 使用`print()`函数。print()中有类似c语言的用%以及相应参数限制输出格式的方法。
   * Python 3中的print 是一个函数，因此**括号必不可少**。
@@ -435,6 +572,25 @@ sound/                          Top-level package
 >>> repr(s)
 "'Hello, world.'"
 ```
+
+## 格式化输入
+
+### 字符串输入-input()
+
+* 函数input() 让程序暂停运行，等待用户输入一些文本。获取用户输入后，Python将其存储在一个变量中，以方便你使用。
+* 函数input() 接受一个参数：即要向用户显示的提示 或说明，让用户知道该如何做。示例：
+* 使用函数input() 时，Python将用户输入解读为**字符串**。
+```python
+name = input("Please enter your name: ")
+print("Hello, " + name + "!")
+```
+
+### 将字符串转换为数字
+
+* 因为input()函数只能读取进来字符串，所以在需要读取数值的时候，需要对字符串类型进行转换。
+* `int()`函数可以将符合整数的规定的**字符串转换成int型的**
+* `float(str)`函数将符合浮点型的规定的**字符串转换成float型的**
+* `str(num)`将**整数、浮点型转换成字符串型的**  
 
 ## 文件读写
 
