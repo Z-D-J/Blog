@@ -357,8 +357,52 @@ xmlns:p="http://www.springframework.org/schema/p"
         p:email="someone@somewhere.com"/>
 ```
 
-# 作用域
+# Bean的作用域
 
-## 单例模式
+1. 单例模式:从一个bean中无论获取多少次获取的都是同一个对象。
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210220100546.jpg)
+    * 单例模式是bean的默认作用域，也可以显示设置：
+    ```xml
+    <bean id="accountService" class="com.something.DefaultAccountService"/>
 
+    <!-- the following is equivalent, though redundant (singleton scope is the default) -->
+    <bean id="accountService" class="com.something.DefaultAccountService" scope="singleton"/>
+    ```
+2. 原型模式：每次从bean中获取的对象都是新的对象。
+   ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210220100858.jpg)
+   * 设置原型模式：
+    ```xml
+    <bean id="accountService" class="com.something.DefaultAccountService" scope="prototype"/>
+    ```
+3. Request
+4. Session
+5. Application
+6. WebSocket （后面的四个都是在web开发中使用的）
+
+# Bean的自动装配
+
+* 自动装配：Spring会在上下文中自动寻找，并**自动给bean装配属性**。
+* Spring中的三种装配方式：
+  1. 在xml中显式的配置
+  2. 在java中显式的配置
+  3. 隐式的自动装配bean
+* 自动装配的两种方式：
+  1. byName：会自动在容器上下文中寻找id属性值和自己对象的set方法后面的名称相同的bean。
+     1. 使用byName需要保证所有bean的id唯一，并且这个bean的id值需要和自动注入的属性的对应的set方法值一致。
+     2. 示例：
+   ```xml
+       <bean id="userServiceImpl" class="com.zestaken.service.UserServiceImpl" autowire="byName">
+        <!--        name指定需要赋值的属性 ref指定传递的对象-->
+        <!--        <property name="userDao" ref="userDaoImpl"/> -->
+       </bean>
+    ```
+  2. byType:会自动在容器上下文中寻找和自己对象的类型相同的bean。
+    1. 使用byType需要保证所有bean的class唯一，并且这个bean需要和自动注入的属性的类型一致。
+    2. 示例：
+    ```xml
+        <bean id="userServiceImpl" class="com.zestaken.service.UserServiceImpl" autowire="byType">
+        <!--        name指定需要赋值的属性 ref指定传递的对象-->
+        <!--        <property name="userDao" ref="userDaoImpl"/> -->
+        </bean>
+    ```
 
