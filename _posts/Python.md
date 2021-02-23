@@ -342,6 +342,7 @@ Found a number 9
 # 函数
 
 * 函数是带名字的代码块，用于完成具体的工作。
+* 重构：将代码划分为一系列完成具体工作的函数。这样的过程被称为**重构**。重构让代码更清晰、更易于理解、更容易扩展。
 * 函数编写规范：
   * 应给函数指定描述性名称，且只在其中使用**小写字母和下划线**;
   * 每个函数都应包含简要地阐述其功能的注释，该注释应紧跟在函数定义后面，并采用文档字符串格式；
@@ -839,6 +840,102 @@ class ElectricCar(Car):
 * 注：你还可以从其他地方下载外部模块。
 
 
+# JSON存储数据
+
+* **JSON（JavaScript Object Notation）**格式最初是为JavaScript开发的，但随后成了一种常见格式，被包括Python在内的众多语言采用。
+* 模块json 让你能够将简单的Python**数据结构转储到文件**中，并在程序再次运行时加载该文件中的数据。
+* 可以使用json在Python程序之间分享数据。
+* JSON数据格式并非Python专用的，这让你能够将以**JSON格式存储的数据与使用其他编程语言**的人分享。
+* JSON在Python中是一个**模块**，使用JSON格式时需要先导入json模块。
+* `json.dump()`:这个函数能够将数据结构转存到文件中。
+* `json.load()`:将以json方式存储到文件的数据结构读取到内存中去。
+* 示例：
+```python
+import json 
+# 如果以前存储了用户名，就加载它 
+# 否则，就提示用户输入用户名并存储它 
+filename = 'username.json' 
+try:  
+  with open(filename) as f_obj:  
+    username = json.load(f_obj) 
+  except FileNotFoundError: 
+     username = input("What is your name? ")  
+     with open(filename, 'w') as f_obj: 
+       json.dump(username, f_obj) 
+       print("We'll remember you when you come back, " + username + "!") 
+  else:
+    print("Welcome back, " + username + "!")
+```
+
+# Python测试
+
+* Python标准库中的**模块unittest**提供了代码测试工具。 
+* **单元测试**用于核实函数的某个方面没有问题。
+* **测试用例**是一组单元测试，这些单元测试一起核实函数在各种情形下的行为都符合要求。
+* **全覆盖测试用例**包含一整套单元测试，涵盖了各种可能的函数使用方式。
+* 示例：
+```python
+import unittest 
+from name_function import get_formatted_name 
+
+class NamesTestCase(unittest.TestCase): 
+  """测试name_function.py """ 
+  def test_first_last_name(self): 
+    """能够正确地处理像Janis Joplin这样的姓名吗？""" 
+    formatted_name = get_formatted_name('janis', 'joplin') 
+    self.assertEqual(formatted_name, 'Janis Joplin') 
+
+  def test_first_last_middle_name(self): 
+    """能够正确地处理像Wolfgang Amadeus Mozart这样的姓名吗？""" 
+     formatted_name = get_formatted_name( 'wolfgang', 'mozart', 'amadeus') 
+     self.assertEqual(formatted_name, 'Wolfgang Amadeus Mozart') 
+     
+unittest.main()
+```
+  * 可先导入**模块unittest**以及要**测试的函数**;
+  * 再创建一个**继承unittest.TestCase 的类**，在这个类中编写一系列**方法**对函数行为的不同方面进行测试。
+    * 你可随便给这个类命名，但最好让它看起来与要测试的函数相关，并包含字样Test。
+  * 在类中用于测试函数不同方面的方法名称**必须以test打头，我们运行该测试程序的时候，所有以test打头的方法都将自动运行**。
+  * 最后需要**调用`unittest.main()`方法，用于运行测试程序**。
+  * **断言**：断言方法用来核实得到的**结果是否与期望的结果一致**。
+    * 在python中断言的一种实现方式是使用通过`unint.TestCase`类中的`assertEqual()`方法,如：`self.assertEqual(formatted_name, 'Wolfgang Amadeus Mozart') `,前面的参数是测试的结果，后面的参数是预期的结果。
+    * `assertEqual(a, b)`: 核实a == b 
+    * `assertNotEqual(a, b)`: 核实a != b 
+    * `assertTrue(x)`: 核实x 为True 
+    * `assertFalse(x)`: 核实x 为False 
+    * `assertIn(item , list )` 核实 item 在 list 中 
+    * `assertNotIn(item , list )`: 核实 item 不在 list 中
+* 和函数的测试相似的，也可以对类进行测试：
+  * 类的测试就是将原来测试函数中调用函数的地方，修改为调用类中的方法。
+  * **使用`setUp()`方法**将测试类初始化：
+    * `unittest.TestCase`类包含方法`setUp()` ，让我们**只需创建这些对象一次，并在每个测试方法中使用它们**。如果你在TestCase 类中包含了方法`setUp()` ，**Python将先运行它，再运行各个以test_打头的方法**。这样，在你编写的每个测试方法中都可使用在方法`setUp()` 中创建的对象了。
+  * 类测试示例：
+  ```python
+  import unittest 
+  from survey import AnonymousSurvey 
+
+  class TestAnonymousSurvey(unittest.TestCase): 
+    """针对AnonymousSurvey类的测试""" 
+    def setUp(self): 
+      """ 创建一个调查对象和一组答案，供使用的测试方法使用 """ 
+      question = "What language did you first learn to speak?" 
+      self.my_survey = AnonymousSurvey(question) 
+      self.responses = ['English', 'Spanish', 'Mandarin'] 
+      
+    def test_store_single_response(self): 
+      """测试单个答案会被妥善地存储""" 
+      self.my_survey.store_response(self.responses[0]) 
+      self.assertIn(self.responses[0], self.my_survey.responses) 
+      
+    def test_store_three_responses(self): 
+      """测试三个答案会被妥善地存储""" 
+      for response in self.responses: 
+        self.my_survey.store_response(response) 
+      for response in self.responses: 
+        self.assertIn(response, self.my_survey.responses) 
+
+  unittest.main()
+```
 
 
 
