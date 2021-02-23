@@ -594,32 +594,93 @@ print("Hello, " + name + "!")
 
 ## 文件读写
 
-### 写入文件
+### 文件的打开与关闭
 
-* 使用函数open（）会返回文件对象。open常用的模式是`open('filename', 'mode')`.第一个参数是一个含有文件名的字符串。第二个参数也是一个字符串，含有描述如何使用该文件的几个字符。mode 为 'r' 时表示只是读取文件；'w' 表示只是写入文件（已经存在的同名文件将被删掉）；'a' 表示打开文件进行追加，写入到文件中的任何数据将自动添加到末尾。 'r+' 表示打开文件进行读取和写入。mode 参数是可选的，默认为 'r'。示例：`f = open('workfile', 'w')`。
-* `文件名.write(字符串)`将字符串写入文件中，并且返回写入的字符串的长度。
+
+* 要以任何方式使用文件——哪怕仅仅是打印其内容，都得先**打开文件**，这样才能访问它。
+  * **函数`open()`**接受一个参数：要打开的文件的名称。Python在当前执行的文件所在的目录中查找指定的文件。
+  * 使用函数`open()`会**返回文件对象**。open常用的模式是`open('filename', 'mode')`.
+    * 第一个参数是一个含有要打开的文件的文件名（或文件路径）的字符串。
+      * **文件路径**：你将类似pi_digits.txt这样的简单文件名传递给函数open() 时，Python将在**当前执行的文件（即.py程序文件）所在的目录**中查找文件,但仅向open()传递位于当前目录下的文件夹下的文件的名称也不可行。要让Python打开不与程序文件位于同一个目录中的文件，需要提供**文件路径** ，它让Python到系统的特定位置去查找。
+      * **相对路径**：如：Linux/OS:`with open('text_files/filename.txt') as file_object:`,在Windows系统中，在文件路径中使用**反斜杠（`\ `）而不是斜杠（`/ `）**：
+      * **绝对路径**：绝对路径通常比相对路径更长，因此将其存储在一个变量中，再将该变量传递给open() 会有所帮助。
+      ```python
+      # Linux/OS
+      file_path = '/home/ehmatthes/other_files/text_files/filename.txt' 
+      with open(file_path) as file_object:
+      
+      # Windows
+      file_path = 'C:\Users\ehmatthes\other_files\text_files\filename.txt' 
+      with open(file_path) as file_object:
+      ```
+    * 第二个参数也是一个字符串，含有描述如何使用该文件的几个字符。
+      * mode 为 'r' 时表示只是读取文件；'w' 表示只是写入文件（已经存在的同名文件将被删掉）；'a' 表示打开文件进行追加，写入到文件中的任何数据将自动添加到末尾。 'r+' 表示打开文件进行读取和写入。
+      * mode 参数是可选的，默认为 'r'。示例：`f = open('workfile', 'w')`。
+      * 只用写入的模式(w,a)，如果输入的文件不存在，会在当前目录下**创建该文件**。
+* 文件打开之后需要正常的**关闭**：
+  * 未妥善地关闭文件可能会导致数据丢失或受损；
+  * 可以`close()`语句来关闭文件。
+  * 也可以是用关键字`with`来关闭文件：关键字with 在不再需要访问文件后将其关闭。如：`with open('pi_digits.txt') as file_object:`
 
 ### 读取文件内容
 
-* `文件名.read(size)`方法：该方法读取若干数量的数据并以字符串形式返回其内容，size 是可选的数值，指定字符串长度。如果没有指定 size 或者指定为负数，就会读取并返回整个文件。如果到了文件末尾，f.read() 会返回一个空字符串（''）
-* `文件名.readline()`从文件中读取单独一行，字符串结尾会自动加上一个换行符（ \n ）。如果 f.readline() 返回一个空字符串，那就表示到达了文件末尾。
-* 使用for循环遍历文件来读取文件的内容。
+* `文件对象.read(size)`方法：该方法读取若干数量的数据并以字符串形式返回其内容，size 是可选的数值，指定字符串长度。如果没有指定 size 或者指定为负数，就会**读取并返回整个文件**。如果到了文件末尾，f.read() 会返回一个空字符串（''）
+* **逐行读取文件**：要以每次一行的方式检查文件，可对文件对象使用**for 循环**(注意：每行的末尾都有一个看不见的换行符,可以使用`rstrip()`方法去掉)：
+  ```python
+   filename = 'pi_digits.txt' 
+   with open(filename) as file_object:  
+     # 每一次在循环中只读取文件中的一行
+     for line in file_object: 
+       print(line.rstrip())
+  ```
+* `文件对象.readline()`从文件中读取单独一行，字符串结尾会自动加上一个换行符（ \n ）。如果 f.readline() 返回一个空字符串，那就表示到达了文件末尾。
 
-# python的错误
+### 写入文件
+
+* 要将文本写入文件，你在调用open() 时需要提供**另一个实参**（因为默认是r模式），告诉Python你要写入打开的文件。
+* 使用文件对象的方法`write()`**将一个字符串写入文件**;
+  * 函数write() **不会在你写入的文本末尾添加换行符**，因此如果你写入多行时没有指定换行符，文件看起来可能不是你希望的那样：
+  * 要让每个字符串都单独占一行，需要在write() 语句中**包含换行符**,如：`file_object.write("I love programming.\n")`
+  * 像显示到终端的输出一样，还可以**使用空格、制表符和空行来设置这些输出的格式**。
+* Python**只能将字符串写入文本文件**。要将数值数据存储到文本文件中，必须先使用函数`str()` 将其转换为字符串格式。
+
+
+# 异常
+
+* Python使用**被称为异常的特殊对象来管理程序执行期间发生的错误**。
+  * 语法正确的情况下发生的错误为异常错误。
+  * 错误信息的最后一行指出发生了什么异常类型。异常也有不同的类型，异常类型做为错误信息的一部分显示出来：如零除错误（ ZeroDivisionError ） ，命名错误（ NameError） 和 类型错误（ TypeError ）等。
+* 每当发生让Python不知所措的错误时，它都会创建一个异常对象。如果你编写了处理该异常的代码，程序将继 续运行；如果你未对异常进行处理，程序将停止，并显示一个traceback(在异常没有被处理的情况下才会有traceback)，其中包含有关异常的报告。
+* 异常是使用**try-except 代码块处理**的。try-except 代码块让Python执行指定的操作，同时告诉Python发生异常时怎么办。使用了try-except 代码块时，**即便出现异常， 程序也将继续运行：显示你编写的友好的错误消息，而不是令用户迷惑的traceback并让程序终止**。
 
 ## 语法错误（SyntaxError）
 
 * 语法分析器指出错误行，并且在检测到错误的位置前面显示一个小“箭头”。 错误是由箭头 前面 的标记引起的（或者至少是这么检测的）。
 * 错误会输出文件名和行号，所以如果是从脚本输入的你就知道去哪里检查错误了。
-
-## 异常
-
-* 语法正确的情况下发生的错误为异常错误。
-* 错误信息的最后一行指出发生了什么错误。异常也有不同的类型，异常类型做为错误信息的一部分显示出来：示例中的异常分别为 零除错误（ ZeroDivisionError ） ，命名错误（ NameError） 和 类型错误（ TypeError ）。
-
 ## 异常的处理
 
-* 使用`try...except`语句来处理异常。（`try...finall`）可以用来定义清理行为。
+* 使用`try...except`语句来处理异常。
+  * 如果try 代码块中的代码运行起来没有问题，Python将跳过except 代码块；如果try 代码块中的代码导致了 错误，Python将查找这样的except 代码块，并运行其中的代码，即其中指定的错误与引发的错误相同。 可以在except代码块中放入**pass语句，告诉程序捕获到异常后什么都不需要做**。
+  * 在出现异常的情况下，如果**try-except 代码块后面还有其他代码，程序将接着运行**，因为已经告诉了Python如何处理这种错误。
+  * 如：
+```python
+try:
+  print(5/0) 
+except ZeroDivisionError: 
+  print("You can't divide by zero!")
+```
+* `try...except...else`代码块：依赖于try 代码块成功执行的代码都应放到else 代码块中：
+  * try-except-else 代码块的工作原理大致如下：Python尝试执行try 代码块中的代码；只有可能引发异常的代码才需要放在try 语句中。有时候，**有一些仅在try 代码块成功 执行时才需要运行的代码；这些代码应放在else 代码块中**。except 代码块告诉Python，如果它尝试运行try 代码块中的代码时引发了指定的异常，该怎么办。
+  * 示例：
+  ```python
+   try:
+     answer = int(first_number) / int(second_number) 
+   except ZeroDivisionError: 
+     print("You can't divide by 0!") 
+   else:
+     print(answer)
+  ```
+* （`try...finall`）可以用来定义清理行为。
 
 ## 异常的抛出
 
@@ -661,6 +722,7 @@ class ClassName():
 * 在`_init_()`这个方法的定义中，**形参self 必不可少，还必须位于其他形参的前面**。
   * Python调用这个`__init__() `方法来创建实例时，将**自动传入实参self** 。每个**与类相关联的方法调用都自动传递实参self ，它是一个指向实例本身的引用，让实例能够访问类中的属性和方法。**每当我们根据类创建实例时，都只需给除开self的形参提供值。
   * 以self 为前缀的变量都可供类中的所有方法使用，我们还可以通过类的任何实例来访问这些变量。如：`self.name = name` 获取存储在形参name 中的值，并将其存储到变量name 中，然后**该变量被关联到当前创建的实例**。
+* 类的属性不用单独定义，**在`_init()`中通过self定义并初始化。
 * 示例：
 ```python
 class Dog():
@@ -685,30 +747,98 @@ class Dog():
 * 类的实例化就就是**将类看做一个函数进行调用**。例如：`x = Myclass()`。
 * 我们通常可以认为首字母大写的名称（如Dog）指的是类，而小写的名称（如my_dog ）指的是根据类创建的实例。
 * 属性与方法的调用：使用句点表示法获取实例的属性和调用其方法。如：`my_dog.name`,`my_dog.roll_over()`
+  * `__doc__` 也是一个有效的属性，返回类的文档字符串
+
+## 类的编码风格
+
+* 类名应采用**驼峰命名法**，即将**类名中的每个单词的首字母都大写**，而不使用下划线。实例名和模块名都采用**小写格式，并在单词之间加上下划线**。
+* 对于每个类，都应紧跟在类定义后面包含一个**文档字符串**。这种文档字符串简要地描述类的功能，并遵循编写函数的文档字符串时采用的格式约定。每个模块也都应包含一个文 档字符串，对其中的类可用于做什么进行描述。
+* 可使用空行来组织代码，但不要滥用。在类中，可使用**一个空行来分隔方法**；而在模块中，可使用**两个空行来分隔类**
+* 需要同时导入标准库中的模块和你编写的模块时，**先编写导入标准库模块的import 语句，再添加一个空行**，然后编写导入你自己编写的模块的import 语句。
+
 
 ## 类的继承
 
 * 编写类时，并非总是要从空白开始。如果你要编写的类是另一个现成类的特殊版本，可使用继承 。一个类继承另一个类时，它将自动获得另一个类的所有属性和方法；原有的类称为父类 ，而新类称为子类 。**子类继承了其父类的所有属性和方法，同时还可以定义自己的属性和方法**。
+* 创建子类时，**父类必须包含在当前文件中，且位于子类前面**。
+* 定义子类时，必须**在括号内指定父类的名称**。
+* 子类的方法`__init__()`
+  * 创建子类的实例时，Python首先需要完成的任务是给父类的所有属性赋值。为此，**子类的方法__init__() 需要父类施以援手**。
+  * `super()` 是一个特殊函数，帮助Python将父类和子类关联起来。使用这个函数让Python调用父类的方法`__init__()` ，让该子类包含父类的所有属性。
+* 让一个类继承另一个类后，可**添加区分子类和父类所需的新属性和方法**,属性在调用`super()`函数后之后添加，方法可以在类中任意定义。
+* **重写父类的方法**：
+  * 对于**父类的方法**，只要它不符合子类模拟的实物的行为，都可对其进行重写。
+  * 重写父类的方法只需要在**子类中定义一个同名的方法**，就会自动覆盖掉父类的该方法。
+* **将实例用作属性**：类中属性可以是**引用类型**。如：`self.battery = Battery()`,其中`Battery()`是Battery类的构造方法。
+* 示例：
+```python
+# 父类
+class Car():
+   """一次模拟汽车的简单尝试""" 
+   def __init__(self, make, model, year): 
+     self.make = make 
+     self.model = model 
+     self.year = year 
+     self.odometer_reading = 0 
 
+   def get_descriptive_name(self): 
+     long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+     return long_name.title() 
 
-## 类对象
+   def read_odometer(self): 
+     print("This car has " + str(self.odometer_reading) + " miles on it.") 
 
-* 类对象支持两种操作：属性引用和实例化。
-
-### 属性引用
-
-* 类对象的属性即类对象中包含的命名（如变量，函数）.
-* 属性引用 使用和 Python 中所有的属性引用一样的标准语法：obj.name。即`类对象名.属性名`。示例：
-```python 
-class MyClass:
-    """A simple example class"""
-    i = 12345
-    def f(self):
-        return 'hello world'
+   def update_odometer(self, mileage): 
+     if mileage >= self.odometer_reading: 
+       self.odometer_reading = mileage else:print("You can't roll back an odometer!") 
+       
+   def increment_odometer(self, miles): 
+     self.odometer_reading += miles  
+    
+   def gas_gank():
+     print("油箱信息")
+# 子类     
+class ElectricCar(Car): 
+  """电动汽车的独特之处""" 
+   def __init__(self, make, model, year): 
+     """初始化父类的属性""" 
+      super().__init__(make, model, year) 
+      self.battery_size = 70 
+      
+   def describe_battery(self): 
+     """打印一条描述电瓶容量的消息""" 
+     print("This car has a " + str(self.battery_size) + "-kWh battery.")
+   
+   # 重写父类方法
+   def gas_gank():
+    print("电动车没有油箱")
 ```
-*  MyClass.i 和 MyClass.f 是有效的属性引用，分别返回一个整数和一个方法对象。也可以对类属性赋值，你可以通过给 MyClass.i 赋值来修改它。 `__doc__` 也是一个有效的属性，返回类的文档字符串："A simple example class"。
 
-### 类的实例化
+## 导入类
+
+* 类和函数一样都可以**封装在模块中**，进行导入。
+* 在模块文件的首部写**个模块级文档字符串，对该模块的内容做简要的描述**。
+* 从模块中导入类的语法和导入函数一致。
+* 一个模块中可以存储一个或者多个类。
+* 模块示例：
+```python
+"""一组可用于表示电动汽车的类"""  
+from car import Car
+
+class Battery(): 
+    ...... 
+
+class ElectricCar(Car): 
+    .......
+```
+
+## Python标准库
+
+* Python标准库是一组模块，安装的Python都包含它。
+* 可使用标准库中的任何函数和类，为此，只需在程序开头包含一条简单的import 语句。
+* 注：你还可以从其他地方下载外部模块。
+
+
 
 
 
