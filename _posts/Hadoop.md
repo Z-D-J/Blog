@@ -218,3 +218,10 @@ ln /usr/lib/jvm/java-8-openjdk-amd64/man/man1/javadoc.1.gz javadoc.1.gz
 * 保存镜像：
   * `docker commit -m "tools installed" -a "zestaken" c2e83b0f9183 zestaken/ubuntu:tools`
 
+# 搭建Hadoop运行环境
+
+## 一：配置虚拟机环境
+
+1. 安装ubuntu20.04虚拟机；
+2. 
+
