@@ -361,7 +361,7 @@ xmlns:p="http://www.springframework.org/schema/p"
 
 1. 单例模式:从一个bean中无论获取多少次获取的都是同一个对象。
     ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210220100546.jpg)
-    * 单例模式是bean的默认作用域，也可以显示设置：
+    * 单例模式是bean的默认作用域，也可以显式设置：
     ```xml
     <bean id="accountService" class="com.something.DefaultAccountService"/>
 
@@ -405,4 +405,103 @@ xmlns:p="http://www.springframework.org/schema/p"
         <!--        <property name="userDao" ref="userDaoImpl"/> -->
         </bean>
     ```
+
+# Spring注解开发
+
+* **开启注解**：
+    * 扫描包中的注解：如扫描`@Component`注解`<context:component-scan base-package="com.zestaken"/>`
+    * 配置注解的支持：`<context:annotation-config/>`
+* xml与注解优缺点：
+    * xml更加万能，维护更加方便；
+    * 注解需要能够修改类中的代码，维护相对困难；
+* xml与注解配合使用：
+    * xml用来管理bean；
+    * 注解只负责属性注入，即`@Value`。
+
+## 注解注册bean
+
+* `@Component`注解：
+    * 组件注解，==放在类上==,说明这个类被Spring管理了，即==注册lbean==；
+    * 自动注入的bean对象名是==类名的首字母小写==形成的。
+    * 等价于`<bean id="userDaoImpl" class="com.zestaken.dao.UserDaoImpl" />`
+* `@Component`为mvc模式形成的衍生注解,这些==注解功能完全相同==，只是为了更好的区分架构层而使用：
+    * dao层:`@Repository`
+    * service层：`@Service`
+    * controller层：`@Controller`
+
+## 注解注入属性
+
+* `@Value("属性值")`注解：
+    * 在基本类型以及字符串类型对象上使用，为创建的对象的的对应属性赋值。
+    * 等价于`<property name="name" value="zestaken"/>`
+
+## 注解配置作用域
+
+* `@Scope("作用域")`注解：
+    * 用于配置bean对象的作用域，如：`@Scope("prototype")`
+ 
+## 注解实现自动装配
+
+* 注解使用配置：
+    1. 导入约束：
+        * `xmlns:context="http://www.springframework.org/schema/context"`
+        * ` http://www.springframework.org/schema/context`
+        * `https://www.springframework.org/schema/context/spring-context.xsd"`
+    2.配置注解的支持：`<context:annotation-config/>`
+    3. 示例：
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+            https://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            https://www.springframework.org/schema/context/spring-context.xsd">
+
+        <context:annotation-config/>
+
+    </beans>
+    ```
+* `@Autowired`注解：
+    * 使用该注解在类中需要导入包:`import org.springframework.beans.factory.annotation.Autowired;`
+        * 这个包需要在maven中配置导入。
+    * 直接在==属性==上使用即可，也可以在set方法上使用。
+    * 使用这个注解，可以==不用编写属性对应的set方法==。前提是要被装配的属性在Spring容器中存在。
+    * 配置注解`@Autowired(required = false)`可以使属性可以为空，默认不能。与注解`@Nullable`作用相同。
+    * `@Autowird`注解：会自动根据该属性的==类型或者名字==来自动装配;
+        * 可以配合使用`@Qualifier(value = "属性名")`来限定根据bean id的名字来装配。
+    * 示例：
+    ```java
+    package com.zestaken.service;
+
+    import com.zestaken.dao.UserDao;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.beans.factory.annotation.Qualifier;
+
+    public class UserServiceImpl implements UserService{
+        @Autowired
+        @Qualifier(value = "userDaoImpl")
+        private UserDao userDao ;
+
+        //注入UserDao的值
+        //使用Spring管理的类的属性，必须由set方法设定
+        public void setUserDao(UserDao userDao) {
+            this.userDao = userDao;
+        }
+
+        @Override
+        public void getUsers() {
+            userDao.getUsers();
+        }
+    }
+    ```
+* `@Resource`注解：
+    * `@Resource`注解是java==原生==的，无需导入包；
+    * `@Resource`相当于拥有`@Autowired`和`@Qualifier`两个注解的功能。
+    * 直接使用该注解，和`@Autowired`一样；
+    * 该注解可以设置参数，限定查找的bean id属性名，如：`@Resource(name = "userDaoImpl")`.
+
+
+
 
