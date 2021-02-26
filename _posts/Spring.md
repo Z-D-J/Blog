@@ -381,6 +381,7 @@ xmlns:p="http://www.springframework.org/schema/p"
 
 # Bean的自动装配
 
+* 装配：有些对象的属性是另一个由Spring管理的对象，给这个属性赋值就是装配。所以不是所有由Spring管理的对象都需要装配。
 * 自动装配：Spring会在上下文中自动寻找，并**自动给bean装配属性**。
 * Spring中的三种装配方式：
   1. 在xml中显式的配置
@@ -501,6 +502,106 @@ xmlns:p="http://www.springframework.org/schema/p"
     * `@Resource`相当于拥有`@Autowired`和`@Qualifier`两个注解的功能。
     * 直接使用该注解，和`@Autowired`一样；
     * 该注解可以设置参数，限定查找的bean id属性名，如：`@Resource(name = "userDaoImpl")`.
+
+# 使用Java来配置Spring
+
+* 本质：使用一个java配置类通过注解的方式来完全取代xml配置文件。
+1. 配置类：
+```java
+package com.zestaken.config;
+
+import com.zestaken.dao.UserDao;
+import com.zestaken.dao.UserDaoImpl;
+import com.zestaken.service.UserService;
+import com.zestaken.service.UserServiceImpl;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public UserDao userDao() {
+        return new UserDaoImpl();
+    }
+
+    @Bean
+    public UserService userService() {
+        return new UserServiceImpl();
+    }
+}
+```
+   * `@Configuration`注解：在配置类上面使用，代表这是一个配置类。（这个配置类的底层实质也是一个被Spring容器管理的类）
+   * `@Bean`注解：类似xml文件中的bean标签的作用，用于设置bean对象的方法之上：
+     * 这个==方法的名字，相当于bean对象中的id属性==；
+     * 这个==方法的返回值，相当于bean对象中的class属性==。
+   * 还有一些诸如扫描包，导入其它配置类的注解等。
+2. 被注册到Spring容器的类
+```java
+//UserDao
+package com.zestaken.dao;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserDaoImpl implements UserDao{
+    @Override
+    public void getUsers() {
+        System.out.println("sql查询");
+    }
+}
+
+//UserService
+package com.zestaken.service;
+
+import com.zestaken.dao.UserDao;
+
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+
+@Component
+public class UserServiceImpl implements UserService{
+
+    @Resource
+    private UserDao userDao ;
+
+    //注入UserDao的值
+    //使用Spring管理的类的属性，必须由set方法设定
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    @Override
+    public void getUsers() {
+        userDao.getUsers();
+    }
+}
+```
+   * 和普通注解开发一样。
+* 测试：
+```java
+package com.zestaken.service;
+
+import com.zestaken.config.AppConfig;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class ServiceTest {
+    @Test
+    public void  userServiceImplTest(){
+        //获取Spring的上下文对象,此处使用AnnotationConfig
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+        //现在所有的对象都交由Spring管理了，要想使用对象，只需要从Spring中取出即可（Spring中这些对象叫做bean）
+        UserService userServiceImpl = (UserService)annotationConfigApplicationContext.getBean("userService");
+        //获取出对象之后，即可正常使用
+        userServiceImpl.getUsers();
+    }
+}
+```
+  * **获取上下文的方式**：`AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(AppConfig.class);`
+    * **参数**:参数是要使用的配置类的class属性值。
+
 
 
 
