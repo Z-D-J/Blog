@@ -603,6 +603,65 @@ public class ServiceTest {
     * **参数**:参数是要使用的配置类的class属性值。
 
 
+# AOP
+
+* **AOP(Aspect Oriented Programming)**:面向切面编程，通过==预编译技术和运行期间动态代理==实现程序功能的统一维护的一种技术。
+* Spring中AOP：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210228205043.jpg)
+* AOP在Spring中的作用：
+  * 提供声明式事务：允许用户自定义切面。
+
+## Spring中AOP概念
+
+* **横切关注点**：
+  * 跨越应用程序多个模块的方法或功能。
+  * 与我们业务逻辑无关的，但是需要我们关注的的部分，就是横切关注点，如日志，安全，缓存和事务等。
+* **切面（Aspect）**:
+  * 横切关注点被模块化的特殊对象；
+  * 切面==是一个类==。
+* **通知（Advice）**:
+  * 切面必须要完成的工作；
+  * ==通知是切面类中的一个方法==。
+  * Spring中支持五种类型的Advice:
+    1. **前置通知**:
+       1. 连接点：方法前；
+       2. 实现接口：`org.springframework.aop.MethodBeforeAdvice`
+    2. **后置通知**：
+       1. 连接点：方法后；
+       2. 实现接口：`org.springframework.aop.AfterReturningAdvice`
+    3. **环绕通知**：
+       1. 连接点：方法前后；
+       2. 实现接口：`org.aopalliance.intercept.MethodInterceptor`
+    4. **异常抛出通知**：
+       1. 连接点：方法抛出异常；
+       2. 实现接口：` org.springframework.aop.ThrowsAdvice`
+    5. **引介通知**：
+       1. 连接点：类中增加新的方法属性。
+       2. 实现接口：`org.springframework.aop.IntroductionInterceptor`
+* **目标（Target）**：
+  * 被通知的对象
+* **代理(Proxy)**:
+  * 向目标对象应用通知之后创建的==对象==；
+* **切入点（PointCut）**：
+  * 切面通知执行“地点”的定义；
+* **连接点（JointPoint）**：
+  * 与切入点匹配的执行点。
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210228211039.jpg)
+
+## Spring实现AOP
+
+* 不论采用何种方法，首先都需要先导入一个织入包：
+```xml
+<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+    <version>1.9.6</version>
+</dependency>
+```
+  
+
+
 
 
 
