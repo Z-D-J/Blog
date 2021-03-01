@@ -659,8 +659,225 @@ public class ServiceTest {
     <version>1.9.6</version>
 </dependency>
 ```
-  
 
+### 方式一：使用Spring的API接口实现AOP
+
+* 主功能的接口：
+```java
+package com.zestaken.service;
+
+public interface UserService {
+    void add();
+    void delete();
+}
+```
+* 实现主功能的类：
+```java
+package com.zestaken.service;
+
+public class UserServiceImpl implements UserService {
+    @Override
+    public void add() {
+        System.out.println("add...");
+    }
+
+    @Override
+    public void delete() {
+        System.out.println("delete...");
+    }
+}
+```
+* 在主功能的方法前加上日志的类：
+```java
+package com.zestaken.log;
+
+import org.springframework.aop.MethodBeforeAdvice;
+
+import java.lang.reflect.Method;
+
+public class Log implements MethodBeforeAdvice {
+    @Override
+    public void before(Method method, Object[] args, Object target) throws Throwable {
+        System.out.println(target.getClass().getName()+"的"+method.getName()+"方法被执行了");
+    }
+}
+```
+  * before方法的参数：
+    * method:要执行的目标对象的方法
+    * args：要执行的目标方法的参数
+    * target：目标对象
+  * 要增加到切点的的类，应该==根据这个类中方法插入的位置，来实现不用的Spring的aop的API接口==.
+* 在applicationContext.xml文件中==注册主功能类和增加日志方法的类,并配置aop==：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+<!--    注册主功能类和增加日志功能的类-->
+    <bean id="userServiceImpl" class="com.zestaken.service.UserServiceImpl"/>
+    <bean id="log" class="com.zestaken.log.Log"/>
+
+<!--    配置aop，需要导入约束-->
+    <aop:config>
+<!--        配置切入点-->
+<!--        id是切入点的名字-->
+<!--        expression描述切入点的位置,使用execution表达式,execution表达式的格式为（修饰词，返回值，类名，方法名，参数）-->
+        <aop:pointcut id="pointcut1" expression="execution(* com.zestaken.service.UserService.*(..))"/>
+<!--        配置增加到切入点的方法-->
+        <aop:advisor advice-ref="log" pointcut-ref="pointcut1"/>
+    </aop:config>
+
+</beans>
+```
+  * 导入的约束：
+    * `xmlns:aop="http://www.springframework.org/schema/aop"`
+    * `http://www.springframework.org/schema/aop`
+    * `https://www.springframework.org/schema/aop/spring-aop.xsd`
+  * excution表达式描述切入点的位置，==其中可以用`*`通配符来表示适用于各种修饰词，返回值，方法名，用`(..)`表示方法的任何参数==。
+* 测试aop：
+```java
+import com.zestaken.service.UserService;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class MyTest {
+    @Test
+    public void aopTest() {
+        //获取配置文件生成上下文对象
+        ApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        //获取接口
+        UserService userService = (UserService)classPathXmlApplicationContext.getBean("userServiceImpl");
+        //测试方法
+        userService.add();
+        userService.delete();
+    }
+}
+```
+  * **==注意：aop的本质是动态代理，动态代理的是接口，所以从容器中获取出来的应该是接口类型的对象==**。
+
+### 方法二：自定义方法实现AOP
+
+* 主功能类与接口不变。
+* 在主功能类前增加日志功能的类：
+```java
+public class Log {
+    void before(){
+        System.out.println("before....");
+    }
+}
+```
+  * ==无需实现接口==，只是一个普通的类。
+* 配置文件：
+```xml
+<aop:config>
+    <aop:aspect ref="log">
+        <aop:pointcut id="pointcut2" expression="execution(* com.zestaken.service.UserServiceImpl.*(..))"/>
+        <aop:before method="before" pointcut-ref="pointcut2"/>
+    </aop:aspect>
+</aop:config>
+```
+  * 在类注册好，以及导入必须的约束的情况下，修改aop的配置。
+  * `<aop:aspect>`标签中，用==属性ref设置需要放入切面的方法==
+  * `<aop:pointcut>`标签中，正常设置切入点。
+  * `<aop:before>`以及`<aop:after>`等标签设置将绑定的方法==放入哪个位置，以及放入的方式==。
+
+### 方法三：使用注解实现AOP
+
+* **只修改实现增强功能的类以及xml文件**。
+* 实现增强功能的类:
+```java
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+
+@Aspect
+public class Log {
+
+    @Before("execution(* com.zestaken.service.UserServiceImpl.*(..))")
+    void before(){
+        System.out.println("before....");
+    }
+}
+```
+  * `@Aspect`注解：表示该类是用于切面的增强功能的类。
+  * `@Before`注解：表示切入的方式，参数是切入点的位置。
+    * 可以有多种切入方式。如`@After`，`@Around`等。
+  * 可以给通知方法传递参数**`ProceedingJoinPoint joinPoint`连接点对象**，作用是获取切入点的信息。如方法名之类的。
+* xml配置文件：==省去aop配置，开启aop的注解功能==。但是aop的相关约束还是要有。
+```xml
+<aop:aspectj-autoproxy proxy-target-class="false"/>
+```
+  * 在注册了相关的bean之后，再开启aop的注解。
+  * aop的动态代理默认是用jdk方式实现的 ，将proxy-target-class属性设为true会改为使用cglib实现。
+  * proxy-target-class属性可以省略，这样默认使用jdk方式。
+
+# Spring整合Mybatis
+
+## 导入相关jar包
+
+1. junit
+```xml
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.13</version>
+    <scope>test</scope>
+</dependency>
+```
+2. mybatis
+```xml
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis</artifactId>
+    <version>3.5.6</version>
+</dependency>
+```
+3. mysql数据库
+```xml
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.23</version>
+</dependency>
+```
+4. Spring基本包
+```xml
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-webmvc</artifactId>
+    <version>5.3.3</version>
+</dependency>
+```
+5. Spring的AOP织入包
+```xml
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+    <version>1.9.6</version>
+</dependency>
+```
+6. Spring操作数据库必须的包
+```xml
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-jdbc</artifactId>
+    <version>5.3.4</version>
+</dependency>
+```
+7. 整合Mybatis和Spring的包：mybatis-spring
+```xml
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis-spring</artifactId>
+    <version>2.0.6</version>
+</dependency>
+```
 
 
 
