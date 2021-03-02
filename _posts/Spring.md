@@ -51,7 +51,7 @@ tags:
     * 基于SpringBoot可以快速开发单个的微服务；
     * 约定大于配置
   * SpringCloud:
-    * SpringClod是基于SpringBoot实现的。
+    * SpringCloud是基于SpringBoot实现的。
   * 学习SpringBoot的前提是Spring及SpringMVC
 
 # IOC
@@ -878,6 +878,177 @@ public class Log {
     <version>2.0.6</version>
 </dependency>
 ```
+
+## Spring整合Mybatis方式一
+
+[Mybatis-spring文档](http://mybatis.org/spring/zh/index.html)
+1. 编写Spring对Mybatis的配置文件：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--    注册DataSource 使用Spring的提供的JDBC来替换Mybatis的数据源配置-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/youth_study"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+<!--    sqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+<!--        绑定Mybatis的配置文件，使这两个配置文件同时作用，各自负责一部分配置-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- 绑定mapper.xml文件，起到注册mapper的作用 -->
+        <property name="mapperLocations" value="classpath:com/zestaken/dao/T_collegeMapper.xml"/>
+    </bean>
+
+<!--    sqlSessionTemplate：就是实际使用的sqlSession-->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+<!--        只能使用构造器注入sqlSessionFactory，因为没有set方法-->
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+</beans>
+```
+   * 这是一个Spring配置文件，==Spring配置文件的约束要有==。
+   * **配置数据源（datasource）**：使用`org.springframework.jdbc.datasource.DriverManagerDataSource`类。具体配置与mybatis一样。
+   * **配置sqlSessionFactory**：
+     * 使用`org.mybatis.spring.SqlSessionFactoryBean`类；
+     * 配置使用的数据源；
+     * 导入mybatis本来的配置；
+     * 导入mapper的配置。
+   * **配置sqlSessionTemplate**:
+     * 使用`org.mybatis.spring.SqlSessionTemplate`类；
+     * 用以==取代原来的sqlSession对象。 
+     * 向sqlSessionTemplate==注入sqlSessionFactory==，并且只能使用构造器注入，因为没有set方法。
+   * **将mapper实现类注册为bean**：
+     * ==将sqlSessionTemplate==注入到mapper实现类中去。
+3. 编写mapper实现类 
+```java
+package com.zestaken.dao;
+
+import com.zestaken.pojo.T_college;
+
+import org.mybatis.spring.SqlSessionTemplate;
+
+import java.util.List;
+
+public class T_collegeMapperImpl implements T_collegeMapper {
+
+//    需要导入包，SqlSessionTemplate模板或得sqlSession来执行操作
+    private SqlSessionTemplate sqlSession;
+
+//设置sqlSession的set方法，方便Spring的注入
+    public void setSqlSession(SqlSessionTemplate sqlSession) {
+        this.sqlSession = sqlSession;
+    }
+
+
+    public List<T_college> getT_collegeList() {
+        T_collegeMapper t_collegeMapper = sqlSession.getMapper(T_collegeMapper.class);
+        List<T_college> t_collegeList = t_collegeMapper.getT_collegeList();
+
+        return t_collegeList;
+    }
+}
+```
+   * 这个实现类需要实现mapper接口中的方法；
+   * 同时==还需创建SqlSessionTemplate属性，并设置它对应的set方法==。
+     * `SqlSessionTemplate属性`需要导入包：`org.mybatis.spring.SqlSessionTemplate`
+   * 相当于将==实际使用时获取mapper，执行对应sql语句的步骤直接放到这个实现类中去完成==，实际使用的时候，只需==获取该实现类的bean，调用相应的方法即可==。
+4.Spring配置文件：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--将数据库操作实现类注册到Spring-->
+    <bean id="t_collegeMapperImpl" class="com.zestaken.dao.T_collegeMapperImpl">
+        <property name="sqlSession" ref="sqlSessionTemplate"/>
+    </bean>
+</beans>
+```
+5. mybatis-config.xml配置文件：
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 核心配置文件 -->
+<configuration>
+
+</configuration>
+```
+6. 测试：
+```java
+@Test
+public void getT_collegeListTest(){
+    ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("spring-dao.xml");
+    T_collegeMapper t_collegeMapperImpl = classPathXmlApplicationContext.getBean("t_collegeMapperImpl", T_collegeMapper.class);
+
+    List<T_college> t_collegeList = t_collegeMapperImpl.getT_collegeList();
+    for(T_college college : t_collegeList){
+        System.out.println(college);
+    }
+}
+```
+* Spring整合Mybatis的常用配置方法：
+  * mybatis自己的配置文件(一般是mybatis-config.xml)中只放别名和设置的配置；(==将与Spring对Mybaits的配置相同的配置全部移除，如数据源配置，mapper注册等==)
+  * 关于Spring的Mybatis配置单独创建一个Spring配置文件来管理；
+  * Spring自己的配置（如注册bean等）用一个单独的Spring配置文件来管理。
+
+## Spring整合Mybatis方式二
+
+* 在方式一的基础上==只对mapper实现类获取SqlSessionTemplate的方式作了简化==；
+* mapper实现类：
+```java
+package com.zestaken.dao;
+
+import com.zestaken.pojo.T_college;
+
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+
+import java.util.List;
+
+public class T_collegeMapperImpl extends SqlSessionDaoSupport implements T_collegeMapper {
+
+    public List<T_college> getT_collegeList() {
+        SqlSession sqlSession = getSqlSession();
+        T_collegeMapper t_collegeMapper = sqlSession.getMapper(T_collegeMapper.class);
+        List<T_college> t_collegeList = t_collegeMapper.getT_collegeList();
+
+        return t_collegeList;
+    }
+}
+```
+  * mapper实现类需要==继承SqlSessionDaoSupport类==，使用这个类需要导入包：`org.mybatis.spring.support.SqlSessionDaoSupport`
+  * 实现类==无需再设置SqlSessionTemplate属性==，可以直接通过==getSqlSession方法获取SqlSessionTemplate对象==。
+* mapper实现类注册bean
+```xml
+<!--将数据库操作实现类注册到Spring-->
+    <bean id="t_collegeMapperImpl" class="com.zestaken.dao.T_collegeMapperImpl">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+```
+  * 虽然无需再向mapper实现类中注入sqlSessionTemplate，但是需要==注入sqlSessionFactory==,用来产生SqlSessionTemplate对象。
+
+## Spring中事务管理
+
+* **事务(Transaction)**：把一组业务绑在一起，看成一个业务，这些业务当且仅当所有业务都执行成功时，每一个业务才能成功执行，只要有一个业务没有成功，那么最后，所有业务都是失败的结果。
+* **事务作用**：确保数据的完整性与一致性。
+* **事务的ACID属性**：
+  1. **原子性（atomicity）**。一个事务是一个不可分割的工作单位，事务中包括的操作==要么都做，要么都不做==。
+  2. **一致性（consistency）**。事务必须是使数据库从一个一致性状态变到另一个一致性状态。一致性与原子性是密切相关的。
+  3. **隔离性（isolation）**。一个事务的执行不能被其他事务干扰。即一个事务内部的操作及使用的数据对并发的其他事务是隔离的，==并发执行的各个事务之间不能互相干扰==。
+  4. **持久性（durability）**。持久性也称永久性（permanence），指一个事务一旦提交，它对数据库中数据的改变就应该是永久性的。接下来的其他操作或故障不应该对其有任何影响。
+ 
 
 
 
