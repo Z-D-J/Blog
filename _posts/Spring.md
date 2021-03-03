@@ -1048,6 +1048,51 @@ public class T_collegeMapperImpl extends SqlSessionDaoSupport implements T_colle
   2. **一致性（consistency）**。事务必须是使数据库从一个一致性状态变到另一个一致性状态。一致性与原子性是密切相关的。
   3. **隔离性（isolation）**。一个事务的执行不能被其他事务干扰。即一个事务内部的操作及使用的数据对并发的其他事务是隔离的，==并发执行的各个事务之间不能互相干扰==。
   4. **持久性（durability）**。持久性也称永久性（permanence），指一个事务一旦提交，它对数据库中数据的改变就应该是永久性的。接下来的其他操作或故障不应该对其有任何影响。
+* Spring支持两种事务：
+  * 声明式事务（又称交由容器管理事务）；
+  * 编程式事务：在程序中通过try/catch实现事务。
+
+### 声明式事务配置
+
+1. 在Spring对Mybatis的配置文件中==开启声明式事务==：
+```xml
+<!--    配置声明式事务-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+```
+   * 需要给transactionManger==注入datasource数据源==。
+2. 结合AOP实现事务的织入：
+```xml
+<!--    结合aop实现事务的织入-->
+<!--    配置事务通知-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+<!--        给具体的方法配置事务-->
+<!--配置每个方法事务的特性,如传播性propagation-->
+        <tx:attributes>
+            <tx:method name="getT_collegeList" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+<!--    配置事务切入-->
+    <aop:config>
+        <aop:pointcut id="txPointCut"  expression="execution(* com.zestaken.dao.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>
+    </aop:config>
+```
+   * 配置事务通知（即使用tx标签）需要导入tx的约束：
+     * `xmlns:tx="http://www.springframework.org/schema/tx"`
+     * ` http://www.springframework.org/schema/tx`
+     * `http://www.springframework.org/schema/tx/spring-tx.xsd`
+   * 给具体的方法配置事务：
+     * 以后在切入点，只要==方法名和配置相同的方法，就会被配置上事务==。
+   * 配置事务的切入：
+     * 通过切入的方式，使事务在具体的位置生效。
+ * 最终效果：
+   * 一个配置了事务的方法中，对数据库的操作中，只要有一个失败了，其余的所有操作都不会生效。
+  
+
+
  
 
 
