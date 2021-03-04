@@ -26,7 +26,7 @@ tags:
   * 示例：
 ```javascript
 //基本定义格式
-var person = {"name":"zhangjie",age = 19, "gender" : true};
+var person = {"name":"zhangjie","age":19, "gender" : true};
 
 //对象中嵌套数组
 var persons = {
