@@ -139,7 +139,7 @@ public class HelloController {
     }
 }
 ```
-   * `@Controller`是为了让Spring IOC容器自动扫描到；
+   * `@Controller`是为了让Spring IOC容器自动扫描到；被这个注解的类中的所有方法，如果返回值是String，并且有具体的页面可以操作，那么就会被视图解析器解析。#
    * `@ResquestMapping`是为了映射请求路径，这里因为类与方法上都有映射，所以访问时应该是`HelloController/hello`(类上的映射可以不写)
    * 方法中声明的Model类型的参数是为了把Action中的数据带到视图层中；
    * 方法返回的结果是视图的名称hello，加上==配置文件中的前后缀==变成WEB-INF/jsp/hello.jsp
@@ -157,4 +157,95 @@ public class HelloController {
    ```
 8. 启动tomcat，访问/HelloController/hello1。
    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210307221352.png)
+
+# Restful风格
+
+* Restful风格：一种软件架构风格、设计风格，而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。
+* REST即Representational State Transfer的缩写，可译为"表现层状态转化”。REST最大的几个特点为：资源、统一接口、URI和无状态。
+* 资源：互联网所有的事物都可以被抽象为资源 。
+* 资源操作：使用POST、DELETE、PUT、GET，使用不同方法对资源进行操作。 
+分别对应 添加、 删除、修改、查询。 
+* 传统方式操作资源：通过不同的参数来实现不同的效果，方法单一，都是GET或者POST。
+```
+http://127.0.0.1/item/queryUser.action?id=1   查询,GET 
+http://127.0.0.1/item/saveUser.action             新增,POST 
+http://127.0.0.1/item/updateUser.action          更新,POST 
+http://127.0.0.1/item/deleteUser.action?id=1  删除,GET或POST
+```
+* 使用RESTful操作资源 :
+  * 通过不同的请求方法来实现不同的效果。请求的地址一样，但是因为请求的方式不同，实现的功能不同。
+    * 可以通过 GET、 POST、 PUT、 PATCH、 DELETE 等方式对服务端的资源进行操作。其中，GET 用于查询资源，POST 用于创建资源，PUT 用于更新服务端的资源的全部信息，PATCH 用于更新服务端的资源的部分信息，DELETE 用于删除服务端的资源。
+  * 同时隐藏了参数的传递，直接将参数写入到地址中，隐藏了参数名。
+```
+【GET】 /users # 查询用户信息列表
+
+【GET】 /users/1001 # 查看某个用户信息（其中1001就是要用到方法中的参数）
+
+【POST】 /users # 新建用户信息
+
+【PUT】 /users/1001 # 更新用户信息(全部字段)
+
+【PATCH】 /users/1001 # 更新用户信息(部分字段)
+
+【DELETE】 /users/1001 # 删除用户信息
+```
+* 传统方法实现示例：
+```java
+package com.zestaken.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class HelloController {
+
+    @RequestMapping("/hello1")
+    public String sayHello(int a, int b,Model model) {
+        int res = a + b;
+        model.addAttribute("msg", "输出结果为："+res);
+        return "hello";
+    }
+}
+```
+  * 请求这个方法的路径：`http://localhost:8080/SpringMVC_war_exploded/hello1?a=1&b=2`
+* Restful风格实现示例：
+```java
+package com.zestaken.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+public class HelloController {
+
+//    @RequestMapping(value = "/hello1/{a}/{b}",method = RequestMethod.GET)
+    @GetMapping("/hello/{a}/{b}")
+    public String GETHello(@PathVariable int a, @PathVariable int b, Model model) {
+        int res = a - b;
+        model.addAttribute("msg", "GET输出结果为："+res);
+        return "hello";
+    }
+
+    @PostMapping("/hello/{b}/{a}")
+    public String POSTHello(@PathVariable int a, @PathVariable int b, Model model) {
+        int res = a - b;
+        model.addAttribute("msg", "POST输出结果为："+res);
+        return "hello";
+    }
+}
+}
+```
+  * 将参数的传递放到路径中去：
+    * 方法的参数必须加上`@PathVariable`注解
+    * 方法的路径中，必须对应方法的参数(名称相同，`{a}`对应参数`int a`)，并且用花括号括起来。
+  * 限制不同的请求方法，只能使用不同的方法
+    * 一种方法是给`@RequestMapping`注解加上method参数
+    * 一种方法是使用对应请求方法特有的map注解,如，GEI方法对应的`@GETMapping`注解。
+  * 请求GETHello的请求路径：`http://localhost:8080/SpringMVC_war_exploded/hello/1/2`
+    * 路径中的参数必须与参数的类型对应。
+    * 请求生效必须采用GET方法。
+
+
 
