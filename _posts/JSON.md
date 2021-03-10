@@ -6,13 +6,14 @@ tags:
 # JSON概述
 
 * JSON：JavaScript 对象表示法（JavaScript Object Notation）。
+* 采用完全独立于编程语言的文本格式来存储和表示数据。
 * JSON是存储和交换文本信息的语法。类似XML。用于数据的传输。
 * JSON比XML更小、更快，更易解析。
 
 # JSON基本规则
 
-* 数据在（名称:值）对中：json数据是由键值对构成的。
-  * 键：用引号（单双都行）引起来，也可以不使用引号；
+* 数据在（名称:值）对中：json数据是由==键值对==构成的。
+  * **键**：用==引号（单双都行）引起来，也可以不使用引号==；
   * 值的取值类型：
     1. 数字（整数或者浮点数）,不用加引号
     2. 字符串（在双引号中）
@@ -60,6 +61,23 @@ for(var key in person) {
 }
 ```
 
+# JSON数据与JavaScript对象的相互转化
+
+* JavaScript转换为JSON数据（就是有特殊格式的字符串）：
+```javascript
+var user = {
+  name : "zhangjie",
+  age: 20,
+  sex: "男"
+};
+
+var json = JSON.stringify(user);
+```
+* 将JSON数据转换为JavaScript对象：
+```javascript
+var jsObj = JSON.parse(json);
+```
+
 # JSON数据与java对象的相互转换
 
 * JSON的解析器：用于转换json的工具类
@@ -79,7 +97,7 @@ for(var key in person) {
             3. `OutputStream`:将obj对象转换为JSON字符串，并将json数据填充到**字节输出流**中。
         2. writeValueAsString(obj):将对象转为JSON字符串
      2. 示例：
-```javascript
+```java
 ObjectMapper mapper = new ObjectMapper();
 
 String json = mapper.writeValueAsString(person);
