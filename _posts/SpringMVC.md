@@ -441,6 +441,29 @@ public class Controller2 implements Controller {
   * 通过ModelAndView对象来设置响应给前端的结果，和具体的的前端页面。
 * 回显结果到前端：通过Model对象来实现。
 * 回显结果到前端：通过ModelMap来实现。
+* 三种回显数据的方法的对比：
+  * Model：只有几种方法，只适用于储存数据，是ModelMap的精简版；
+  * ModelMap:继承了LinkedMap,除了实现了自身的一些方法，同样的继承LinkedMap方法和特性。功能更齐全。
+  * ModelAndView:可以在储存数据的同时，进行设置返回的逻辑视图，进行控制展示层的跳转。
 
 
+# 后台乱码问题
+
+* 在前端编码方式为utf-8的情况下，因为服务端的编码问题导致经由后台代码的中文输出为乱码。
+* 解决方案：使用SpringMVC的乱码过滤器过滤器。
+* 在`web.xml`中配置SpringMVC的乱码过滤器：
+```xml
+<filter>
+    <filter-name>encoding</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+        <param-name>encoding</param-name>
+        <param-name>utf-8></param-name>
+    </init-param>
+</filter>
+<filter-mapping>
+    <filter-name>encoding</filter-name>
+    <url-pattern>/</url-pattern>
+</filter-mapping>
+``` 
 
