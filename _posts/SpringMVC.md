@@ -467,3 +467,391 @@ public class Controller2 implements Controller {
 </filter-mapping>
 ``` 
 
+
+# SSM整合
+
+1. maven的pom.xml配置，导入相关依赖包
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>ssm</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>ssm</name>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <junit.version>5.6.2</junit.version>
+    </properties>
+
+<!--    依赖：junit，数据库驱动，连接池，servlet，jsp，mybatis，mybatis-spring，spring servlet jsp jstl-->
+    <dependencies>
+<!--        web包-->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>8.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+<!--        junit-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+<!--        mysql数据库驱动包， 数据库连接池c3p0-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.23</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.2</version>
+        </dependency>
+
+<!--        servlet jsp-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+<!--        mybatis mybatis-spring-->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+
+<!--        spring依赖-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>5.3.4</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+        </plugins>
+<!--        配置静态资源导出问题-->
+            <resources>
+                <resource>
+                    <directory>src/main/java</directory>
+                    <includes>
+                        <include>**/*.properties</include>
+                        <include>**/*.xml</include>
+                    </includes>
+                    <filtering>false</filtering>
+                </resource>
+                <resource>
+                    <directory>src/main/resources</directory>
+                    <includes>
+                        <include>**/*.properties</include>
+                        <include>**/*.xml</include>
+                    </includes>
+                    <filtering>false</filtering>
+                </resource>
+            </resources>
+    </build>
+</project>
+```
+2. 编写基本目录结构：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210312104652.png)
+
+## 一：mybaits层编写
+
+1. 连接数据库
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210311225308.png)
+
+2. 编写mybatis层配置：
+   1. mybatis-config.xml，并管理
+```xml
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE configuration
+            PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    <!-- 核心配置文件 -->
+    <configuration>
+
+    <!--    配置数据源的工作交给spring去做-->
+    <!--    <properties resource="db.properties">-->
+    <!--        <property name="password" value="root"/>-->
+    <!--    </properties>-->
+
+    <!--    <environments default="development">-->
+    <!--        <environment id="development">-->
+    <!--            <transactionManager type="JDBC"/>-->
+    <!--            &lt;!&ndash;配置数据源&ndash;&gt;-->
+    <!--            <dataSource type="POOLED">-->
+    <!--                &lt;!&ndash;注册驱动，同jdbc&ndash;&gt;-->
+    <!--                <property name="driver" value="${driver}"/>-->
+    <!--                &lt;!&ndash;数据库连接路径&ndash;&gt;-->
+    <!--                <property name="url" value="${url}"/>-->
+    <!--                <property name="username" value="${username}"/>-->
+    <!--                <property name="password" value="${password}"/>-->
+    <!--            </dataSource>-->
+    <!--        </environment>-->
+    <!--    </environments>-->
+
+    <!--    mybatis的配置文件中可以做配置别名等工作-->
+    <typeAliases>
+        <package name="com.zestaken.pojo"/>
+    </typeAliases>
+    <!--每一个Mapper.xml文件都需要在这个mybatis核心配置文件中注册-->
+    <mappers>
+        <mapper resource="com/zestaken/dao/T_collegeMapper.xml"/>
+    </mappers>
+    </configuration>
+```
+
+3. 编写数据库配置文件：database.properties
+```properties
+    jdbc.driver = com.mysql.jdbc.Driver
+    # 如果使用的是MySQL8.0以上版本，需要加上一个时区配置:serverTimezone=Asia/Shanghai
+    jdbc.url = jdbc:mysql://localhost:3306/youth_study?serverTimezone=Asia/Shanghai
+    jdbc.usrname=root
+    jdbc.password = root
+```
+
+4. 编写实体类pojo：
+```java
+package com.zestaken.pojo;
+
+import java.sql.Date;
+
+public class T_college {
+    private int id;
+    private String name;
+    private Date gmt_create;
+    private Date gmt_modified;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Date getGmt_create() {
+        return gmt_create;
+    }
+
+    public Date getGmt_modified() {
+        return gmt_modified;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGmt_create(Date gmt_create) {
+        this.gmt_create = gmt_create;
+    }
+
+    public void setGmt_modified(Date gmt_modified) {
+        this.gmt_modified = gmt_modified;
+    }
+
+    @Override
+    public String toString() {
+        return "T_college{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", gmt_create=" + gmt_create +
+                ", gmt_modified=" + gmt_modified +
+                '}';
+    }
+}
+```
+   * 属性名与数据库字段名相同；
+   * 并编写每个属性的getter和setter方法
+   * 编写toString方法
+   * ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210312110729.png)
+   * 类名就是表名配合首字母大写
+5. 编写操作数据库的方法（dao层）接口，命名为pojo实体类加Mapper，如：T_collegeMapper
+```java
+package com.zestaken.dao;
+
+import com.zestaken.pojo.T_college;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface T_collegeMapper {
+
+    //    增加一个学院
+    int addCollege(T_college college);
+
+    //删除一个指定的学院
+    int deleteCollege(@Param("collegeID") int id);
+
+    //更新一个学院的信息
+    int updateCollege(T_college college);
+
+    //查询一个学院
+    T_college queryCollege(@Param("collegeID") int id);
+
+    //查询全部的学院
+    List<T_college> queryAllCollege();
+}
+
+```
+6.编写对应dao层接口的mapper配置文件：T_collegeMapper.xml
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zestaken.dao.T_collegeMapper">
+
+    <insert id="addCollege" parameterType="T_college">
+    insert into youth_study.t_college(id,name)
+    value (#{id},#{name});
+    </insert>
+
+    <delete id="deleteCollege" parameterType="int">
+    delete from youth_study.t_college
+    where id = #{collegeID};
+    </delete>
+    
+    <update id="updateCollege" parameterType="T_college">
+    update youth_study.t_college
+    set name=#{name}
+    where id = #{id};
+    </update>
+
+    <select id="queryCollege" resultType="T_college">
+    select * form youth_study.t_college
+    where id = #{collegeID};
+    </select>
+
+    <select id="queryAllCollege" resultMap="T_college">
+    select * from youth_study.t_college;
+    </select>
+
+</mapper>
+```
+7. 绑定mapper，在mybatis-config.xml中配置：
+```xml
+    <mappers>
+        <mapper resource="com/zestaken/dao/T_collegeMapper.xml"/>
+    </mappers>
+```
+8.编写业务层的接口：
+```java
+package com.zestaken.service;
+
+import com.zestaken.pojo.T_college;
+
+import java.util.List;
+
+public interface T_collegeService {
+
+    //    增加一个学院
+    int addCollege(T_college college);
+
+    //删除一个指定的学院
+    int deleteCollege(int id);
+
+    //更新一个学院的信息
+    int updateCollege(T_college college);
+
+    //查询一个学院
+    T_college queryCollege(int id);
+
+    //查询全部的学院
+    List<T_college> queryAllCollege();
+}
+```
+9.实现业务层的接口:
+```java
+package com.zestaken.service;
+
+import com.zestaken.dao.T_collegeMapper;
+import com.zestaken.pojo.T_college;
+
+import java.util.List;
+
+public class T_collegeServiceImpl implements T_collegeService{
+
+    //service层调dao层实现功能
+    private T_collegeMapper t_collegeMapper;
+
+    //方便之后用Spring托管这个对象
+    public void setT_collegeMapper(T_collegeMapper t_collegeMapper) {
+        this.t_collegeMapper = t_collegeMapper;
+    }
+
+    @Override
+    public int addCollege(T_college college) {
+        return t_collegeMapper.addCollege(college);
+    }
+
+    @Override
+    public int deleteCollege(int id) {
+        return t_collegeMapper.deleteCollege(id);
+    }
+
+    @Override
+    public int updateCollege(T_college college) {
+        return t_collegeMapper.updateCollege(college);
+    }
+
+    @Override
+    public T_college queryCollege(int id) {
+        return t_collegeMapper.queryCollege(id);
+    }
+
+    @Override
+    public List<T_college> queryAllCollege() {
+        return t_collegeMapper.queryAllCollege();
+    }
+}
+```

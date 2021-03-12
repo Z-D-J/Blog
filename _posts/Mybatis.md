@@ -412,7 +412,8 @@ public class T_collegeMapperTest {
       * UNPOOLED：这个数据源的实现会每次请求时打开和关闭连接。
       * JNDI：这个数据源实现是为了能在如 EJB 或应用服务器这类容器中使用，容器可以集中或在外部配置数据源，然后放置一个 JNDI 上下文的数据源引用。
 * 示例：
-```xml<environments default="development">
+```xml
+<environments default="development">
   <environment id="development">
     <transactionManager type="JDBC">
       <property name="..." value="..."/>
