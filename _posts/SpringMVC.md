@@ -855,3 +855,162 @@ public class T_collegeServiceImpl implements T_collegeService{
     }
 }
 ```
+
+## Spring层
+
+* 要将Spring相关的所有配置文件整合在到一起（本质上写一个spring的配置文件就足够了，分开写只是为了思路更清晰）
+  * 可以通过用import配置文件的方法实现:
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210313164643.png)
+  * 也可以利用idea配置实现：
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210313164431.png)
+
+### Spring整合dao层
+
+* 编写spring-dao.xml配置文件：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            https://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            https://www.springframework.org/schema/context/spring-context.xsd">
+
+<!--    关联数据库配置文件-->
+    <context:property-placeholder location="classpath:database.properties"/>
+
+<!--    配置连接池，此处使用c3p0-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password"/>
+
+    <!--        c3p0配置-->
+        <property name="maxPoolSize" value="30"/>
+        <property name="minPoolSize" value="10"/>
+        <property name="autoCommitOnClose" value="false"/>
+        <property name="checkoutTimeout" value="10000"/>
+        <property name="acquireRetryAttempts" value="2"/>
+    </bean>
+
+<!--    sqlSessionFactory配置-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!--        绑定数据源-->
+        <property name="dataSource" ref="dataSource"/>
+    <!--        绑定mybatis的配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+<!--    配置dao接口的扫描包 动态实现Dao接口注入到Spring容器中（不用写接口实现类了）-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="com.zestaken.dao"/>
+    </bean>
+</beans>
+```
+
+### Spring整合service层
+
+* 写一个spring-sevice.xml配置文件：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            https://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            https://www.springframework.org/schema/context/spring-context.xsd">
+
+<!--    扫描service层下的包, 要被扫描的类上面要加上@Compoent（或者更详细的@Service注解）-->
+    <context:component-scan base-package="com.zestaken.service"/>
+
+<!--    将service层的业务类注入到Spring，可以通过配置，或者注解实现-->
+    <bean id="T_collegeServiceImpl" class="com.zestaken.service.T_collegeServiceImpl">
+        <property name="t_collegeMapper" ref="t_collegeMapper"/>
+    </bean>
+
+<!--声明式事务配置-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+<!--        注入数据源-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+</beans>
+```
+  * 如果需要aop的配置，也写在这里。
+
+## SpringMVC层
+
+* 编写WEB-INF目录下的web.xml配置文件：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+<!--    DispatchServlet配置-->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+<!--    乱码过滤配置-->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+<!--    配置session-->
+    <session-config>
+        <session-timeout>15</session-timeout>
+    </session-config>
+</web-app>
+```
+* 编写Spring-service.xml配置文件：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            https://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            https://www.springframework.org/schema/comtext/spring-context.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+<!--    注解驱动-->
+    <mvc:annotation-driven/>
+<!--    静态资源过滤-->
+    <mvc:default-servlet-handler/>
+<!--    扫描包：controller-->
+    <context:component-scan base-package="com.zestaken.controller"/>
+
+<!--    视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>
+```
