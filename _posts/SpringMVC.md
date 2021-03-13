@@ -648,10 +648,10 @@ public class Controller2 implements Controller {
 
 3. 编写数据库配置文件：database.properties
 ```properties
-    jdbc.driver = com.mysql.jdbc.Driver
+    jdbc.driver = com.mysql.cj.Driver
     # 如果使用的是MySQL8.0以上版本，需要加上一个时区配置:serverTimezone=Asia/Shanghai
     jdbc.url = jdbc:mysql://localhost:3306/youth_study?serverTimezone=Asia/Shanghai
-    jdbc.usrname=root
+    jdbc.usrname = root
     jdbc.password = root
 ```
 
@@ -772,7 +772,7 @@ public interface T_collegeMapper {
     where id = #{collegeID};
     </select>
 
-    <select id="queryAllCollege" resultMap="T_college">
+    <select id="queryAllCollege" resultType="T_college">
     select * from youth_study.t_college;
     </select>
 
@@ -957,7 +957,9 @@ public class T_collegeServiceImpl implements T_collegeService{
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:spring-mvc.xml</param-value>
+<!--            <param-value>classpath:spring-mvc.xml</param-value>-->
+<!--            不能只导入Springmvc的配置文件，需要导入所有spring的配置文件，不然有一些bean会找不到-->
+            <param-value>classpath:applicationContext.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -984,9 +986,9 @@ public class T_collegeServiceImpl implements T_collegeService{
     <session-config>
         <session-timeout>15</session-timeout>
     </session-config>
-</web-app>
+</web-app>>
 ```
-* 编写Spring-service.xml配置文件：
+* 编写spring-mvc.xml配置文件：
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -1009,8 +1011,147 @@ public class T_collegeServiceImpl implements T_collegeService{
 
 <!--    视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/jsp"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
 </beans>
 ```
+
+## 编写实际项目
+
+* 编写web.xml(WEB-INF)目录下的：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+<!--    DispatchServlet配置-->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+<!--            <param-value>classpath:spring-mvc.xml</param-value>-->
+<!--            不能只导入Springmvc的配置文件，需要导入所有spring的配置文件，不然有一些bean会找不到-->
+            <param-value>classpath:applicationContext.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+<!--    <context-param>-->
+<!--        <param-name>contextConfigLocation</param-name>-->
+
+<!--        <param-value>classpath:applicationContext.xml</param-value>-->
+<!--    </context-param>-->
+
+    
+<!--    乱码过滤配置-->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+<!--    配置session-->
+    <session-config>
+        <session-timeout>15</session-timeout>
+    </session-config>
+
+</web-app>
+```
+* 编写controller：
+```java
+package com.zestaken.controller;
+
+import com.zestaken.pojo.T_college;
+import com.zestaken.service.T_collegeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
+
+@Controller
+@RequestMapping("/college")
+public class T_collegeController {
+
+    //controller调service层
+    @Autowired
+    @Qualifier("T_collegeServiceImpl")
+    private T_collegeService t_collegeService;
+
+    public void setT_collegeService(T_collegeService t_collegeService) {
+        this.t_collegeService = t_collegeService;
+    }
+
+    @RequestMapping("/allCollege")
+    public  String queryAllCollege(Model model) {
+        List<T_college> t_colleges = t_collegeService.queryAllCollege();
+        model.addAttribute("msg", t_colleges);
+        return "allCollege";
+    }
+}
+```
+* 编写页面：
+  * ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210313220441.png)
+```jsp
+<%--
+  Created by IntelliJ IDEA.
+  User: 12246
+  Date: 2021/3/13
+  Time: 19:15
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>首页</title>
+</head>
+<body>
+
+<h1>
+    <a href="${pageContext.request.contextPath}/college/allCollege">进入学院展示页面</a>
+</h1>
+</body>
+</html>
+```
+
+```jsp
+<%--
+  Created by IntelliJ IDEA.
+  User: 12246
+  Date: 2021/3/13
+  Time: 19:14
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>allCollege</title>
+</head>
+<body>
+
+<h1>${msg}</h1>
+</body>
+</html>
+```
+
+* 配置Tomcat，启动项目。
+* 最后总架构：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210313220644.png)
