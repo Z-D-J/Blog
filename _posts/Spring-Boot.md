@@ -6,6 +6,8 @@ tags:
 
 # SpringBoot简介
 
+[官方文档](https://spring.io/projects/spring-boot#learn)
+
 * Spring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。
 * SpringBoot所具备的特征有：
 （1）可以创建独立的Spring应用程序，并且基于其Maven或Gradle插件，可以创建可执行的JARs和WARs；
@@ -110,3 +112,78 @@ tags:
 
 </project>
 ```
+ 
+* 修改项目的端口号，在application.properties中添加如下配置：
+  ```properties
+  # 更改项目的端口号为8081（默认为8080）
+  server.port = 8081
+  ```
+    
+* 修改背景图片：使用在线工具生成banner.txt 放到application.properties的同级目录下：
+    ![](https://gitee.com/zhangjie0524/picgo/raw/master/img/20210315182722.png)
+
+# Springboot自动装配原理
+
+## 配置解析
+
+* `spring-boot-dependencies`:核心依赖，在父工程（`spring-boot-starter-parent`）中;
+  * 作用：配置了springboot依赖的版本仓库，使我们在写或者引入springboot依赖的时候不用写版本号；
+* `spring-boot-starter`:启动器
+```xml
+<dependency>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter</artifactId>
+<version>2.4.3</version>
+</dependency>
+```
+  * 配置了SpringBoot的启动场景，比如spring-boot-starter-web就会帮我们导入web环境的所有的依赖。
+  * SpringBoot会将所有的**功能场景，都变成一个个的启动器**。
+  * 需要使用什么功能，只需要找到对应的启动器。
+  * [启动器介绍文档](https://docs.spring.io/spring-boot/docs/2.4.3/reference/html/using-spring-boot.html#using-boot-starter)
+
+## 主程序
+
+* 本例中中主程序是SpringbootApplication(项目名+Application):
+```java
+package com.zestaken.springboot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+
+@SpringBootApplication //标注这个这个类是一个springboot的应用
+public class SpringbootApplication {
+
+    public static void main(String[] args) {
+        //将SpringBoot应用启动
+        SpringApplication.run(SpringbootApplication.class, args);
+    }
+
+}
+```
+* `@SpringBootApplication`注解：这个注解是一个组合注解，其中包含的比较重要的注解如下
+  *  `@SpringBootConfiguration`:springboot的配置注解，这个注解也是一个组合注解，包含的比较重要的注解如下：
+     *  `@Configuration`：spring的配置注解，这个注解也是一个组合注解，包含的比较重要的注解如下：
+        *  `@Component`:spring的组件注解。
+     * 从根本来说，这个主程序也是**spring的一个组件**。
+* `@EnableAutoConfiguration`:springboot自动配置注解，这个注解也是一个组合注解，包含的比较重要的注解如下：
+  * `@AutoConfigurationPackage`:自动配置包注解，这个注解也是一个组合注解，包含的比较重要的注解如下：
+    * `@Import({Registrar.class})`自动配置包的注册
+  * `@Import({AutoConfigurationImportSelector.class})`:自动配置导入选择器，这个注解也是一个组合注解，包含的比较重要的注解如下：
+
+# 主程序
+
+* 实现的工作：
+  1. 推断应用的类型是普通的项目还是web项目；
+  2. 查找并加载所有可用的**初始化器**，设置到initializers属性中；
+  3. 找出所有的应用程序监听器，设置到listeners属性中；
+  4. 推断并设置main方法的定义类，找到运行的主类。
+
+# SpringBoot配置
+
+* SpringBoot使用一个全局的配置文件，配置文件的名称是固定的为`application`,但是可以使用两种格式：
+  * `application.properties`:
+    * 语法结构：`key = value`
+  * `application.yml`:
+    * 语法结构：`key : (此处由空格) value`
+* 配置文件的作用：修改SpringBoot的自动配置的默认值。
