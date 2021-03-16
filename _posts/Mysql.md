@@ -788,5 +788,6 @@ create table `student` (
     `youth_league_branch_id` int not null -- 所属团支部id 
 ); 
 ```
+* 在`student`外面加上引号是为了设置大小写敏感，否则所有的大写都会被自动转换为小写。
 
  
