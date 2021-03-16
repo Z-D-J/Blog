@@ -64,7 +64,7 @@ tags:
 * 字符串**是不可变的**，不可以被修改。如果需要修改，只能创建一个新的字符串，并在创建的过程中，将修改加进去。
 * 制表符`\t`:添加四个空格，如：`print("\tPython")`
 * 换行符`\n`:换到下一行。
- 
+
 
 ### 字符串对象方法
 
@@ -451,7 +451,23 @@ print(user_profile)
 ## 函数的返回值
 
 * 在函数中，可使用return 语句将值返回到调用函数的代码行。
+
 * 函数可返回任何类型的值，包括列表和字典等较复杂的数据结构。
+
+* ` ->`常常出现在python函数定义的函数名后面，为函数添加`元数据`,描述函数的返回类型，从而方便开发人员使用。如：
+
+  ```java
+  Class ListNode:
+      def _init_(self, x):
+          self.val = x
+          self.next = None
+  
+  Class Solution:
+      def reverseList(self, head: ListNode) -> ListNode:
+  # 表示该函数的返回值类型为ListNode
+  ```
+
+  
 
 ## 模块
 ### 模块的概念
@@ -741,7 +757,7 @@ class Dog():
     def roll_over(self):
       """模拟小狗被命令时打滚"""
       print(self.name.title() + " rolled over!")
-``` 
+```
 
 ## 类的实例化
 
@@ -894,6 +910,7 @@ unittest.main()
 ```
   * 可先导入**模块unittest**以及要**测试的函数**;
   * 再创建一个**继承unittest.TestCase 的类**，在这个类中编写一系列**方法**对函数行为的不同方面进行测试。
+    
     * 你可随便给这个类命名，但最好让它看起来与要测试的函数相关，并包含字样Test。
   * 在类中用于测试函数不同方面的方法名称**必须以test打头，我们运行该测试程序的时候，所有以test打头的方法都将自动运行**。
   * 最后需要**调用`unittest.main()`方法，用于运行测试程序**。
@@ -935,6 +952,7 @@ unittest.main()
         self.assertIn(response, self.my_survey.responses) 
 
   unittest.main()
+  ```
 ```
 
 
@@ -948,3 +966,5 @@ unittest.main()
 
 
 
+
+```
