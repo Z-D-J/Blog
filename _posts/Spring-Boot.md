@@ -185,5 +185,210 @@ public class SpringbootApplication {
   * `application.properties`:
     * 语法结构：`key = value`
   * `application.yml`:
-    * 语法结构：`key : (此处由空格) value`
+    * 语法结构：`key : (此处有空格) value`
 * 配置文件的作用：修改SpringBoot的自动配置的默认值。
+
+## yaml
+
+* YAML 是 "YAML Ain't a Markup Language"（YAML 不是一种标记语言）的递归缩写。
+* YAML 的语法和其他高级语言类似，并且可以简单表达清单、散列表，标量等数据形态。它使用**空白符号缩进**和大量依赖外观的特色，特别适合用来表达或编辑数据结构、各种配置文件、倾印调试内容、文件大纲（例如：许多电子邮件标题格式和YAML非常接近）。
+* **YAML 的配置文件后缀为 .yml或者.yaml**，如：`application.yml`或者`application.yaml`，官方推荐使用`.yaml`
+* yaml的特点：
+  * 大小写敏感
+  * 使用缩进表示层级关系 
+  * 缩进不允许使用tab，只允许空格
+  * 缩进的空格数不重要，只要相同层级的元素左对齐即可
+  * `#`表示注释。
+* YAML 支持以下几种数据类型：
+  * 对象：键值对的集合，又称为映射（mapping）/ 哈希（hashes） / 字典（dictionary）
+  * 数组：一组按次序排列的值，又称为序列（sequence） / 列表（list）
+  * 纯量（scalars）：单个的、不可再分的值
+* 纯量（普通的数据）：
+  * `name: zestaken`
+* 对象:
+  * 空格缩进存对象：
+  ```yml
+  # 包含name和age属性值的student对象。
+  studen:
+   name: zestaken
+   age: 19
+  ```
+  * 行内使用花括号：
+  ```yml
+  # 还是student对象
+  student: {name: zestaken, age: 19}
+  ```
+  * 利用yaml可以存储对象的特点，可以用于给**对象赋值**。
+* 数组：
+  * 使用空格缩进和`-`:
+  ```yml
+  # 包含三个元素的pets数组
+  pets:
+   - cat
+   - dog
+   - pig
+  ```
+  * 行内使用中括号：
+  ```yml
+  pets: [cat, dog, pig]
+  ```
+###  使用yaml给对象赋值：
+
+* Yaml注入配置文件@ConfigurationProperties
+1. 在springboot项目中的resources目录下新建一个文件 application.yml
+2. 编写一个实体类 Dog
+```java
+@Component//注册bean到容器中 
+public class Dog {
+
+    private String name;
+    private Integer age;
+     //有参无参构造、get、set方法、toString()方法 
+}
+```
+`3. 思考，我们原来是如何给bean注入属性值的！ @Value，给狗狗类测试一下：
+```java
+@Component 
+//注册bean 
+public class Dog {    
+	@Value("阿黄")    
+	private String name;    
+	@Value("18")    
+	private Integer age; 
+}
+```
+4. 在SpringBoot的测试类下注入狗狗输出一下；
+```java
+@SpringBootTest 
+class DemoApplicationTests {
+    @Autowired //将狗狗自动注入进来    
+    Dog dog;
+    @Test    
+    public void contextLoads() {        
+    System.out.println(dog); //打印看下狗狗对象    
+}
+```
+  * 结果成功输出，@Value注入成功，这是我们原来的办法
+5. 我们再编写一个复杂一点的实体类：Person 类
+```java
+@Component
+public class Person {
+    private String name;
+    private Integer age;
+    private Boolean happy;
+    private Date birth;
+    private Map<String, Object> map;
+    private List<Object> list;
+    private Dog dog;
+```
+6. 我们来使用yaml配置的方式进行注入，大家写的时候注意区别和优势，我们编写一个yaml配置
+```yml
+Person:
+  name: zyx${random.uuid} #随机uuid
+  age: ${random.int} #随机int
+  happy: true
+  birth: 1992/10/07
+  map: {k1: v1,k2: v2}
+  list:
+    - 唱歌
+    - 跳舞
+    - 表演
+  dog:
+    name: haha
+    age: 3
+```
+7、我们刚才已经把person这个对象的所有值都写好了，我们现在来注入到我们的类中！\
+```java
+ //@ConfigurationProperties作用： 将配置文件中配置的每一个属性的值，映射到这个组件中；告诉SpringBoot将本类中的所有属性和配置文件中相关的配置进行绑定
+//参数 prefix = “person” : 将配置文件中的person下面的所有属性一一对应 
+@Component
+@ConfigurationProperties(prefix = "person")
+public class Person {
+    private String name;
+    private Integer age;
+    private Boolean happy;
+    private Date birth;
+    private Map<String, Object> map;
+    private List<Object> list;
+    private Dog dog;
+```
+8、IDEA 提示，springboot配置注解处理器没有找到，让我们看文档，我们可以查看文档，找到一个依赖
+![](https://gitee.com/zhangjie0524/picgo/raw/master/20210317182009.png)
+```xml
+<!-- 导入配置文件处理器，配置文件进行绑定就会有提示，需要重启 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-configuration-processor</artifactId>
+    <optional>true</optional>
+</dependency>
+```
+9、确认以上配置都OK之后，我们去测试类中测试一下
+```java
+@SpringBootTest
+class Springboot01PropertyApplicationTests {
+
+    @Autowired
+    private Person person;//将person自动注入进来
+    @Test
+    void contextLoads() {
+
+        System.out.println(person); //打印person信息 
+    }
+
+}
+```
+* 结果：所有值全部注入成功！
+
+## JSR-303校验
+
+* JSR-303 是 JAVA EE 6 中的一项子规范，叫做 Bean Validation。
+* Bean Validation 为 JavaBean 验证定义了相应的元数据模型和 API。缺省的元数据是 Java Annotations，通过使用 XML 可以对原有的元数据信息进行覆盖和扩展。在应用程序中，通过使用 Bean Validation 或是你自己定义的 constraint，例如 @NotNull, @Max, @ZipCode， 就可以确保数据模型（JavaBean）的正确性。constraint 可以附加到字段，getter 方法，类或者接口上面。对于一些特定的需求，用户可以很容易的开发定制化的 constraint。Bean Validation 是一个运行时的数据验证框架，在验证之后验证的错误信息会被马上返回。
+* Bean Validation 规范内嵌的约束注解：
+![](https://gitee.com/zhangjie0524/picgo/raw/master/20210317183152.png)
+* SpringBoot使用：
+  1. 引入依赖
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+```
+
+   2. 给参数对象添加校验注解
+```java
+@Data
+public class User {
+    
+    private Integer id;
+    @NotBlank(message = "用户名不能为空")
+    private String username;
+    @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$", message = "密码必须为8~16个字母和数字组合")
+    private String password;
+    @Email
+    private String email;
+    private Integer gender;
+
+}
+```
+   3. Controller 中需要校验的参数Bean前添加 @Valid 开启校验功能，紧跟在校验的Bean后添加一个BindingResult，BindingResult封装了前面Bean的校验结果。
+```java
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    @PostMapping("")
+    public Result save (@Valid User user , BindingResult bindingResult)  {
+        if (bindingResult.hasErrors()) {
+            Map<String , String> map = new HashMap<>();
+            bindingResult.getFieldErrors().forEach( (item) -> {
+                String message = item.getDefaultMessage();
+                String field = item.getField();
+                map.put( field , message );
+            } );
+            return Result.build( 400 , "非法参数 !" , map);
+        }
+        return Result.ok();
+    }
+}
+```
+
